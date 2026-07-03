@@ -19,7 +19,15 @@ jobs:
         run: pip install -e .[dev]
 
       - name: Unit tests
-        run: pytest -q
+        run: |
+          set -o pipefail
+          pytest -q | tee pytest-output.txt
+          {
+            echo "## Unit tests"
+            echo '```'
+            tail -n 3 pytest-output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       # The gate: re-run the eval and exit 1 if any metric drops more than
       # the threshold below the committed baseline. Also writes an HTML
