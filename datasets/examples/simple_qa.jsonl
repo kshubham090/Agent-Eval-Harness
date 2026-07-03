@@ -1,0 +1,5 @@
+{"id": "q1", "input": "What is the capital of France?", "expected_output": "Paris", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q2", "input": "What is 2 + 2?", "expected_output": "4", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q3", "input": "Who wrote Romeo and Juliet?", "expected_output": "William Shakespeare", "expected_trajectory": null, "tags": ["literature"]}
+{"id": "q4", "input": "What is the chemical symbol for gold?", "expected_output": "Au", "expected_trajectory": null, "tags": ["chemistry"]}
+{"id": "q5", "input": "What is the largest planet in our solar system?", "expected_output": "Jupiter", "expected_trajectory": null, "tags": ["astronomy"]}

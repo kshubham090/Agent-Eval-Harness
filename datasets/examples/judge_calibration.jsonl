@@ -1,0 +1,10 @@
+{"id": "j1", "expected": "Paris", "actual": "Paris", "human_score": 1.0}
+{"id": "j2", "expected": "Paris", "actual": "The capital of France is Paris.", "human_score": 1.0}
+{"id": "j3", "expected": "Paris", "actual": "I believe it's Paris, though Lyon is also a major city.", "human_score": 0.9}
+{"id": "j4", "expected": "Paris", "actual": "It's a large European capital on the Seine.", "human_score": 0.5}
+{"id": "j5", "expected": "Paris", "actual": "London", "human_score": 0.0}
+{"id": "j6", "expected": "4", "actual": "2 + 2 equals 4", "human_score": 1.0}
+{"id": "j7", "expected": "4", "actual": "5", "human_score": 0.0}
+{"id": "j8", "expected": "William Shakespeare", "actual": "Shakespeare wrote it", "human_score": 0.9}
+{"id": "j9", "expected": "William Shakespeare", "actual": "Christopher Marlowe", "human_score": 0.0}
+{"id": "j10", "expected": "Jupiter", "actual": "Jupiter is the largest, followed by Saturn.", "human_score": 1.0}

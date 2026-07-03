@@ -1,0 +1,3 @@
+{"id": "t1", "input": "Book a flight from NYC to London", "expected_output": "Flight booked", "expected_trajectory": ["search_flights", "select_cheapest", "confirm_booking"], "tags": ["tool-use", "multi-step"]}
+{"id": "t2", "input": "What's the weather in Tokyo tomorrow?", "expected_output": "Sunny, 24C", "expected_trajectory": ["get_location", "fetch_forecast"], "tags": ["tool-use"]}
+{"id": "t3", "input": "Transfer $50 from checking to savings", "expected_output": "Transfer complete", "expected_trajectory": ["get_accounts", "validate_balance", "execute_transfer"], "tags": ["tool-use", "multi-step", "finance"]}
