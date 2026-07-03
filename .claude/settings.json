@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(.venv\\\\Scripts\\\\python -m pytest -q)"
+      "PowerShell(.venv\\\\Scripts\\\\python -m pytest -q)",
+      "PowerShell(.venv\\\\Scripts\\\\agent-eval eval --dataset datasets/examples/simple_qa.jsonl --agent examples/degraded_agent.py --scorers exact --compare-baseline ci --filter-tags geography,math; \"exit: $LASTEXITCODE\")"
     ]
   }
 }

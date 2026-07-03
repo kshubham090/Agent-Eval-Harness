@@ -62,6 +62,20 @@ def _parse_case(record: dict, line_no: int) -> EvalCase:
     )
 
 
+def dataset_sha(path: str | Path) -> str:
+    """Short content fingerprint of a dataset file, stored in results so
+    baseline comparisons can refuse to compare runs of different datasets."""
+    import hashlib
+
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()[:12]
+
+
+def filter_by_tags(cases: list[EvalCase], tags: list[str]) -> list[EvalCase]:
+    """Keep cases carrying at least one of the given tags."""
+    wanted = set(tags)
+    return [c for c in cases if wanted & set(c.tags)]
+
+
 def load_dataset(path: str | Path) -> list[EvalCase]:
     """Load a JSONL golden dataset, validating shape and id uniqueness."""
     path = Path(path)

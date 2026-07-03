@@ -1,6 +1,6 @@
 {
-  "run_id": "6d6465c0",
-  "timestamp": "2026-07-03T18:02:39+00:00",
+  "run_id": "27836c7d",
+  "timestamp": "2026-07-03T18:42:52+00:00",
   "scores": {
     "exact_match": {
       "mean": 0.2,
@@ -13,5 +13,79 @@
       }
     }
   },
-  "pass_rate": 0.2
+  "pass_rate": 0.2,
+  "error_count": 0,
+  "cases": [
+    {
+      "id": "q1",
+      "input": "What is the capital of France?",
+      "expected_output": "Paris",
+      "output": "Paris",
+      "scores": {
+        "exact_match": 1.0
+      },
+      "trajectory": null,
+      "trajectory_score": null,
+      "error": null,
+      "latency_ms": 0.009499985026195645
+    },
+    {
+      "id": "q2",
+      "input": "What is 2 + 2?",
+      "expected_output": "4",
+      "output": "Paris",
+      "scores": {
+        "exact_match": 0.0
+      },
+      "trajectory": null,
+      "trajectory_score": null,
+      "error": null,
+      "latency_ms": 0.008200004231184721
+    },
+    {
+      "id": "q3",
+      "input": "Who wrote Romeo and Juliet?",
+      "expected_output": "William Shakespeare",
+      "output": "Paris",
+      "scores": {
+        "exact_match": 0.0
+      },
+      "trajectory": null,
+      "trajectory_score": null,
+      "error": null,
+      "latency_ms": 0.002100015990436077
+    },
+    {
+      "id": "q4",
+      "input": "What is the chemical symbol for gold?",
+      "expected_output": "Au",
+      "output": "Paris",
+      "scores": {
+        "exact_match": 0.0
+      },
+      "trajectory": null,
+      "trajectory_score": null,
+      "error": null,
+      "latency_ms": 0.0027999922167509794
+    },
+    {
+      "id": "q5",
+      "input": "What is the largest planet in our solar system?",
+      "expected_output": "Jupiter",
+      "output": "Paris",
+      "scores": {
+        "exact_match": 0.0
+      },
+      "trajectory": null,
+      "trajectory_score": null,
+      "error": null,
+      "latency_ms": 0.0030999945010989904
+    }
+  ],
+  "dataset_sha": "df76deffea57",
+  "metadata": {
+    "dataset": "datasets/examples/simple_qa.jsonl",
+    "agent": "examples/stub_agent.py",
+    "scorers": "exact"
+  }
 }

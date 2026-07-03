@@ -11,6 +11,8 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from harness.results import flatten_metrics
+
 DEFAULT_BASELINES_DIR = "baselines"
 
 
@@ -26,15 +28,6 @@ def load_baseline(name: str, baselines_dir: str | Path = DEFAULT_BASELINES_DIR) 
     if not path.exists():
         raise FileNotFoundError(f"no baseline named {name!r} in {baselines_dir}/")
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _metrics(result: dict) -> dict[str, float]:
-    """Flatten a result dict into comparable metric-name -> mean pairs."""
-    metrics = {f"scorer:{name}": s["mean"] for name, s in result.get("scores", {}).items()}
-    if result.get("trajectory_score") is not None:
-        metrics["trajectory"] = result["trajectory_score"]["mean"]
-    metrics["pass_rate"] = result["pass_rate"]
-    return metrics
 
 
 @dataclass
@@ -58,15 +51,29 @@ class BaselineComparison:
         return not self.regressions
 
 
-def compare_to_baseline(current: dict, baseline: dict, threshold: float = 0.05) -> BaselineComparison:
+def compare_to_baseline(
+    current: dict,
+    baseline: dict,
+    threshold: float = 0.05,
+    ignore_dataset_mismatch: bool = False,
+) -> BaselineComparison:
     """Compare a current result to a baseline.
 
     A metric regresses when it drops by more than `threshold` (absolute) below
     the baseline. Every metric present in the baseline must exist in the
-    current run -- a vanished metric would otherwise hide a regression.
+    current run -- a vanished metric would otherwise hide a regression. When
+    both sides carry a dataset_sha, they must match: comparing runs from
+    different dataset versions is meaningless.
     """
-    current_metrics = _metrics(current)
-    baseline_metrics = _metrics(baseline)
+    current_sha, baseline_sha = current.get("dataset_sha"), baseline.get("dataset_sha")
+    if current_sha and baseline_sha and current_sha != baseline_sha and not ignore_dataset_mismatch:
+        raise ValueError(
+            f"dataset changed since the baseline was saved ({baseline_sha} -> {current_sha}); "
+            "re-save the baseline, or pass --allow-dataset-change to compare anyway"
+        )
+
+    current_metrics = flatten_metrics(current)
+    baseline_metrics = flatten_metrics(baseline)
 
     missing = set(baseline_metrics) - set(current_metrics)
     if missing:

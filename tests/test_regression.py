@@ -76,6 +76,61 @@ def test_missing_metric_in_current_raises():
         compare_to_baseline(result_dict(), baseline)
 
 
+# --- dataset fingerprint ---
+
+
+def test_dataset_change_blocks_comparison():
+    current, baseline = result_dict(), result_dict()
+    current["dataset_sha"], baseline["dataset_sha"] = "aaa", "bbb"
+    with pytest.raises(ValueError, match="dataset changed"):
+        compare_to_baseline(current, baseline)
+
+
+def test_dataset_change_can_be_overridden():
+    current, baseline = result_dict(), result_dict()
+    current["dataset_sha"], baseline["dataset_sha"] = "aaa", "bbb"
+    comparison = compare_to_baseline(current, baseline, ignore_dataset_mismatch=True)
+    assert comparison.passed
+
+
+def test_missing_sha_on_either_side_skips_the_check():
+    current, baseline = result_dict(), result_dict()
+    current["dataset_sha"] = "aaa"  # baseline predates fingerprinting
+    assert compare_to_baseline(current, baseline).passed
+
+
+# --- multi-run statistics ---
+
+
+def test_summarize_runs_computes_mean_and_std():
+    from harness.results import summarize_runs
+
+    runs = [result_dict(exact_mean=0.7, pass_rate=0.7), result_dict(exact_mean=0.9, pass_rate=0.9)]
+    summary = summarize_runs(runs)
+
+    assert summary["type"] == "multi_run"
+    assert summary["run_count"] == 2
+    assert summary["mean"]["scorer:exact_match"] == pytest.approx(0.8)
+    assert summary["std"]["scorer:exact_match"] == pytest.approx(0.1414, abs=1e-3)
+
+
+def test_identical_runs_have_zero_std():
+    from harness.results import summarize_runs
+
+    summary = summarize_runs([result_dict(), result_dict(), result_dict()])
+    assert all(v == 0.0 for v in summary["std"].values())
+
+
+def test_multi_run_summary_compares_against_single_run_baseline():
+    from harness.results import summarize_runs
+
+    summary = summarize_runs([result_dict(exact_mean=0.6, pass_rate=0.6),
+                              result_dict(exact_mean=0.6, pass_rate=0.6)])
+    comparison = compare_to_baseline(summary, result_dict(exact_mean=0.8, pass_rate=0.8))
+    assert not comparison.passed
+    assert {r.metric for r in comparison.regressions} == {"scorer:exact_match", "pass_rate"}
+
+
 # --- CLI end-to-end: the README verification scenario ---
 
 

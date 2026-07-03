@@ -8,6 +8,9 @@ dependencies = [
     "python-dotenv>=1.0",
 ]
 
+[project.scripts]
+agent-eval = "harness.cli:cli"
+
 [project.optional-dependencies]
 # Heavy/optional deps arrive with their build phase (see README Build Phases).
 embedding = ["sentence-transformers>=3.0", "numpy>=1.26"]  # Phase 4

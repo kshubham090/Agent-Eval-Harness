@@ -22,7 +22,8 @@ jobs:
         run: pytest -q
 
       # The gate: re-run the eval and exit 1 if any metric drops more than
-      # the threshold below the committed baseline.
+      # the threshold below the committed baseline. Also writes an HTML
+      # report and a job summary (the CLI detects GITHUB_STEP_SUMMARY).
       - name: Regression gate
         run: |
           python -m harness eval \
@@ -30,4 +31,13 @@ jobs:
             --agent examples/stub_agent.py \
             --scorers exact \
             --compare-baseline ci \
-            --threshold 0.05
+            --threshold 0.05 \
+            --html eval-report.html
+
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: eval-report.html
+          if-no-files-found: ignore
