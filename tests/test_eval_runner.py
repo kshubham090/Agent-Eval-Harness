@@ -28,10 +28,11 @@ def test_end_to_end_stub_agent_on_simple_qa():
     cases = load_dataset("datasets/examples/simple_qa.jsonl")
     result = run_eval(cases, StubAgent(), [ExactMatchScorer()])
 
-    assert result.scores["exact_match"].mean == pytest.approx(1 / 5)
+    paris_rate = sum(1 for c in cases if c.expected_output == "Paris") / len(cases)
+    assert result.scores["exact_match"].mean == pytest.approx(paris_rate)
     assert result.scores["exact_match"].per_case["q1"] == 1.0
     assert result.scores["exact_match"].per_case["q2"] == 0.0
-    assert result.pass_rate == pytest.approx(1 / 5)
+    assert result.pass_rate == pytest.approx(paris_rate)
     assert result.error_count == 0
 
 
@@ -57,7 +58,7 @@ def test_result_serializes_with_readme_core_shape(tmp_path):
     # README core shape, plus production extras
     assert {"run_id", "timestamp", "scores", "pass_rate"} <= set(data)
     assert set(data["scores"]["exact_match"]) == {"mean", "per_case"}
-    assert len(data["cases"]) == 5
+    assert len(data["cases"]) == 60
     assert data["cases"][0]["latency_ms"] is not None
 
 
@@ -149,7 +150,10 @@ def test_invalid_concurrency_rejected():
 def test_filter_by_tags():
     cases = load_dataset("datasets/examples/simple_qa.jsonl")
     math_only = filter_by_tags(cases, ["math"])
-    assert [c.id for c in math_only] == ["q2"]
+    assert math_only, "expected math-tagged cases"
+    assert all("math" in c.tags for c in math_only)
+    assert "q2" in {c.id for c in math_only}
     assert filter_by_tags(cases, ["nonexistent"]) == []
     both = filter_by_tags(cases, ["math", "geography"])
-    assert {c.id for c in both} == {"q1", "q2"}
+    assert len(both) == len(math_only) + len(filter_by_tags(cases, ["geography"]))
+    assert all({"math", "geography"} & set(c.tags) for c in both)

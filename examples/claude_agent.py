@@ -25,7 +25,9 @@ class ClaudeAgent:
         from anthropic import Anthropic  # deferred so importing the file never needs the SDK
 
         self.model = model or os.environ.get("AGENT_MODEL", DEFAULT_MODEL)
-        self.client = Anthropic()
+        # generous retries: concurrent eval runs burst-hit rate limits, and the
+        # SDK backs off using the server's retry-after
+        self.client = Anthropic(max_retries=8)
 
     def run(self, input: str) -> AgentOutput:
         response = self.client.messages.create(

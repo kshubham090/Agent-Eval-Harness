@@ -8,3 +8,33 @@
 {"id": "j8", "expected": "William Shakespeare", "actual": "Shakespeare wrote it", "human_score": 0.9}
 {"id": "j9", "expected": "William Shakespeare", "actual": "Christopher Marlowe", "human_score": 0.0}
 {"id": "j10", "expected": "Jupiter", "actual": "Jupiter is the largest, followed by Saturn.", "human_score": 1.0}
+{"id": "j11", "expected": "4", "actual": "four", "human_score": 1.0}
+{"id": "j12", "expected": "206", "actual": "There are 206 bones in the adult human body.", "human_score": 1.0}
+{"id": "j13", "expected": "12", "actual": "twelve (12)", "human_score": 1.0}
+{"id": "j14", "expected": "3/4", "actual": "0.75", "human_score": 1.0}
+{"id": "j15", "expected": "100", "actual": "100 degrees Celsius", "human_score": 1.0}
+{"id": "j16", "expected": "H2O", "actual": "H₂O", "human_score": 1.0}
+{"id": "j17", "expected": "H2O", "actual": "water", "human_score": 0.5}
+{"id": "j18", "expected": "George Washington", "actual": "Washington", "human_score": 0.9}
+{"id": "j19", "expected": "George Washington", "actual": "John Adams", "human_score": 0.0}
+{"id": "j20", "expected": "Tokyo", "actual": "Tokyo, which has been the capital since 1868.", "human_score": 1.0}
+{"id": "j21", "expected": "Mercury", "actual": "I think it's Mercury.", "human_score": 0.9}
+{"id": "j22", "expected": "Mercury", "actual": "It might be Venus or Mercury, I'm not certain.", "human_score": 0.5}
+{"id": "j23", "expected": "Diamond", "actual": "The hardest gemstone, often used in industrial drills.", "human_score": 0.5}
+{"id": "j24", "expected": "1945", "actual": "World War II ended in 1944.", "human_score": 0.0}
+{"id": "j25", "expected": "1945", "actual": "1945, when Japan surrendered in September.", "human_score": 1.0}
+{"id": "j26", "expected": "git clone", "actual": "GIT CLONE", "human_score": 1.0}
+{"id": "j27", "expected": "git clone", "actual": "git pull", "human_score": 0.0}
+{"id": "j28", "expected": "Central Processing Unit", "actual": "CPU", "human_score": 0.9}
+{"id": "j29", "expected": "Central Processing Unit", "actual": "Computer Processing Unit", "human_score": 0.5}
+{"id": "j30", "expected": "Jane Austen", "actual": "The novelist Austen", "human_score": 0.9}
+{"id": "j31", "expected": "The Pacific Ocean", "actual": "Pacific", "human_score": 1.0}
+{"id": "j32", "expected": "The Pacific Ocean", "actual": "The Atlantic Ocean", "human_score": 0.0}
+{"id": "j33", "expected": "Canberra", "actual": "Sydney", "human_score": 0.0}
+{"id": "j34", "expected": "Canberra", "actual": "Most people think Sydney, but it's actually Canberra.", "human_score": 1.0}
+{"id": "j35", "expected": "Gravity", "actual": "I don't know.", "human_score": 0.0}
+{"id": "j36", "expected": "Gravity", "actual": "The gravitational pull of the Sun.", "human_score": 1.0}
+{"id": "j37", "expected": "The blue whale", "actual": "Blue whales are the largest mammals.", "human_score": 1.0}
+{"id": "j38", "expected": "The blue whale", "actual": "The African elephant", "human_score": 0.0}
+{"id": "j39", "expected": "366", "actual": "A leap year has 366 days, one more than a normal year.", "human_score": 1.0}
+{"id": "j40", "expected": "Hydrogen", "actual": "Helium", "human_score": 0.0}

@@ -1,74 +1,204 @@
 {
-  "run_id": "efd777e2",
-  "timestamp": "2026-07-05T11:41:41+00:00",
+  "run_id": "5d348c78",
+  "timestamp": "2026-07-05T12:07:11+00:00",
   "scores": {
     "exact_match": {
-      "mean": 0.016666666666666666,
+      "mean": 0.8666666666666667,
       "per_case": {
         "q1": 1.0,
-        "q2": 0.0,
-        "q3": 0.0,
-        "q4": 0.0,
-        "q5": 0.0,
-        "q6": 0.0,
-        "q7": 0.0,
+        "q2": 1.0,
+        "q3": 1.0,
+        "q4": 1.0,
+        "q5": 1.0,
+        "q6": 1.0,
+        "q7": 1.0,
         "q8": 0.0,
-        "q9": 0.0,
-        "q10": 0.0,
-        "q11": 0.0,
-        "q12": 0.0,
+        "q9": 1.0,
+        "q10": 1.0,
+        "q11": 1.0,
+        "q12": 1.0,
         "q13": 0.0,
-        "q14": 0.0,
-        "q15": 0.0,
+        "q14": 1.0,
+        "q15": 1.0,
         "q16": 0.0,
-        "q17": 0.0,
-        "q18": 0.0,
-        "q19": 0.0,
-        "q20": 0.0,
-        "q21": 0.0,
-        "q22": 0.0,
-        "q23": 0.0,
-        "q24": 0.0,
-        "q25": 0.0,
-        "q26": 0.0,
-        "q27": 0.0,
-        "q28": 0.0,
+        "q17": 1.0,
+        "q18": 1.0,
+        "q19": 1.0,
+        "q20": 1.0,
+        "q21": 1.0,
+        "q22": 1.0,
+        "q23": 1.0,
+        "q24": 1.0,
+        "q25": 1.0,
+        "q26": 1.0,
+        "q27": 1.0,
+        "q28": 1.0,
         "q29": 0.0,
-        "q30": 0.0,
-        "q31": 0.0,
-        "q32": 0.0,
-        "q33": 0.0,
-        "q34": 0.0,
-        "q35": 0.0,
-        "q36": 0.0,
-        "q37": 0.0,
-        "q38": 0.0,
-        "q39": 0.0,
-        "q40": 0.0,
-        "q41": 0.0,
-        "q42": 0.0,
-        "q43": 0.0,
-        "q44": 0.0,
-        "q45": 0.0,
-        "q46": 0.0,
+        "q30": 1.0,
+        "q31": 1.0,
+        "q32": 1.0,
+        "q33": 1.0,
+        "q34": 1.0,
+        "q35": 1.0,
+        "q36": 1.0,
+        "q37": 1.0,
+        "q38": 1.0,
+        "q39": 1.0,
+        "q40": 1.0,
+        "q41": 1.0,
+        "q42": 1.0,
+        "q43": 1.0,
+        "q44": 1.0,
+        "q45": 1.0,
+        "q46": 1.0,
         "q47": 0.0,
-        "q48": 0.0,
-        "q49": 0.0,
-        "q50": 0.0,
-        "q51": 0.0,
-        "q52": 0.0,
-        "q53": 0.0,
-        "q54": 0.0,
-        "q55": 0.0,
-        "q56": 0.0,
+        "q48": 1.0,
+        "q49": 1.0,
+        "q50": 1.0,
+        "q51": 1.0,
+        "q52": 1.0,
+        "q53": 1.0,
+        "q54": 1.0,
+        "q55": 1.0,
+        "q56": 1.0,
         "q57": 0.0,
         "q58": 0.0,
         "q59": 0.0,
-        "q60": 0.0
+        "q60": 1.0
+      }
+    },
+    "embedding": {
+      "mean": 0.984128528552186,
+      "per_case": {
+        "q1": 0.999999999999808,
+        "q2": 0.9999999999995322,
+        "q3": 1.0,
+        "q4": 0.999999999999641,
+        "q5": 0.9999999999998186,
+        "q6": 0.9999999999998497,
+        "q7": 1.0,
+        "q8": 0.9645227857414268,
+        "q9": 0.9999999999997948,
+        "q10": 0.9999999999998271,
+        "q11": 1.0,
+        "q12": 0.9999999999999998,
+        "q13": 0.8600418222400547,
+        "q14": 0.9999999999998638,
+        "q15": 0.9999999999997641,
+        "q16": 0.4760777919703049,
+        "q17": 1.0,
+        "q18": 0.999999999999839,
+        "q19": 0.9999999999994975,
+        "q20": 0.9999999999997553,
+        "q21": 0.999999999999838,
+        "q22": 0.999999999999818,
+        "q23": 0.9999999999998155,
+        "q24": 0.9999999999997138,
+        "q25": 0.9999999999998526,
+        "q26": 0.9999999999996907,
+        "q27": 0.9999999999994803,
+        "q28": 0.9999999999997646,
+        "q29": 0.9383977526607097,
+        "q30": 0.9999999999996363,
+        "q31": 0.9999999999997194,
+        "q32": 0.9999999999995999,
+        "q33": 0.9999999999997526,
+        "q34": 0.9999999999997813,
+        "q35": 0.9999999999995973,
+        "q36": 0.9999999999998006,
+        "q37": 1.0,
+        "q38": 0.9999999999997844,
+        "q39": 0.9999999999998721,
+        "q40": 0.9999999999998138,
+        "q41": 0.9999999999997803,
+        "q42": 1.0,
+        "q43": 0.9999999999997959,
+        "q44": 1.0,
+        "q45": 0.9999999999999999,
+        "q46": 0.9999999999998218,
+        "q47": 0.9625774202026528,
+        "q48": 1.0,
+        "q49": 1.0,
+        "q50": 0.9999999999999998,
+        "q51": 0.9999999999998141,
+        "q52": 0.9999999999997802,
+        "q53": 0.9999999999998901,
+        "q54": 0.9999999999997239,
+        "q55": 0.9999999999997309,
+        "q56": 0.9999999999997194,
+        "q57": 0.9229785063366269,
+        "q58": 0.9570262743239938,
+        "q59": 0.9660893596650159,
+        "q60": 1.0
+      }
+    },
+    "llm_judge": {
+      "mean": 1.0,
+      "per_case": {
+        "q1": 1.0,
+        "q2": 1.0,
+        "q3": 1.0,
+        "q4": 1.0,
+        "q5": 1.0,
+        "q6": 1.0,
+        "q7": 1.0,
+        "q8": 1.0,
+        "q9": 1.0,
+        "q10": 1.0,
+        "q11": 1.0,
+        "q12": 1.0,
+        "q13": 1.0,
+        "q14": 1.0,
+        "q15": 1.0,
+        "q16": 1.0,
+        "q17": 1.0,
+        "q18": 1.0,
+        "q19": 1.0,
+        "q20": 1.0,
+        "q21": 1.0,
+        "q22": 1.0,
+        "q23": 1.0,
+        "q24": 1.0,
+        "q25": 1.0,
+        "q26": 1.0,
+        "q27": 1.0,
+        "q28": 1.0,
+        "q29": 1.0,
+        "q30": 1.0,
+        "q31": 1.0,
+        "q32": 1.0,
+        "q33": 1.0,
+        "q34": 1.0,
+        "q35": 1.0,
+        "q36": 1.0,
+        "q37": 1.0,
+        "q38": 1.0,
+        "q39": 1.0,
+        "q40": 1.0,
+        "q41": 1.0,
+        "q42": 1.0,
+        "q43": 1.0,
+        "q44": 1.0,
+        "q45": 1.0,
+        "q46": 1.0,
+        "q47": 1.0,
+        "q48": 1.0,
+        "q49": 1.0,
+        "q50": 1.0,
+        "q51": 1.0,
+        "q52": 1.0,
+        "q53": 1.0,
+        "q54": 1.0,
+        "q55": 1.0,
+        "q56": 1.0,
+        "q57": 1.0,
+        "q58": 1.0,
+        "q59": 1.0,
+        "q60": 1.0
       }
     }
   },
-  "pass_rate": 0.016666666666666666,
+  "pass_rate": 0.9833333333333333,
   "error_count": 0,
   "cases": [
     {
@@ -77,785 +207,905 @@
       "expected_output": "Paris",
       "output": "Paris",
       "scores": {
-        "exact_match": 1.0
+        "exact_match": 1.0,
+        "embedding": 0.999999999999808,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.00689999433234334
+      "latency_ms": 14137.575200002175
     },
     {
       "id": "q2",
       "input": "What is 2 + 2?",
       "expected_output": "4",
-      "output": "Paris",
+      "output": "4",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999995322,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.007000009645707905
+      "latency_ms": 14889.302300012787
     },
     {
       "id": "q3",
       "input": "Who wrote Romeo and Juliet?",
       "expected_output": "William Shakespeare",
-      "output": "Paris",
+      "output": "William Shakespeare",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0024999899324029684
+      "latency_ms": 6070.356399999582
     },
     {
       "id": "q4",
       "input": "What is the chemical symbol for gold?",
       "expected_output": "Au",
-      "output": "Paris",
+      "output": "Au",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.999999999999641,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0043000036384910345
+      "latency_ms": 4003.2821000058902
     },
     {
       "id": "q5",
       "input": "What is the largest planet in our solar system?",
       "expected_output": "Jupiter",
-      "output": "Paris",
+      "output": "Jupiter",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998186,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0034999975468963385
+      "latency_ms": 3363.372099993285
     },
     {
       "id": "q6",
       "input": "What is the capital of Japan?",
       "expected_output": "Tokyo",
-      "output": "Paris",
+      "output": "Tokyo",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998497,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0026999914553016424
+      "latency_ms": 6653.654900001129
     },
     {
       "id": "q7",
       "input": "Which river flows through Cairo?",
       "expected_output": "The Nile",
-      "output": "Paris",
+      "output": "The Nile",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.002800006768666208
+      "latency_ms": 17232.655500003602
     },
     {
       "id": "q8",
       "input": "What is the largest ocean on Earth?",
       "expected_output": "The Pacific Ocean",
-      "output": "Paris",
+      "output": "Pacific Ocean",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.9645227857414268,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0011999945854768157
+      "latency_ms": 48611.12349999894
     },
     {
       "id": "q9",
       "input": "On which continent is the Sahara Desert?",
       "expected_output": "Africa",
-      "output": "Paris",
+      "output": "Africa",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997948,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0026000052457675338
+      "latency_ms": 11499.898399997619
     },
     {
       "id": "q10",
       "input": "What is the capital of Australia?",
       "expected_output": "Canberra",
-      "output": "Paris",
+      "output": "Canberra",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998271,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0013999961083754897
+      "latency_ms": 12431.221300008474
     },
     {
       "id": "q11",
       "input": "In which mountain range is Mount Everest?",
       "expected_output": "The Himalayas",
-      "output": "Paris",
+      "output": "The Himalayas",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0022000021999701858
+      "latency_ms": 23496.93359999219
     },
     {
       "id": "q12",
       "input": "What is the smallest country in the world by area?",
       "expected_output": "Vatican City",
-      "output": "Paris",
+      "output": "Vatican City",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999999998,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0010999938240274787
+      "latency_ms": 35198.22269999713
     },
     {
       "id": "q13",
       "input": "What is the currency of Japan?",
       "expected_output": "The yen",
-      "output": "Paris",
+      "output": "Japanese yen",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.8600418222400547,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.00100000761449337
+      "latency_ms": 12665.59179998876
     },
     {
       "id": "q14",
       "input": "What is the capital of Canada?",
       "expected_output": "Ottawa",
-      "output": "Paris",
+      "output": "Ottawa",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998638,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0008999923011288047
+      "latency_ms": 23358.979800003
     },
     {
       "id": "q15",
       "input": "Which country is home to the kangaroo?",
       "expected_output": "Australia",
-      "output": "Paris",
+      "output": "Australia",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997641,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0015999976312741637
+      "latency_ms": 23964.297099999385
     },
     {
       "id": "q16",
       "input": "What is the chemical formula for water?",
       "expected_output": "H2O",
-      "output": "Paris",
+      "output": "H\u2082O",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.4760777919703049,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0006999907782301307
+      "latency_ms": 48115.99409999326
     },
     {
       "id": "q17",
       "input": "What gas do plants absorb from the atmosphere during photosynthesis?",
       "expected_output": "Carbon dioxide",
-      "output": "Paris",
+      "output": "Carbon dioxide",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 12859.135499995318
     },
     {
       "id": "q18",
       "input": "Which planet is closest to the Sun?",
       "expected_output": "Mercury",
-      "output": "Paris",
+      "output": "Mercury",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.999999999999839,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0008999923011288047
+      "latency_ms": 11629.798199996003
     },
     {
       "id": "q19",
       "input": "What is the chemical symbol for sodium?",
       "expected_output": "Na",
-      "output": "Paris",
+      "output": "Na",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999994975,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000800006091594696
+      "latency_ms": 24545.84469999827
     },
     {
       "id": "q20",
       "input": "How many bones are in the adult human body?",
       "expected_output": "206",
-      "output": "Paris",
+      "output": "206",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997553,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 24292.54619999847
     },
     {
       "id": "q21",
       "input": "What force keeps the planets in orbit around the Sun?",
       "expected_output": "Gravity",
-      "output": "Paris",
+      "output": "Gravity",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.999999999999838,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000800006091594696
+      "latency_ms": 23296.563800002332
     },
     {
       "id": "q22",
       "input": "What is the hardest natural substance on Earth?",
       "expected_output": "Diamond",
-      "output": "Paris",
+      "output": "Diamond",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.999999999999818,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 24246.273600001587
     },
     {
       "id": "q23",
       "input": "Which planet is known as the Red Planet?",
       "expected_output": "Mars",
-      "output": "Paris",
+      "output": "Mars",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998155,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000900006853044033
+      "latency_ms": 24331.154899991816
     },
     {
       "id": "q24",
       "input": "At what temperature in Celsius does water boil at sea level?",
       "expected_output": "100",
-      "output": "Paris",
+      "output": "100",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997138,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 23279.156299991882
     },
     {
       "id": "q25",
       "input": "Which element has the atomic number 1?",
       "expected_output": "Hydrogen",
-      "output": "Paris",
+      "output": "Hydrogen",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998526,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 24065.79090000014
     },
     {
       "id": "q26",
       "input": "What is 7 times 8?",
       "expected_output": "56",
-      "output": "Paris",
+      "output": "56",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999996907,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000900006853044033
+      "latency_ms": 24096.640999996453
     },
     {
       "id": "q27",
       "input": "What is the square root of 144?",
       "expected_output": "12",
-      "output": "Paris",
+      "output": "12",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999994803,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 23765.47149999533
     },
     {
       "id": "q28",
       "input": "What is 15% of 200?",
       "expected_output": "30",
-      "output": "Paris",
+      "output": "30",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997646,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000900006853044033
+      "latency_ms": 24228.284900003928
     },
     {
       "id": "q29",
       "input": "How many sides does a hexagon have?",
       "expected_output": "6",
-      "output": "Paris",
+      "output": "Six",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.9383977526607097,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0011999945854768157
+      "latency_ms": 35981.508400000166
     },
     {
       "id": "q30",
       "input": "What is 100 divided by 4?",
       "expected_output": "25",
-      "output": "Paris",
+      "output": "25",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999996363,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0012999953469261527
+      "latency_ms": 11791.217000005418
     },
     {
       "id": "q31",
       "input": "What is the next prime number after 7?",
       "expected_output": "11",
-      "output": "Paris",
+      "output": "11",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997194,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000800006091594696
+      "latency_ms": 25457.153099996503
     },
     {
       "id": "q32",
       "input": "What is 12 squared?",
       "expected_output": "144",
-      "output": "Paris",
+      "output": "144",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999995999,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 35680.859000000055
     },
     {
       "id": "q33",
       "input": "How many degrees are in a right angle?",
       "expected_output": "90",
-      "output": "Paris",
+      "output": "90",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997526,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000800006091594696
+      "latency_ms": 10635.168200009502
     },
     {
       "id": "q34",
       "input": "What is one half plus one quarter, as a fraction?",
       "expected_output": "3/4",
-      "output": "Paris",
+      "output": "3/4",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997813,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0010999938240274787
+      "latency_ms": 36258.83320000139
     },
     {
       "id": "q35",
       "input": "What is the smallest prime number?",
       "expected_output": "2",
-      "output": "Paris",
+      "output": "2",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999995973,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.00100000761449337
+      "latency_ms": 12262.955500002136
     },
     {
       "id": "q36",
       "input": "In what year did World War II end?",
       "expected_output": "1945",
-      "output": "Paris",
+      "output": "1945",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998006,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000800006091594696
+      "latency_ms": 47511.30949999788
     },
     {
       "id": "q37",
       "input": "Who was the first President of the United States?",
       "expected_output": "George Washington",
-      "output": "Paris",
+      "output": "George Washington",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0006999907782301307
+      "latency_ms": 11853.016399996704
     },
     {
       "id": "q38",
       "input": "In what year did humans first land on the Moon?",
       "expected_output": "1969",
-      "output": "Paris",
+      "output": "1969",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997844,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.00100000761449337
+      "latency_ms": 12359.105299998191
     },
     {
       "id": "q39",
       "input": "Who painted the Mona Lisa?",
       "expected_output": "Leonardo da Vinci",
-      "output": "Paris",
+      "output": "Leonardo da Vinci",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998721,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 23446.85880000179
     },
     {
       "id": "q40",
       "input": "In what year did the Titanic sink?",
       "expected_output": "1912",
-      "output": "Paris",
+      "output": "1912",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998138,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 24194.97660000343
     },
     {
       "id": "q41",
       "input": "In what year did the Berlin Wall fall?",
       "expected_output": "1989",
-      "output": "Paris",
+      "output": "1989",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997803,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000900006853044033
+      "latency_ms": 35666.677900007926
     },
     {
       "id": "q42",
       "input": "Which ancient wonder still stands at Giza?",
       "expected_output": "The Great Pyramid of Giza",
-      "output": "Paris",
+      "output": "The Great Pyramid of Giza",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0006999907782301307
+      "latency_ms": 13138.721099996474
     },
     {
       "id": "q43",
       "input": "Who wrote the novel 1984?",
       "expected_output": "George Orwell",
-      "output": "Paris",
+      "output": "George Orwell",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997959,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 25804.60360000143
     },
     {
       "id": "q44",
       "input": "Who wrote the Harry Potter series?",
       "expected_output": "J.K. Rowling",
-      "output": "Paris",
+      "output": "J.K. Rowling",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0009999930625781417
+      "latency_ms": 25112.42369998945
     },
     {
       "id": "q45",
       "input": "Who wrote Pride and Prejudice?",
       "expected_output": "Jane Austen",
-      "output": "Paris",
+      "output": "Jane Austen",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999999999,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.00100000761449337
+      "latency_ms": 22154.441100006807
     },
     {
       "id": "q46",
       "input": "Who is traditionally credited as the author of The Odyssey?",
       "expected_output": "Homer",
-      "output": "Paris",
+      "output": "Homer",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998218,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0008999923011288047
+      "latency_ms": 22862.898599996697
     },
     {
       "id": "q47",
       "input": "Who created the detective Sherlock Holmes?",
       "expected_output": "Arthur Conan Doyle",
-      "output": "Paris",
+      "output": "Sir Arthur Conan Doyle",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.9625774202026528,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000900006853044033
+      "latency_ms": 24291.35290000704
     },
     {
       "id": "q48",
       "input": "Who created the Python programming language?",
       "expected_output": "Guido van Rossum",
-      "output": "Paris",
+      "output": "Guido van Rossum",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 36395.039299997734
     },
     {
       "id": "q49",
       "input": "What does HTML stand for?",
       "expected_output": "HyperText Markup Language",
-      "output": "Paris",
+      "output": "HyperText Markup Language",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 11472.184300000663
     },
     {
       "id": "q50",
       "input": "Who co-founded Microsoft together with Paul Allen?",
       "expected_output": "Bill Gates",
-      "output": "Paris",
+      "output": "Bill Gates",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999999998,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 23597.80519999913
     },
     {
       "id": "q51",
       "input": "What does CPU stand for?",
       "expected_output": "Central Processing Unit",
-      "output": "Paris",
+      "output": "Central Processing Unit",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998141,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0007999915396794677
+      "latency_ms": 76591.69359999942
     },
     {
       "id": "q52",
       "input": "Which company makes the iPhone?",
       "expected_output": "Apple",
-      "output": "Paris",
+      "output": "Apple",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997802,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.00100000761449337
+      "latency_ms": 12196.112199992058
     },
     {
       "id": "q53",
       "input": "Which git command copies a remote repository to your machine?",
       "expected_output": "git clone",
-      "output": "Paris",
+      "output": "git clone",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999998901,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 12398.621799991815
     },
     {
       "id": "q54",
       "input": "What is the decimal number 5 in binary?",
       "expected_output": "101",
-      "output": "Paris",
+      "output": "101",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997239,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0008999923011288047
+      "latency_ms": 15865.032999994582
     },
     {
       "id": "q55",
       "input": "Which HTTP status code means Not Found?",
       "expected_output": "404",
-      "output": "Paris",
+      "output": "404",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997309,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000900006853044033
+      "latency_ms": 7562.336100003449
     },
     {
       "id": "q56",
       "input": "How many players from one soccer team are on the field during play?",
       "expected_output": "11",
-      "output": "Paris",
+      "output": "11",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 0.9999999999997194,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0005999900167807937
+      "latency_ms": 47348.81280000263
     },
     {
       "id": "q57",
       "input": "How many rings are on the Olympic flag?",
       "expected_output": "5",
-      "output": "Paris",
+      "output": "Five",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.9229785063366269,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000800006091594696
+      "latency_ms": 7976.120199993602
     },
     {
       "id": "q58",
       "input": "Which musical instrument has 88 keys?",
       "expected_output": "The piano",
-      "output": "Paris",
+      "output": "Piano",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.9570262743239938,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 11769.668100008857
     },
     {
       "id": "q59",
       "input": "What is the largest mammal on Earth?",
       "expected_output": "The blue whale",
-      "output": "Paris",
+      "output": "Blue whale",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 0.0,
+        "embedding": 0.9660893596650159,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.0006999907782301307
+      "latency_ms": 24425.820200005546
     },
     {
       "id": "q60",
       "input": "How many days are in a leap year?",
       "expected_output": "366",
-      "output": "Paris",
+      "output": "366",
       "scores": {
-        "exact_match": 0.0
+        "exact_match": 1.0,
+        "embedding": 1.0,
+        "llm_judge": 1.0
       },
       "trajectory": null,
       "trajectory_score": null,
       "error": null,
-      "latency_ms": 0.000700005330145359
+      "latency_ms": 24540.41440000583
     }
   ],
   "dataset_sha": "0adf06099a59",
   "metadata": {
     "dataset": "datasets/examples/simple_qa.jsonl",
-    "agent": "examples/stub_agent.py",
-    "scorers": "exact"
+    "agent": "examples/claude_agent.py",
+    "scorers": "exact,embedding,llm_judge"
   }
 }

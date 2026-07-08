@@ -74,7 +74,7 @@ def test_llm_judge_with_fake_backend_can_be_meta_evaled():
 
 def test_loads_example_calibration_dataset():
     loaded = load_judge_dataset("datasets/examples/judge_calibration.jsonl")
-    assert len(loaded) == 10
+    assert len(loaded) == 40
     assert all(0.0 <= c.human_score <= 1.0 for c in loaded)
 
 

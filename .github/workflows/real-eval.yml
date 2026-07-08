@@ -1,0 +1,51 @@
+name: Real-agent eval
+
+# Manually triggered: evaluates the real Claude agent against the full
+# dataset. Requires the ANTHROPIC_API_KEY repository secret
+# (Settings -> Secrets and variables -> Actions -> New repository secret).
+on:
+  workflow_dispatch:
+    inputs:
+      scorers:
+        description: "Comma-separated scorers"
+        default: "exact,llm_judge"
+      compare_baseline:
+        description: "Baseline to gate against (empty = no gate)"
+        default: "claude-v1"
+
+jobs:
+  real-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -e .[judge]
+
+      - name: Eval real agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          GATE_ARGS=""
+          if [ -n "${{ inputs.compare_baseline }}" ]; then
+            GATE_ARGS="--compare-baseline ${{ inputs.compare_baseline }}"
+          fi
+          python -m harness eval \
+            --dataset datasets/examples/simple_qa.jsonl \
+            --agent examples/claude_agent.py \
+            --scorers "${{ inputs.scorers }}" \
+            --concurrency 2 \
+            --html eval-report.html \
+            $GATE_ARGS
+
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-eval-report
+          path: eval-report.html
+          if-no-files-found: ignore

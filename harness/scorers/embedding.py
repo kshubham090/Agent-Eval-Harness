@@ -11,6 +11,7 @@ first score() call. Install with: pip install .[embedding]
 from __future__ import annotations
 
 import math
+import threading
 from collections.abc import Callable, Sequence
 
 # An EmbedFn maps a list of texts to a list of same-length numeric vectors.
@@ -46,10 +47,14 @@ class EmbeddingScorer:
     def __init__(self, embed_fn: EmbedFn | None = None, model_name: str = DEFAULT_MODEL):
         self.model_name = model_name
         self._embed = embed_fn
+        self._init_lock = threading.Lock()
 
     def score(self, expected: str, actual: str) -> float:
         if self._embed is None:
-            self._embed = _load_sentence_transformer(self.model_name)
+            # concurrent eval threads must not each load their own model copy
+            with self._init_lock:
+                if self._embed is None:
+                    self._embed = _load_sentence_transformer(self.model_name)
         vec_expected, vec_actual = self._embed([expected, actual])
         # Cosine ranges [-1, 1]; negative similarity is "completely wrong",
         # so clamp into the scorer contract's [0, 1].

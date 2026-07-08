@@ -39,7 +39,7 @@ jobs:
             --agent examples/stub_agent.py \
             --scorers exact \
             --compare-baseline ci \
-            --threshold 0.05 \
+            --threshold 0.01 \
             --html eval-report.html
 
       - name: Upload eval report

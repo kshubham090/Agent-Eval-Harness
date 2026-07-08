@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "PowerShell(.venv\\\\Scripts\\\\python -m pytest -q)",
-      "PowerShell(.venv\\\\Scripts\\\\agent-eval eval --dataset datasets/examples/simple_qa.jsonl --agent examples/degraded_agent.py --scorers exact --compare-baseline ci --filter-tags geography,math; \"exit: $LASTEXITCODE\")"
+      "PowerShell(.venv\\\\Scripts\\\\agent-eval eval --dataset datasets/examples/simple_qa.jsonl --agent examples/degraded_agent.py --scorers exact --compare-baseline ci --filter-tags geography,math; \"exit: $LASTEXITCODE\")",
+      "PowerShell(.venv\\\\Scripts\\\\agent-eval baseline save --name claude-v1 --result results/claude_run.json)",
+      "PowerShell(.venv\\\\Scripts\\\\python -m pytest -q; .venv\\\\Scripts\\\\agent-eval eval --dataset datasets/examples/simple_qa.jsonl --agent examples/stub_agent.py --scorers exact --compare-baseline ci --threshold 0.01; \"gate exit: $LASTEXITCODE\")"
     ]
   }
 }

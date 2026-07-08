@@ -26,6 +26,14 @@ And it blocks deploys when the answer is "worse."
 - **Meta-eval** — calibrate the LLM judge against human-graded cases and measure its agreement before trusting its scores
 - **CI-native** — regression tables land in the GitHub Actions job summary; the HTML report uploads as an artifact
 
+## Datasets included
+
+| Dataset | Cases | What it covers |
+|---|---|---|
+| [simple_qa.jsonl](datasets/examples/simple_qa.jsonl) | 60 | Factual Q&A across geography, science, math, history, literature, technology, sports — every case tagged for `--filter-tags` slicing |
+| [tool_calling.jsonl](datasets/examples/tool_calling.jsonl) | 18 | Multi-step trajectories across travel, finance, email, calendar, devops, shopping, support |
+| [judge_calibration.jsonl](datasets/examples/judge_calibration.jsonl) | 40 | Human-graded pairs covering paraphrases, numeric formats, abbreviations, hedged answers, descriptions-without-naming, extra info, contradictions |
+
 ## Quickstart
 
 ```bash
@@ -53,8 +61,44 @@ agent-eval baseline save --name v1.0 --result results/run_001.json
 # degraded agent answers "London" to everything -> exit code 1
 agent-eval eval --dataset datasets/examples/simple_qa.jsonl \
     --agent examples/degraded_agent.py --scorers exact \
-    --compare-baseline v1.0
+    --compare-baseline v1.0 --threshold 0.01
 ```
+
+### Evaluate a real agent
+
+The stub agents above are deterministic fixtures for exercising the harness.
+The real workflow evaluates a model-backed agent — put your key in `.env`
+(copy [.env.example](.env.example)) and run:
+
+```bash
+pip install -e .[judge,embedding]
+agent-eval eval --dataset datasets/examples/simple_qa.jsonl \
+    --agent examples/claude_agent.py \
+    --scorers exact,embedding,llm_judge \
+    --concurrency 2 \
+    --output results/claude.json --html results/claude.html
+```
+
+The committed [baselines/claude-v1.json](baselines/claude-v1.json) is a real
+run of this agent on the full 60-case dataset — gate your changes against it
+with `--compare-baseline claude-v1`. In CI, the
+[real-agent eval workflow](.github/workflows/real-eval.yml) runs the same
+thing on demand (Actions → "Real-agent eval" → Run workflow) once you add an
+`ANTHROPIC_API_KEY` repository secret.
+
+Actual results from that run — a live demonstration of why the scorer ladder
+exists:
+
+| Metric | Mean | What it says |
+|---|---|---|
+| exact_match | 0.867 | 8/60 answers differ only in formatting ("Six" vs "6", "Sir Arthur Conan Doyle", "H₂O" vs "H2O") |
+| embedding | 0.984 | rescues 7 of those 8 — but scores H₂O vs H2O only 0.48 (the subscript breaks tokenization) |
+| llm_judge | 1.000 | correctly grades all 60 as right |
+| pass_rate | 0.983 | |
+
+Same agent, three verdicts. Exact match under-reports by 13 points, embeddings
+have blind spots of their own, and the (calibrated) judge gets it right —
+which is why you calibrate it first.
 
 ## CLI reference
 

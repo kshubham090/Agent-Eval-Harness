@@ -1,5 +1,60 @@
 {"id": "q1", "input": "What is the capital of France?", "expected_output": "Paris", "expected_trajectory": null, "tags": ["geography"]}
 {"id": "q2", "input": "What is 2 + 2?", "expected_output": "4", "expected_trajectory": null, "tags": ["math"]}
 {"id": "q3", "input": "Who wrote Romeo and Juliet?", "expected_output": "William Shakespeare", "expected_trajectory": null, "tags": ["literature"]}
-{"id": "q4", "input": "What is the chemical symbol for gold?", "expected_output": "Au", "expected_trajectory": null, "tags": ["chemistry"]}
-{"id": "q5", "input": "What is the largest planet in our solar system?", "expected_output": "Jupiter", "expected_trajectory": null, "tags": ["astronomy"]}
+{"id": "q4", "input": "What is the chemical symbol for gold?", "expected_output": "Au", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q5", "input": "What is the largest planet in our solar system?", "expected_output": "Jupiter", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q6", "input": "What is the capital of Japan?", "expected_output": "Tokyo", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q7", "input": "Which river flows through Cairo?", "expected_output": "The Nile", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q8", "input": "What is the largest ocean on Earth?", "expected_output": "The Pacific Ocean", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q9", "input": "On which continent is the Sahara Desert?", "expected_output": "Africa", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q10", "input": "What is the capital of Australia?", "expected_output": "Canberra", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q11", "input": "In which mountain range is Mount Everest?", "expected_output": "The Himalayas", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q12", "input": "What is the smallest country in the world by area?", "expected_output": "Vatican City", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q13", "input": "What is the currency of Japan?", "expected_output": "The yen", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q14", "input": "What is the capital of Canada?", "expected_output": "Ottawa", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q15", "input": "Which country is home to the kangaroo?", "expected_output": "Australia", "expected_trajectory": null, "tags": ["geography"]}
+{"id": "q16", "input": "What is the chemical formula for water?", "expected_output": "H2O", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q17", "input": "What gas do plants absorb from the atmosphere during photosynthesis?", "expected_output": "Carbon dioxide", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q18", "input": "Which planet is closest to the Sun?", "expected_output": "Mercury", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q19", "input": "What is the chemical symbol for sodium?", "expected_output": "Na", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q20", "input": "How many bones are in the adult human body?", "expected_output": "206", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q21", "input": "What force keeps the planets in orbit around the Sun?", "expected_output": "Gravity", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q22", "input": "What is the hardest natural substance on Earth?", "expected_output": "Diamond", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q23", "input": "Which planet is known as the Red Planet?", "expected_output": "Mars", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q24", "input": "At what temperature in Celsius does water boil at sea level?", "expected_output": "100", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q25", "input": "Which element has the atomic number 1?", "expected_output": "Hydrogen", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q26", "input": "What is 7 times 8?", "expected_output": "56", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q27", "input": "What is the square root of 144?", "expected_output": "12", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q28", "input": "What is 15% of 200?", "expected_output": "30", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q29", "input": "How many sides does a hexagon have?", "expected_output": "6", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q30", "input": "What is 100 divided by 4?", "expected_output": "25", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q31", "input": "What is the next prime number after 7?", "expected_output": "11", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q32", "input": "What is 12 squared?", "expected_output": "144", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q33", "input": "How many degrees are in a right angle?", "expected_output": "90", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q34", "input": "What is one half plus one quarter, as a fraction?", "expected_output": "3/4", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q35", "input": "What is the smallest prime number?", "expected_output": "2", "expected_trajectory": null, "tags": ["math"]}
+{"id": "q36", "input": "In what year did World War II end?", "expected_output": "1945", "expected_trajectory": null, "tags": ["history"]}
+{"id": "q37", "input": "Who was the first President of the United States?", "expected_output": "George Washington", "expected_trajectory": null, "tags": ["history"]}
+{"id": "q38", "input": "In what year did humans first land on the Moon?", "expected_output": "1969", "expected_trajectory": null, "tags": ["history"]}
+{"id": "q39", "input": "Who painted the Mona Lisa?", "expected_output": "Leonardo da Vinci", "expected_trajectory": null, "tags": ["history", "art"]}
+{"id": "q40", "input": "In what year did the Titanic sink?", "expected_output": "1912", "expected_trajectory": null, "tags": ["history"]}
+{"id": "q41", "input": "In what year did the Berlin Wall fall?", "expected_output": "1989", "expected_trajectory": null, "tags": ["history"]}
+{"id": "q42", "input": "Which ancient wonder still stands at Giza?", "expected_output": "The Great Pyramid of Giza", "expected_trajectory": null, "tags": ["history"]}
+{"id": "q43", "input": "Who wrote the novel 1984?", "expected_output": "George Orwell", "expected_trajectory": null, "tags": ["literature"]}
+{"id": "q44", "input": "Who wrote the Harry Potter series?", "expected_output": "J.K. Rowling", "expected_trajectory": null, "tags": ["literature"]}
+{"id": "q45", "input": "Who wrote Pride and Prejudice?", "expected_output": "Jane Austen", "expected_trajectory": null, "tags": ["literature"]}
+{"id": "q46", "input": "Who is traditionally credited as the author of The Odyssey?", "expected_output": "Homer", "expected_trajectory": null, "tags": ["literature"]}
+{"id": "q47", "input": "Who created the detective Sherlock Holmes?", "expected_output": "Arthur Conan Doyle", "expected_trajectory": null, "tags": ["literature"]}
+{"id": "q48", "input": "Who created the Python programming language?", "expected_output": "Guido van Rossum", "expected_trajectory": null, "tags": ["technology"]}
+{"id": "q49", "input": "What does HTML stand for?", "expected_output": "HyperText Markup Language", "expected_trajectory": null, "tags": ["technology"]}
+{"id": "q50", "input": "Who co-founded Microsoft together with Paul Allen?", "expected_output": "Bill Gates", "expected_trajectory": null, "tags": ["technology"]}
+{"id": "q51", "input": "What does CPU stand for?", "expected_output": "Central Processing Unit", "expected_trajectory": null, "tags": ["technology"]}
+{"id": "q52", "input": "Which company makes the iPhone?", "expected_output": "Apple", "expected_trajectory": null, "tags": ["technology"]}
+{"id": "q53", "input": "Which git command copies a remote repository to your machine?", "expected_output": "git clone", "expected_trajectory": null, "tags": ["technology"]}
+{"id": "q54", "input": "What is the decimal number 5 in binary?", "expected_output": "101", "expected_trajectory": null, "tags": ["technology", "math"]}
+{"id": "q55", "input": "Which HTTP status code means Not Found?", "expected_output": "404", "expected_trajectory": null, "tags": ["technology"]}
+{"id": "q56", "input": "How many players from one soccer team are on the field during play?", "expected_output": "11", "expected_trajectory": null, "tags": ["sports"]}
+{"id": "q57", "input": "How many rings are on the Olympic flag?", "expected_output": "5", "expected_trajectory": null, "tags": ["sports"]}
+{"id": "q58", "input": "Which musical instrument has 88 keys?", "expected_output": "The piano", "expected_trajectory": null, "tags": ["music"]}
+{"id": "q59", "input": "What is the largest mammal on Earth?", "expected_output": "The blue whale", "expected_trajectory": null, "tags": ["science"]}
+{"id": "q60", "input": "How many days are in a leap year?", "expected_output": "366", "expected_trajectory": null, "tags": ["math"]}

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 from collections.abc import Callable
 
 CompleteFn = Callable[[str], str]
@@ -65,7 +66,7 @@ def _make_anthropic_backend(model: str) -> CompleteFn:
             "LLMJudgeScorer needs the anthropic package; install with: pip install .[judge]"
         ) from e
 
-    client = Anthropic()
+    client = Anthropic(max_retries=8)  # concurrent eval runs burst-hit rate limits
 
     def complete(prompt: str) -> str:
         response = client.messages.create(
@@ -101,9 +102,13 @@ class LLMJudgeScorer:
     def __init__(self, complete_fn: CompleteFn | None = None, model: str = DEFAULT_MODEL):
         self.model = model
         self._complete = complete_fn
+        self._init_lock = threading.Lock()
 
     def score(self, expected: str, actual: str) -> float:
         if self._complete is None:
-            self._complete = _make_anthropic_backend(self.model)
+            # concurrent eval threads must not each build their own backend
+            with self._init_lock:
+                if self._complete is None:
+                    self._complete = _make_anthropic_backend(self.model)
         prompt = JUDGE_PROMPT_TEMPLATE.format(expected=expected, actual=actual)
         return parse_judge_response(self._complete(prompt))

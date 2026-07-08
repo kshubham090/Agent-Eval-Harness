@@ -180,7 +180,9 @@ def test_cli_gate_blocks_degraded_agent(tmp_path):
     assert run2.exit_code == 0, run2.output
     assert "PASS" in run2.output
 
-    # 3. Degraded agent (never right) vs baseline: gate exits 1
+    # 3. Degraded agent (never right) vs baseline: gate exits 1.
+    # The stub's baseline on the 60-case dataset is only ~0.017, so the
+    # threshold must be below that drop for the gate to see it.
     degraded = tmp_path / "degraded_agent.py"
     degraded.write_text(DEGRADED_AGENT, encoding="utf-8")
     run3 = runner.invoke(cli, [
@@ -188,6 +190,7 @@ def test_cli_gate_blocks_degraded_agent(tmp_path):
         "--agent", str(degraded),
         "--scorers", "exact",
         "--compare-baseline", "v1", "--baselines-dir", str(baselines),
+        "--threshold", "0.01",
     ])
     assert run3.exit_code == 1, run3.output
     assert "REGRESSION" in run3.output

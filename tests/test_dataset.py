@@ -30,8 +30,11 @@ def test_skips_blank_lines(tmp_path):
 
 
 def test_loads_example_datasets():
-    assert len(load_dataset("datasets/examples/simple_qa.jsonl")) == 5
+    qa_cases = load_dataset("datasets/examples/simple_qa.jsonl")
+    assert len(qa_cases) == 60
+    assert all(c.tags for c in qa_cases)  # every case is taggable for --filter-tags
     trajectory_cases = load_dataset("datasets/examples/tool_calling.jsonl")
+    assert len(trajectory_cases) == 18
     assert all(c.expected_trajectory for c in trajectory_cases)
 
 
