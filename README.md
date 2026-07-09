@@ -1,13 +1,28 @@
-# Agent Eval Harness
+<div align="center">
+
+# Lowq X1
+
+### Agent Eval Harness
 
 [![Eval](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml/badge.svg)](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml)
+[![Real-agent eval](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/real-eval.yml/badge.svg)](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/real-eval.yml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](pyproject.toml)
+[![Tests](https://img.shields.io/badge/tests-96%20passing-brightgreen.svg)](tests/)
+[![Last commit](https://img.shields.io/github/last-commit/kshubham090/Agent-Eval-Harness.svg)](https://github.com/kshubham090/Agent-Eval-Harness/commits/master)
 
-A production-grade eval system for AI agents, built from scratch — no eval frameworks.
+**A production-grade eval system for AI agents, built from scratch — no eval frameworks.**
 
-```
-Golden Dataset  →  Agent Runner  →  Scorer(s)  →  Results  →  Baseline Compare  →  CI Gate
-     ↑                                  ↑
-  (your test cases)           exact / regex / embedding / llm-judge / trajectory
+</div>
+
+---
+
+```mermaid
+flowchart LR
+    DS[("Golden Dataset<br/><sub>your test cases</sub>")] --> AR["Agent Runner"]
+    AR --> SC["Scorer(s)<br/><sub>exact · regex · embedding · llm-judge · trajectory</sub>"]
+    SC --> RS[("Results")]
+    RS --> BC{"Baseline Compare"}
+    BC --> GATE(["CI Gate"])
 ```
 
 The harness answers one question: **"Is my agent getting better or worse?"**
@@ -25,6 +40,129 @@ And it blocks deploys when the answer is "worse."
 - **HTML reports** — `--html report.html` writes a self-contained page: metrics, baseline deltas, and every case worst-first with expected vs actual, latency, and errors
 - **Meta-eval** — calibrate the LLM judge against human-graded cases and measure its agreement before trusting its scores
 - **CI-native** — regression tables land in the GitHub Actions job summary; the HTML report uploads as an artifact
+
+## System Design & Architecture
+
+### Component architecture
+
+How the pieces fit together — a dataset and an agent go in, a pass/fail decision comes out.
+
+```mermaid
+flowchart LR
+    subgraph Input
+        DS[("Golden Dataset<br/>JSONL")]
+        AG["Agent Under Test<br/>get_agent()"]
+    end
+
+    subgraph Core["harness/ core"]
+        DL["dataset.py<br/>load + validate + hash"]
+        ER["eval_runner.py<br/>ThreadPoolExecutor"]
+        SC["scorers/*<br/>exact · regex · embedding · llm_judge"]
+        TR["trajectory.py<br/>LCS step-match"]
+        AGG["results.py<br/>aggregate + multi-run stats"]
+    end
+
+    subgraph Storage
+        RES[("results/*.json")]
+        BASE[("baselines/*.json")]
+    end
+
+    subgraph Output
+        REP["report.py<br/>self-contained HTML"]
+        GATE{{"baseline.py<br/>compare_to_baseline"}}
+        CI["exit 0 / exit 1"]
+    end
+
+    DS --> DL --> ER
+    AG --> ER
+    ER --> SC --> AGG
+    ER --> TR --> AGG
+    AGG --> RES
+    RES -.save.-> BASE
+    RES --> REP
+    RES --> GATE
+    BASE --> GATE
+    GATE --> CI
+```
+
+### Eval run — process flow
+
+What happens inside a single `agent-eval eval` invocation.
+
+```mermaid
+sequenceDiagram
+    participant U as You
+    participant CLI as agent-eval CLI
+    participant D as Dataset Loader
+    participant P as Thread Pool
+    participant A as Agent
+    participant S as Scorers
+    participant G as Baseline Gate
+
+    U->>CLI: eval --dataset --agent --compare-baseline ci
+    CLI->>D: load_dataset(path)
+    D-->>CLI: cases[] + dataset_sha
+
+    par for every case, up to --concurrency
+        P->>A: run(input)
+        A-->>P: output + trajectory
+        P->>S: score(expected, actual)
+        S-->>P: 0.0 - 1.0
+        Note over P: exceptions caught here —<br/>one bad case never kills the run
+    end
+
+    P-->>CLI: CaseResult[] (order preserved)
+    CLI->>CLI: aggregate() -> means, pass_rate, errors
+    CLI->>G: compare_to_baseline(result, baseline)
+    G-->>CLI: regressions[] (metric, delta)
+    CLI-->>U: HTML report + console table + exit code
+```
+
+### CI regression gate
+
+The whole point of the project: an automatic, unbypassable check on every push.
+
+```mermaid
+flowchart TD
+    A["git push / pull request"] --> B["GitHub Actions: Eval workflow"]
+    B --> C["pytest -q"]
+    C -->|fail| X["Red X — merge blocked"]
+    C -->|pass| D["agent-eval eval --compare-baseline ci"]
+    D --> E{"any metric dropped<br/>more than threshold?"}
+    E -->|yes| F["exit 1<br/>regression table in job summary<br/>HTML report uploaded as artifact"]
+    E -->|no| H["exit 0 — PASS"]
+    F --> X
+    H --> G["Green check — merge allowed"]
+```
+
+### Scorer plugin model
+
+Every scorer implements one protocol, so adding a new grading strategy never touches the eval loop.
+
+```mermaid
+classDiagram
+    class Scorer {
+        <<protocol>>
+        +str name
+        +score(expected, actual) float
+    }
+    class ExactMatchScorer
+    class RegexScorer
+    class EmbeddingScorer {
+        -embed_fn : injectable
+    }
+    class LLMJudgeScorer {
+        -complete_fn : injectable
+    }
+    Scorer <|.. ExactMatchScorer
+    Scorer <|.. RegexScorer
+    Scorer <|.. EmbeddingScorer
+    Scorer <|.. LLMJudgeScorer
+```
+
+`embed_fn` and `complete_fn` are why the test suite runs offline in seconds and
+why swapping in Ollama as the judge backend is a one-function change, not a
+rewrite.
 
 ## Datasets included
 
