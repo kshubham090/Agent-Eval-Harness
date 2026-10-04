@@ -27,7 +27,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-from harness.runner import AgentOutput, validate_json_value
+from harness.runner import AgentOutput, ResponseValidationError, validate_json_value
 
 DEFAULT_MAX_OUTPUT_BYTES = 1_048_576
 _IS_WINDOWS = os.name == "nt"
@@ -35,6 +35,10 @@ _IS_WINDOWS = os.name == "nt"
 
 class AdapterError(RuntimeError):
     """An agent failed, timed out, or returned an invalid response."""
+
+
+class AdapterValidationError(AdapterError, ResponseValidationError):
+    """An adapter received malformed output or telemetry from an agent."""
 
 
 def _nonnegative_number(value: Any) -> bool:
@@ -62,34 +66,34 @@ def agent_output_from_payload(payload: Any, *, output_key: str = "output") -> Ag
     nonnegative number), ``metadata`` (an object), and ``events`` (JSON objects).
     """
     if not isinstance(payload, dict):
-        raise AdapterError("agent response must be a JSON object")
+        raise AdapterValidationError("agent response must be a JSON object")
     output = payload.get(output_key)
     if not isinstance(output, str):
-        raise AdapterError(f"agent response field {output_key!r} must be a string")
+        raise AdapterValidationError(f"agent response field {output_key!r} must be a string")
     trajectory = payload.get("trajectory")
     if trajectory is not None and (
         not isinstance(trajectory, list) or any(not isinstance(step, str) for step in trajectory)
     ):
-        raise AdapterError("agent response trajectory must be a list of strings or null")
+        raise AdapterValidationError("agent response trajectory must be a list of strings or null")
     usage = payload.get("usage", {})
     metadata = payload.get("metadata", {})
     if not isinstance(usage, dict) or not isinstance(metadata, dict):
-        raise AdapterError("agent response usage and metadata must be objects")
+        raise AdapterValidationError("agent response usage and metadata must be objects")
     if any(not isinstance(key, str) or not key or not _nonnegative_number(value) for key, value in usage.items()):
-        raise AdapterError("agent response usage must map nonempty names to finite nonnegative numbers")
+        raise AdapterValidationError("agent response usage must map nonempty names to finite nonnegative numbers")
     cost = payload.get("cost_usd")
     events = payload.get("events", [])
     if not isinstance(events, list) or any(not isinstance(event, dict) for event in events):
-        raise AdapterError("agent response events must be a list of JSON objects")
+        raise AdapterValidationError("agent response events must be a list of JSON objects")
     if cost is not None and not _nonnegative_number(cost):
-        raise AdapterError("agent response cost_usd must be a finite nonnegative number or null")
+        raise AdapterValidationError("agent response cost_usd must be a finite nonnegative number or null")
     try:
         if not _string_object_keys(metadata):
             raise ValueError("metadata object keys must be strings")
         validate_json_value(events, "events")
         json.dumps({"usage": usage, "metadata": metadata}, allow_nan=False)
     except (TypeError, ValueError, OverflowError, RecursionError):
-        raise AdapterError("agent response usage, metadata and events must contain valid JSON values") from None
+        raise AdapterValidationError("agent response usage, metadata and events must contain valid JSON values") from None
     return AgentOutput(
         output=output,
         trajectory=trajectory,
@@ -106,7 +110,7 @@ def _json(text: str, source: str) -> Any:
     except (ValueError, RecursionError):
         # Never include raw agent output, prompts, URLs, or environment values
         # in exceptions: case errors are persisted in evaluation reports.
-        raise AdapterError(f"{source} returned invalid JSON") from None
+        raise AdapterValidationError(f"{source} returned invalid JSON") from None
 
 
 def _invalid_constant() -> None:
@@ -324,7 +328,7 @@ def _execute(
         try:
             return buffers[0].decode("utf-8")
         except UnicodeDecodeError:
-            raise AdapterError("agent command stdout must be UTF-8 text") from None
+            raise AdapterValidationError("agent command stdout must be UTF-8 text") from None
     finally:
         # Also reap descendants after success: a command must not leave agents
         # running between eval cases after closing its output pipes.
@@ -483,7 +487,7 @@ class CodexRunner:
                 continue
             event = _json(line, "Codex")
             if not isinstance(event, dict) or not isinstance(event.get("type"), str):
-                raise AdapterError("Codex JSONL events must be objects with a type")
+                raise AdapterValidationError("Codex JSONL events must be objects with a type")
             kind = event["type"]
             if kind == "turn.failed":
                 raise AdapterError("Codex reported a failed turn; provider details omitted")
@@ -504,13 +508,13 @@ class CodexRunner:
             if kind == "item.completed":
                 item = event.get("item")
                 if not isinstance(item, dict):
-                    raise AdapterError("Codex item.completed must contain an item object")
+                    raise AdapterValidationError("Codex item.completed must contain an item object")
                 item_type = item.get("type")
                 if not isinstance(item_type, str) or not item_type:
-                    raise AdapterError("Codex completed item must contain a string type")
+                    raise AdapterValidationError("Codex completed item must contain a string type")
                 if item_type == "agent_message":
                     if not isinstance(item.get("text"), str):
-                        raise AdapterError("Codex agent_message must contain text")
+                        raise AdapterValidationError("Codex agent_message must contain text")
                     final = item["text"]
                 elif item_type == "mcp_tool_call":
                     tool = item.get("tool")
@@ -525,7 +529,7 @@ class CodexRunner:
         if final is None or not completed:
             if provider_errors:
                 raise AdapterError("Codex reported a failed turn without a subsequent completed response; provider details omitted")
-            raise AdapterError("Codex response is incomplete: final agent message and completed turn required")
+            raise AdapterValidationError("Codex response is incomplete: final agent message and completed turn required")
         if provider_errors:
             metadata["provider_error_events"] = provider_errors
         return agent_output_from_payload({
@@ -561,7 +565,10 @@ class ClaudeCodeRunner:
         stdout = _execute(self.command, input, cwd=self.cwd, timeout=self.timeout, max_output_bytes=self.max_output_bytes)
         payload = _json(stdout, "Claude Code")
         if not isinstance(payload, dict) or payload.get("type") != "result":
-            raise AdapterError("Claude Code response must be a result object")
+            raise AdapterValidationError("Claude Code response must be a result object")
+        if (not isinstance(payload.get("is_error"), bool)
+                or not isinstance(payload.get("subtype"), str) or not payload["subtype"]):
+            raise AdapterValidationError("Claude Code result must contain boolean is_error and string subtype fields")
         if payload.get("is_error") is not False or payload.get("subtype") != "success":
             raise AdapterError("Claude Code reported an unsuccessful result; provider details omitted")
         metadata = {"adapter": "claude-code"}
@@ -569,15 +576,15 @@ class ClaudeCodeRunner:
             metadata["session_id"] = payload["session_id"]
         provider_usage = payload.get("usage", {})
         if not isinstance(provider_usage, dict):
-            raise AdapterError("Claude Code usage must be an object")
+            raise AdapterValidationError("Claude Code usage must be an object")
         usage = {}
         token_counters = {"input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "total_tokens"}
         for key, value in provider_usage.items():
             if key in token_counters and not _nonnegative_number(value):
-                raise AdapterError("Claude Code usage counters must be finite nonnegative numbers")
+                raise AdapterValidationError("Claude Code usage counters must be finite nonnegative numbers")
             if isinstance(value, (float, int)):
                 if not _nonnegative_number(value):
-                    raise AdapterError("Claude Code usage counters must be finite nonnegative numbers")
+                    raise AdapterValidationError("Claude Code usage counters must be finite nonnegative numbers")
                 usage[key] = value
         if "total_tokens" not in usage and "input_tokens" in usage and "output_tokens" in usage:
             usage["total_tokens"] = sum(usage.get(key, 0) for key in (
@@ -658,5 +665,5 @@ class HTTPRunner:
         try:
             text = body.decode("utf-8")
         except UnicodeDecodeError:
-            raise AdapterError("HTTP agent response must be UTF-8 JSON") from None
+            raise AdapterValidationError("HTTP agent response must be UTF-8 JSON") from None
         return agent_output_from_payload(_json(text, "HTTP agent"), output_key=self.output_key)

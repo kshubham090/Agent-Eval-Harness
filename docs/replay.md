@@ -85,6 +85,13 @@ An ordinary wrong answer is a zero score, without an execution error. An error
 always fails, even with a pass threshold of zero. When a previous scoring
 failure is retried, its error is retained in case metadata.
 
+Adapters distinguish malformed response envelopes, JSON, and protocol fields
+from process or provider failures. Their validation exceptions remain
+`AdapterError` subclasses and are recorded as `validation`. Custom runners
+that validate a response inside `run()` can raise
+`harness.runner.ResponseValidationError` to preserve the same attribution.
+Ordinary exceptions from a runner remain `agent` failures.
+
 ## Grader reproducibility
 
 `metadata.grader_config` records each grader's name, qualified Python type,

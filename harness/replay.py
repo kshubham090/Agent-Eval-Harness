@@ -276,7 +276,9 @@ def rescore_result(payload: dict, scorers: list[Scorer], pass_threshold: float |
     if any(not isinstance(name, str) or not name.strip() for name in names) or len(set(names)) != len(names):
         raise ValueError("scorer names must be nonempty and unique")
     source_runs = recording["runs"] if recording.get("type") == "multi_run" else [recording]
-    if any(run["metadata"].get("evaluation_kind") == "coding" or "tests" in run["scores"]
+    if any(run["metadata"].get("evaluation_kind") == "coding"
+           or any(grader["type"] == "harness.coding.held_out_tests"
+                  for grader in run["metadata"].get("grader_config", []))
            for run in source_runs):
         raise ValueError("coding recordings require rerunning their held-out tests; text rescore is unsupported")
     graders = describe_scorers(scorers)

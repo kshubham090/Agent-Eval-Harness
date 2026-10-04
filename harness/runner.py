@@ -11,6 +11,10 @@ import math
 from typing import Protocol, runtime_checkable
 
 
+class ResponseValidationError(ValueError):
+    """An agent returned output or telemetry that violates its response protocol."""
+
+
 def validate_json_value(value: object, label: str = "value") -> None:
     """Reject values JSON would coerce, lose, or encode non-standardly.
 

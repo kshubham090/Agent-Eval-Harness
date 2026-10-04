@@ -71,6 +71,26 @@ def test_pack_fingerprint_is_portable_and_covers_all_files(tmp_path):
     assert load_pack(target).fingerprint != previous
 
 
+@pytest.mark.parametrize("tree", ["workspace", "grader"])
+def test_fingerprint_covers_empty_directories_and_entry_types(tmp_path, tree):
+    root = copy_pack(tmp_path)
+    original = load_pack(root).fingerprint
+    path = root / "tasks" / "slug" / tree / "fixture"
+    path.mkdir()
+    directory_fingerprint = load_pack(root).fingerprint
+    assert directory_fingerprint != original
+    renamed = path.with_name("renamed-fixture")
+    path.rename(renamed)
+    assert load_pack(root).fingerprint != directory_fingerprint
+    renamed.rename(path)
+    assert load_pack(root).fingerprint == directory_fingerprint
+    path.rmdir()
+    path.write_bytes(b"")
+    assert load_pack(root).fingerprint not in {original, directory_fingerprint}
+    path.unlink()
+    assert load_pack(root).fingerprint == original
+
+
 @pytest.mark.skipif(os.name == "nt", reason="Windows has different executable-mode semantics")
 def test_fingerprint_covers_executable_flag(tmp_path):
     root = copy_pack(tmp_path)
@@ -309,6 +329,19 @@ def test_independent_graders_reject_starters_and_accept_correct_repairs(tmp_path
     passed = run_grader(task, workspace)
     assert passed.returncode == 0, passed.stderr
     evidence = json.loads(passed.stdout)
+    assert evidence["passed"] == evidence["total"] and evidence["total"] >= 16
+
+
+@pytest.mark.parametrize("task_id,function", [
+    ("slug", "slugify"), ("dedup", "stable_unique"), ("intervals", "merge_intervals"),
+])
+def test_independent_graders_accept_repairs_with_local_helper_modules(tmp_path, task_id, function):
+    task = next(task for task in load_pack("coding-starter").tasks if task.id == task_id)
+    (tmp_path / "helpers.py").write_text(_SOLUTIONS[task_id])
+    (tmp_path / "solution.py").write_text(f"from helpers import {function}\n")
+    result = run_grader(task, tmp_path)
+    assert result.returncode == 0, result.stderr
+    evidence = json.loads(result.stdout)
     assert evidence["passed"] == evidence["total"] and evidence["total"] >= 16
 
 

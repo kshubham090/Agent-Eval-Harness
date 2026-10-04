@@ -24,6 +24,7 @@ from collections.abc import Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
+from types import MappingProxyType
 from typing import Any
 
 from harness.results import CaseResult, EvalResult, aggregate, validate_probability
@@ -58,24 +59,32 @@ class _File:
     executable: bool = False
 
 
-@dataclass
+@dataclass(frozen=True)
 class _Snapshot:
-    files: dict[str, _File] = field(default_factory=dict)
-    directories: set[str] = field(default_factory=set)
+    files: Mapping[str, _File] = field(default_factory=dict)
+    directories: frozenset[str] = field(default_factory=frozenset)
+
+    def __post_init__(self) -> None:
+        # Snapshots may be shared by concurrent tasks; retain no mutable inputs.
+        object.__setattr__(self, "files", MappingProxyType(dict(self.files)))
+        directories = set(self.directories)
+        for name in self.files.keys() | directories:
+            directories.update(str(parent) for parent in PurePosixPath(name).parents if str(parent) != ".")
+        object.__setattr__(self, "directories", frozenset(directories))
 
     def manifest(self) -> list[dict]:
-        return [
-            {"path": path, "bytes": len(file.data), "sha256": hashlib.sha256(file.data).hexdigest(),
+        entries = [{"path": path, "type": "directory"} for path in self.directories]
+        entries.extend(
+            {"path": path, "type": "file", "bytes": len(file.data), "sha256": hashlib.sha256(file.data).hexdigest(),
              "executable": file.executable}
-            for path, file in sorted(self.files.items())
-        ]
+            for path, file in self.files.items()
+        )
+        return sorted(entries, key=lambda entry: entry["path"])
 
     def archive(self, prefix: str = "", *, trusted: bool = False) -> bytes:
         result = io.BytesIO()
         with tarfile.open(fileobj=result, mode="w", format=tarfile.PAX_FORMAT) as archive:
             directories = set(self.directories)
-            for name in self.files:
-                directories.update(str(parent) for parent in PurePosixPath(name).parents if str(parent) != ".")
             if prefix:
                 directories.add("")
             for name in sorted(directories):
@@ -108,7 +117,9 @@ def _safe_name(name: str) -> str:
 def _snapshot_directory(path: Path) -> _Snapshot:
     if path.is_symlink() or not path.is_dir():
         raise CodingError("workspace and grader must be real directories", phase="validation")
-    result, total, count = _Snapshot(), 0, 0
+    files: dict[str, _File] = {}
+    directories: set[str] = set()
+    total, count = 0, 0
     pending = [path]
     while pending:
         directory = pending.pop()
@@ -120,7 +131,7 @@ def _snapshot_directory(path: Path) -> _Snapshot:
             if count > MAX_ENTRIES:
                 raise CodingError("workspace exceeds the entry limit", phase="validation")
             if stat.S_ISDIR(mode):
-                result.directories.add(name)
+                directories.add(name)
                 pending.append(entry)
             elif stat.S_ISREG(mode):
                 if info.st_nlink > 1:
@@ -132,32 +143,36 @@ def _snapshot_directory(path: Path) -> _Snapshot:
                 total += len(content)
                 if len(content) > MAX_FILE_BYTES or total > MAX_WORKSPACE_BYTES:
                     raise CodingError("workspace exceeds the byte limit", phase="validation")
-                result.files[name] = _File(content, bool(mode & 0o111))
+                files[name] = _File(content, bool(mode & 0o111))
             else:
                 raise CodingError("workspace may contain only regular files and directories; links are rejected", phase="validation")
-    return result
+    return _Snapshot(files, frozenset(directories))
 
 
 def _snapshot_archive(data: bytes) -> _Snapshot:
     if len(data) > MAX_ARCHIVE_BYTES:
         raise CodingError("candidate archive exceeds the byte limit", phase="validation")
-    result, seen, total, count = _Snapshot(), set(), 0, 0
+    files: dict[str, _File] = {}
+    directories: set[str] = set()
+    seen: set[str] = set()
+    total, count, root_seen = 0, 0, False
     try:
         with tarfile.open(fileobj=io.BytesIO(data), mode="r:") as archive:
             for member in archive:
                 name = _safe_name(member.name)
-                count += 1
-                if count > MAX_ENTRIES:
-                    raise CodingError("candidate exceeds the entry limit", phase="validation")
                 if not name and member.isdir():
+                    if root_seen:
+                        raise CodingError("candidate contains duplicate root entries", phase="validation")
+                    root_seen = True
                     continue
+                count += 1
                 if count > MAX_ENTRIES:
                     raise CodingError("candidate exceeds the entry limit", phase="validation")
                 if not name or name in seen:
                     raise CodingError("candidate contains duplicate or empty paths", phase="validation")
                 seen.add(name)
                 if member.isdir():
-                    result.directories.add(name)
+                    directories.add(name)
                 elif member.isfile() and not member.issparse():
                     total += member.size
                     if member.size < 0 or member.size > MAX_FILE_BYTES or total > MAX_WORKSPACE_BYTES:
@@ -168,15 +183,18 @@ def _snapshot_archive(data: bytes) -> _Snapshot:
                     content = stream.read(MAX_FILE_BYTES + 1)
                     if len(content) != member.size:
                         raise CodingError("candidate archive contains an incomplete file", phase="validation")
-                    result.files[name] = _File(content, bool(member.mode & 0o111))
+                    files[name] = _File(content, bool(member.mode & 0o111))
                 else:
                     raise CodingError("candidate links, devices, sparse files, and special entries are rejected", phase="validation")
     except (tarfile.TarError, OSError, ValueError) as exc:
         raise CodingError("candidate archive is invalid", phase="validation") from exc
     for name in seen:
-        if any(str(parent) in result.files for parent in PurePosixPath(name).parents):
+        if any(str(parent) in files for parent in PurePosixPath(name).parents):
             raise CodingError("candidate file conflicts with a directory path", phase="validation")
-    return result
+    snapshot = _Snapshot(files, frozenset(directories))
+    if len(snapshot.files) + len(snapshot.directories) > MAX_ENTRIES:
+        raise CodingError("candidate exceeds the entry limit", phase="validation")
+    return snapshot
 
 
 def _patch(before: _Snapshot, after: _Snapshot) -> tuple[bytes, bool]:
@@ -419,13 +437,24 @@ def run_coding_eval(pack: Any, command: Sequence[str], *, image: str | None = No
     tasks = list(pack.tasks)
     if len({task.id for task in tasks}) != len(tasks) or any(not isinstance(task.id, str) or not task.id.strip() for task in tasks):
         raise ValueError("coding task ids must be unique nonempty strings")
+    snapshots: dict[Path, _Snapshot] = {}
+
+    def prepare_snapshot(path: Path) -> _Snapshot:
+        # Preserve root-link rejection even when its target is already cached.
+        if path.is_symlink():
+            raise CodingError("workspace and grader must be real directories", phase="validation")
+        canonical = path.resolve()
+        if canonical not in snapshots:
+            snapshots[canonical] = _snapshot_directory(path)
+        return snapshots[canonical]
+
     prepared = []
     for task in tasks:
         if not isinstance(task.input, str) or not task.input or len(task.input.encode("utf-8")) > MAX_LOG_BYTES:
             raise ValueError("task prompts must be nonempty and at most 1 MiB")
         _argv(task.command)
         _positive(task.timeout, "grader timeout")
-        prepared.append((task, _snapshot_directory(Path(task.workspace)), _snapshot_directory(Path(task.grader))))
+        prepared.append((task, prepare_snapshot(Path(task.workspace)), prepare_snapshot(Path(task.grader))))
     executable = shutil.which("docker")
     if executable is None:
         raise CodingError("Docker is not installed; install Docker and start its daemon")

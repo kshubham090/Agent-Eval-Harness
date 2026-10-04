@@ -19,8 +19,10 @@ import runpy
 import sys
 
 payload = json.loads(sys.stdin.read())
+workspace = Path(sys.argv[1])
+sys.path.insert(0, str(workspace))
 with contextlib.redirect_stdout(io.StringIO()):
-    namespace = runpy.run_path(str(Path(sys.argv[1]) / 'solution.py'))
+    namespace = runpy.run_path(str(workspace / 'solution.py'))
     function = namespace[payload['function']]
     records = []
     for args in payload['calls']:

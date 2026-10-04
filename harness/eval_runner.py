@@ -19,7 +19,7 @@ from copy import deepcopy
 
 from harness.dataset import EvalCase
 from harness.results import CaseResult, EvalResult, _nonnegative, aggregate, validate_probability
-from harness.runner import AgentRunner, validate_json_value
+from harness.runner import AgentRunner, ResponseValidationError, validate_json_value
 from harness.scorers.base import Scorer
 from harness.trajectory import score_trajectory
 
@@ -96,6 +96,9 @@ def _run_case(case: EvalCase, runner: AgentRunner, scorers: list[Scorer]) -> Cas
     try:
         try:
             agent_output = runner.run(case.input)
+        except ResponseValidationError:
+            error_stage = "validation"
+            raise
         finally:
             agent_latency_ms = (time.perf_counter() - start) * 1000
         error_stage = "validation"

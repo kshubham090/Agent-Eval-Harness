@@ -158,9 +158,15 @@ def eval_command(ctx, **options):
     if options["config"]:
         try:
             configured = load_config(options["config"])
+            selected_sources = [key for key in ("dataset", "pack")
+                                if ctx.get_parameter_source(key) == ParameterSource.COMMANDLINE]
+            discarded_source = None
+            if len(selected_sources) == 1:
+                discarded_source = "pack" if selected_sources[0] == "dataset" else "dataset"
+                options[discarded_source] = None
             params = {p.name: p for p in ctx.command.params}
             for key, value in configured.items():
-                if ctx.get_parameter_source(key) != ParameterSource.COMMANDLINE:
+                if key != discarded_source and ctx.get_parameter_source(key) != ParameterSource.COMMANDLINE:
                     options[key] = params[key].process_value(ctx, value)
             # Selecting a different adapter on the command line overrides the configured target.
             selected = [key for key in ("agent_path", "command", "url")
@@ -173,10 +179,6 @@ def eval_command(ctx, **options):
                     for key, default in (("model", None), ("agent_args", ())):
                         if ctx.get_parameter_source(key) != ParameterSource.COMMANDLINE:
                             options[key] = default
-            selected_sources = [key for key in ("dataset", "pack")
-                                if ctx.get_parameter_source(key) == ParameterSource.COMMANDLINE]
-            if len(selected_sources) == 1:
-                options["pack" if selected_sources[0] == "dataset" else "dataset"] = None
         except (OSError, ValueError) as exc:
             raise click.ClickException(str(exc)) from exc
     options["_scorers_explicit"] = ("scorer_names" in configured or

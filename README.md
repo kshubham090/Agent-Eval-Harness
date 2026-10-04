@@ -385,10 +385,12 @@ Anthropic example manually with a repository secret.
 
 ## Scope and practical limits
 
-This release evaluates text/JSON responses and supplied tool trajectories.
-It does not yet provision per-case containers, reset repositories, verify
-patches with hidden tests, or run SWE-bench/Terminal-Bench. A prompt-only score
-cannot establish end-to-end coding ability or “best in the world.”
+This release evaluates text/JSON responses, supplied tool trajectories and
+repository edits in fresh Docker workspaces with separate test containers.
+The bundled coding tasks are public teaching examples, not representative
+coding benchmarks or adversarially tamper-proof graders. SWE-bench and
+Terminal-Bench are not integrated. A prompt-only score cannot establish
+end-to-end coding ability or “best in the world.”
 
 The Codex preset starts read-only; Claude Code uses `dontAsk` and retains
 existing tool permissions. Command and Python integrations use your existing
@@ -411,5 +413,5 @@ factory agents remain compatible.
 
 See [integration examples](docs/integrations.md), [benchmark methodology](docs/benchmarking.md),
 [smoke-suite generation](benchmarks/README.md), and the original
-[learning resources](RESOURCES.md). Next priorities are reproducible sandboxed
-coding tasks, resumable runs and richer task-specific validators.
+[learning resources](RESOURCES.md). Next priorities are broader coding-task
+coverage, resumable runs and richer task-specific validators.

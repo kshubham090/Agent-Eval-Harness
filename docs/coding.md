@@ -143,6 +143,10 @@ The home directory is non-root owned with mode 0700 and is never included in
 candidate snapshots or copied to the host. Grader files have an additional
 64 MiB tmpfs volume, are owned by root, and are not writable by candidate code.
 
+All task inputs are validated before containers start. Tasks that reuse the
+same workspace or grader directory share one immutable host snapshot, while
+each task still receives a separate copy inside its own container.
+
 After the agent returns, its entire container is paused before copying candidate
 files, preventing descendants from editing the snapshot. The agent container
 and its volumes are then removed. Agent timeouts kill the local Docker client
@@ -156,15 +160,18 @@ unavailable, an operator may need to remove resources with the recorded
 Input and candidate workspaces accept regular files and directories only.
 Symlinks, hard links, devices, sparse archive entries, escaping paths, duplicate
 paths, and file/directory collisions are rejected. A workspace is limited to
-4096 entries, 32 MiB total regular-file bytes, and 8 MiB per file; each log stream
-is limited to 1 MiB. Use images with dependencies preinstalled instead of
-creating a large virtual environment inside the task workspace. Executable bits
+4096 files and directories beneath its root, 32 MiB total regular-file bytes,
+and 8 MiB per file; each log stream is limited to 1 MiB. Use images with
+dependencies preinstalled instead of creating a large virtual environment inside
+the task workspace. Executable bits
 are normalized to 0755 or 0644; trusted grader files use 0555 or 0444. File
-contents, relative names, and the executable flag are preserved.
+contents, relative names, empty directories, and the executable flag are preserved.
 
 Each invocation creates a unique artifact directory and never overwrites an
 earlier run. Each task records bounded agent/grader stdout and stderr,
-`candidate.tar`, file hashes, `patch.diff`, and `evidence.json`. The text diff is
+`candidate.tar`, tree manifests, `patch.diff`, and `evidence.json`. Manifests
+identify each entry as a file or directory, including empty directories, and
+record hashes, byte sizes, and executable flags for files. The text diff is
 an inspection aid: binary/large files are summarized and long diffs are marked
 truncated. The candidate archive is the complete validated file snapshot within
 the stated limits. The full result JSON is also saved inside the run directory.

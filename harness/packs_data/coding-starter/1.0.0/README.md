@@ -9,6 +9,8 @@ Independent standard-library graders check ordinary examples, edge cases, input
 mutation, and deterministic generated inputs. The grader calls candidate code in
 a child process and checks returned values in its own process, so exiting the
 candidate process with status zero without returning results does not pass.
+Candidate functions may import helper modules from their workspace; expected
+answers and comparisons remain in the separate grader parent process.
 
 The harness gives the agent only the selected task's `workspace/`. After the
 agent exits, a fresh grading container receives the candidate files and the

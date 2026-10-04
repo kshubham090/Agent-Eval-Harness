@@ -23,6 +23,9 @@ def validate_output_paths(*, inputs=(), outputs=(), protected_directories=()):
                 raise ValueError("output paths must be distinct from source files and each other")
         if any(target.is_relative_to(Path(p).resolve()) for p in protected_directories if p):
             raise ValueError("outputs must be outside the benchmark pack")
+    for target in targets:
+        if target.is_file() and target.stat().st_nlink > 1:
+            raise ValueError("output files must not have multiple hard links")
 
 
 def _save(path, payload):

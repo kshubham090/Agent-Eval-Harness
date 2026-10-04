@@ -85,10 +85,11 @@ def test_rescore_json_and_html_cannot_alias_each_other(tmp_path, monkeypatch, al
 
 
 @pytest.mark.parametrize("selected", ["pack", "dataset"])
-def test_explicit_cli_dataset_or_pack_overrides_configured_other_source(tmp_path, selected):
+@pytest.mark.parametrize("configured", ['dataset="cases.jsonl"', 'dataset="missing.jsonl"',
+                                        'pack="json-contracts@1.0.0"', 'pack="missing-pack@1.0.0"'])
+def test_explicit_cli_dataset_or_pack_overrides_configured_source(tmp_path, selected, configured):
     cases = tmp_path / "cases.jsonl"
     cases.write_text(json.dumps({"id": "own-case", "input": "prompt", "expected_output": "null"}) + "\n")
-    configured = 'dataset="cases.jsonl"' if selected == "pack" else 'pack="json-contracts@1.0.0"'
     config = tmp_path / "agent-eval.toml"
     config.write_text(f"[eval]\n{configured}\n")
     output = tmp_path / "run.json"
@@ -105,6 +106,63 @@ def test_explicit_cli_dataset_or_pack_overrides_configured_other_source(tmp_path
     else:
         assert [case["id"] for case in data["cases"]] == ["own-case"]
         assert "pack" not in data["metadata"]
+
+
+@pytest.mark.parametrize("configured, message", [
+    ('dataset=123', "eval.dataset must be a path string"),
+    ('dataset="missing.jsonl"\nunknown=1', "unknown config [eval] keys"),
+    ('dataset="missing.jsonl"\nruns="two"', "eval.runs must be an integer"),
+])
+def test_cli_source_override_keeps_strict_config_validation(tmp_path, configured, message):
+    config = tmp_path / "agent-eval.toml"
+    config.write_text(f"[eval]\n{configured}\n")
+    outcome = CliRunner().invoke(cli, ["eval", "--config", str(config),
+                                      "--pack", "json-contracts@1.0.0"])
+    assert outcome.exit_code == 1
+    assert message in outcome.output
+
+
+def test_both_explicit_cli_sources_still_fail_as_a_usage_error(tmp_path):
+    cases = tmp_path / "cases.jsonl"
+    cases.write_text(json.dumps({"id": "case", "input": "prompt", "expected_output": "null"}) + "\n")
+    config = tmp_path / "agent-eval.toml"
+    config.write_text('[eval]\ndataset="missing.jsonl"\n')
+    outcome = CliRunner().invoke(cli, ["eval", "--config", str(config), "--dataset", str(cases),
+                                      "--pack", "json-contracts@1.0.0"])
+    assert outcome.exit_code == 2
+    assert "choose --dataset or --pack, not both" in outcome.output
+
+
+@pytest.mark.parametrize("field", ["--output", "--html"])
+def test_output_alias_cannot_overwrite_a_protected_pack_file(tmp_path, monkeypatch, field):
+    pack = tmp_path / "pack"
+    assert CliRunner().invoke(cli, ["pack", "init", str(pack), "--kind", "output"]).exit_code == 0
+    protected = pack / "pack.toml"
+    original = protected.read_bytes()
+    alias = tmp_path / "result"
+    try:
+        os.link(protected, alias)
+    except OSError as exc:
+        pytest.skip(f"filesystem does not support test hardlinks: {exc}")
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("hard-linked outputs must be rejected before agent calls")
+
+    monkeypatch.setattr("harness.cli._make_runner", forbidden)
+    outcome = CliRunner().invoke(cli, ["eval", "--pack", str(pack), field, str(alias)])
+    assert outcome.exit_code == 1, outcome.output
+    assert "hard links" in outcome.output
+    assert protected.read_bytes() == original
+    assert alias.read_bytes() == original
+
+
+def test_existing_artifact_directory_is_not_mistaken_for_a_hard_link(tmp_path):
+    from harness.workflows import validate_output_paths
+
+    artifacts = tmp_path / "artifacts"
+    artifacts.mkdir()
+    (artifacts / "previous-run").mkdir()
+    validate_output_paths(outputs=[artifacts])
 
 
 @pytest.mark.parametrize("field", ["--output", "--html"])

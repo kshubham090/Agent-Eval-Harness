@@ -115,9 +115,9 @@ def _portable_component(name: str) -> bool:
     )
 
 
-def _inventory(root: Path) -> list[tuple[str, Path, int, bool]]:
+def _inventory(root: Path) -> list[tuple[str, Path, str, int, bool]]:
     """Reject links/special files and bound reads before hashing pack content."""
-    files: list[tuple[str, Path, int, bool]] = []
+    entries: list[tuple[str, Path, str, int, bool]] = []
     total = 0
     visited = 0
     folded: set[str] = set()
@@ -142,6 +142,7 @@ def _inventory(root: Path) -> list[tuple[str, Path, int, bool]]:
                 raise PackError(f"pack contains case-insensitive path collisions: {relative}")
             folded.add(relative.casefold())
             if stat.S_ISDIR(info.st_mode):
+                entries.append((relative, path, "directory", 0, False))
                 continue
             if not stat.S_ISREG(info.st_mode):
                 raise PackError(f"pack contains a non-regular file: {relative}")
@@ -152,8 +153,8 @@ def _inventory(root: Path) -> list[tuple[str, Path, int, bool]]:
             total += info.st_size
             if total > _MAX_PACK_BYTES:
                 raise PackError(f"pack exceeds {_MAX_PACK_BYTES} bytes")
-            files.append((relative, path, info.st_size, bool(info.st_mode & 0o111)))
-    return sorted(files)
+            entries.append((relative, path, "file", info.st_size, bool(info.st_mode & 0o111)))
+    return sorted(entries)
 
 
 def _path(root: Path, value: object, label: str, *, directory: bool = False) -> Path:
@@ -179,16 +180,19 @@ def _path(root: Path, value: object, label: str, *, directory: bool = False) -> 
     return path
 
 
-def _hash_files(files: list[tuple[str, Path, int, bool]]) -> str:
-    digest = hashlib.sha256(b"agent-eval-pack-v1\0")
-    for relative, path, expected_size, executable in files:
+def _hash_entries(entries: list[tuple[str, Path, str, int, bool]]) -> str:
+    digest = hashlib.sha256(b"agent-eval-pack-v2\0")
+    for relative, path, kind, expected_size, executable in entries:
         name = relative.encode("utf-8")
+        digest.update(len(name).to_bytes(8, "big"))
+        digest.update(name)
+        digest.update(b"d" if kind == "directory" else b"f")
+        if kind == "directory":
+            continue
         with path.open("rb") as stream:
             contents = stream.read(_MAX_FILE_BYTES + 1)
         if len(contents) != expected_size:
             raise PackError(f"pack changed while reading: {relative}")
-        digest.update(len(name).to_bytes(8, "big"))
-        digest.update(name)
         digest.update(bytes([executable]))
         digest.update(len(contents).to_bytes(8, "big"))
         digest.update(contents)
@@ -201,7 +205,7 @@ def _load_directory(root: Path) -> BenchmarkPack:
     if not root.is_dir():
         raise PackError(f"pack directory does not exist: {root}")
     root = root.resolve()
-    files = _inventory(root)
+    entries = _inventory(root)
     manifest = root / "pack.toml"
     if not manifest.is_file():
         raise PackError(f"missing pack.toml in {root}")
@@ -280,7 +284,7 @@ def _load_directory(root: Path) -> BenchmarkPack:
                     raise PackError("workspace and grader directories must not overlap (including across tasks)")
     return BenchmarkPack(
         id=identifier, version=version, kind=kind, root=root,
-        fingerprint=_hash_files(files), dataset=dataset, scorers=scorers, image=image,
+        fingerprint=_hash_entries(entries), dataset=dataset, scorers=scorers, image=image,
         tasks=tuple(tasks), name=name, description=description, license=license_name,
     )
 

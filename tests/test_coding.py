@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tarfile
 import time
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -15,6 +16,7 @@ import pytest
 
 import harness.coding as coding
 from harness.coding import CodingError, _Docker, _File, _Snapshot, _patch, _snapshot_archive, _snapshot_directory, run_coding_eval
+from harness.packs import load_pack
 
 
 def _pack(tmp_path: Path, *, grader_source: str | None = None, tasks: int = 1):
@@ -66,8 +68,33 @@ def test_snapshot_roundtrip_retains_bytes_empty_directories_and_exec(tmp_path):
     original = _snapshot_directory(tmp_path)
     restored = _snapshot_archive(original.archive())
     assert restored == original
-    assert restored.manifest()[0]["sha256"]
+    manifest = {entry["path"]: entry for entry in restored.manifest()}
+    assert manifest["src/a.py"]["sha256"]
+    assert manifest["src/a.py"]["type"] == "file"
+    assert manifest["src"] == {"path": "src", "type": "directory"}
+    assert manifest["empty"] == {"path": "empty", "type": "directory"}
     assert original.archive() == original.archive()
+
+
+def test_snapshot_is_immutable_and_does_not_retain_mutable_inputs():
+    files, directories = {"a": _File(b"original")}, {"empty"}
+    snapshot = _Snapshot(files, directories)
+    files["a"] = _File(b"changed")
+    directories.clear()
+    assert snapshot.files["a"].data == b"original"
+    assert snapshot.directories == {"empty"}
+    with pytest.raises(TypeError):
+        snapshot.files["a"] = _File(b"changed")
+    with pytest.raises(AttributeError):
+        snapshot.directories.add("another")
+
+
+def test_snapshot_manifest_includes_implicit_parent_directories():
+    snapshot = _Snapshot({"src/lib/a.py": _File(b"pass\n")}, {"fixtures/empty"})
+    assert snapshot.directories == {"src", "src/lib", "fixtures", "fixtures/empty"}
+    restored = _snapshot_archive(snapshot.archive())
+    assert restored == snapshot
+    assert restored.manifest() == snapshot.manifest()
 
 
 @pytest.mark.parametrize("name", ["../escape", "/absolute", "a/../../x", "a\\x", "C:/x", "a:b", "a//b", "a/./b", "a\nx"])
@@ -105,12 +132,31 @@ def test_archive_rejects_truncation_and_excess_size(monkeypatch):
 
 def test_archive_counts_all_entries_and_total_bytes(monkeypatch):
     monkeypatch.setattr(coding, "MAX_ENTRIES", 1)
-    with pytest.raises(CodingError, match="entry limit"):
+    with pytest.raises(CodingError, match="duplicate root"):
         _snapshot_archive(_tar([(".", None, tarfile.DIRTYPE), (".", None, tarfile.DIRTYPE)]))
     monkeypatch.setattr(coding, "MAX_ENTRIES", 10)
     monkeypatch.setattr(coding, "MAX_WORKSPACE_BYTES", 3)
     with pytest.raises(CodingError, match="limits"):
         _snapshot_archive(_tar([("a", b"12", None), ("b", b"34", None)]))
+
+
+def test_archive_allows_one_root_beside_exact_workspace_entry_limit(monkeypatch):
+    monkeypatch.setattr(coding, "MAX_ENTRIES", 2)
+    entries = [(".", None, tarfile.DIRTYPE), ("empty", None, tarfile.DIRTYPE), ("a", b"data", None)]
+    snapshot = _snapshot_archive(_tar(entries))
+    assert snapshot.directories == {"empty"} and snapshot.files["a"].data == b"data"
+    with pytest.raises(CodingError, match="entry limit"):
+        _snapshot_archive(_tar([*entries, ("extra", b"", None)]))
+    with pytest.raises(CodingError, match="duplicate root"):
+        _snapshot_archive(_tar([entries[0], ("./", None, tarfile.DIRTYPE)]))
+
+
+def test_archive_counts_implicit_parent_directories_toward_entry_limit(monkeypatch):
+    monkeypatch.setattr(coding, "MAX_ENTRIES", 2)
+    snapshot = _snapshot_archive(_tar([("src/a.py", b"pass\n", None)]))
+    assert snapshot.directories == {"src"}
+    with pytest.raises(CodingError, match="entry limit"):
+        _snapshot_archive(_tar([("src/lib/a.py", b"pass\n", None)]))
 
 
 def test_local_snapshot_rejects_symlinks(tmp_path):
@@ -176,6 +222,48 @@ def test_docker_missing_and_invalid_image_fail_preflight(tmp_path, monkeypatch):
     with pytest.raises(CodingError, match="not installed"):
         run_coding_eval(pack, ["python"], artifacts_dir=tmp_path / "artifacts")
     assert not (tmp_path / "artifacts").exists()
+
+
+def test_preflight_snapshots_shared_canonical_trees_only_once(tmp_path, monkeypatch):
+    pack = _pack(tmp_path, tasks=32)
+    pack.tasks[1].workspace = pack.tasks[1].workspace / ".." / "workspace"
+    observed = []
+
+    def capture_snapshot(path):
+        observed.append(path.resolve())
+        return _snapshot_directory(path)
+
+    def stop_before_execution(*args):
+        raise CodingError("preflight complete")
+
+    monkeypatch.setattr(coding, "_snapshot_directory", capture_snapshot)
+    monkeypatch.setattr(coding.shutil, "which", lambda _: "docker")
+    monkeypatch.setattr(_Docker, "image", stop_before_execution)
+    with pytest.raises(CodingError, match="preflight complete"):
+        run_coding_eval(pack, ["python"], concurrency=1, artifacts_dir=tmp_path / "artifacts")
+    assert observed == [(tmp_path / "workspace").resolve(), (tmp_path / "grader").resolve()]
+    assert not (tmp_path / "artifacts").exists()
+
+
+def test_cached_snapshot_does_not_allow_a_linked_task_root(tmp_path, monkeypatch):
+    pack = _pack(tmp_path, tasks=2)
+    link = tmp_path / "workspace-link"
+    try:
+        link.symlink_to(pack.tasks[0].workspace, target_is_directory=True)
+    except OSError:
+        pytest.skip("creating symlinks is not permitted on this host")
+    pack.tasks[1].workspace = link
+    monkeypatch.setattr(coding.shutil, "which", lambda _: pytest.fail("Docker discovery ran before validation"))
+    with pytest.raises(CodingError, match="real directories"):
+        run_coding_eval(pack, ["python"], artifacts_dir=tmp_path / "artifacts")
+
+
+def test_cached_trees_still_validate_every_task_before_execution(tmp_path, monkeypatch):
+    pack = _pack(tmp_path, tasks=2)
+    pack.tasks[1].command = ()
+    monkeypatch.setattr(coding.shutil, "which", lambda _: pytest.fail("Docker discovery ran before validation"))
+    with pytest.raises(ValueError, match="nonempty argv"):
+        run_coding_eval(pack, ["python"], artifacts_dir=tmp_path / "artifacts")
 
 
 def test_docker_process_bounds_and_nonzero():
@@ -269,6 +357,41 @@ def test_docker_e2e_failed_tests_are_zero_without_execution_error(tmp_path, dock
     result = run_coding_eval(_pack(tmp_path), ["python", "-c", "print('no edit')"], artifacts_dir=tmp_path / "artifacts")
     assert result.pass_rate == 0 and result.error_count == 0
     assert result.case_results[0].metadata["grader_exit_code"] == 1
+    _assert_no_resources(result)
+
+
+def test_docker_e2e_workspace_at_entry_limit_roundtrips(tmp_path, docker_enabled):
+    pack = _pack(tmp_path, grader_source="print('passed')\n")
+    for index in range(coding.MAX_ENTRIES - 1):
+        (pack.tasks[0].workspace / f"empty-{index:04d}").write_bytes(b"")
+    result = run_coding_eval(pack, ["python", "-c", "pass"], artifacts_dir=tmp_path / "artifacts")
+    assert result.pass_rate == 1 and result.error_count == 0, result.case_results[0].error
+    case = result.case_results[0]
+    candidate = _snapshot_archive((Path(case.metadata["artifacts"]) / "candidate.tar").read_bytes())
+    assert candidate == _snapshot_directory(pack.tasks[0].workspace)
+    assert len(case.metadata["candidate_manifest"]) == coding.MAX_ENTRIES
+    _assert_no_resources(result)
+
+
+def test_docker_e2e_bundled_grader_supports_local_modules_and_directory_evidence(tmp_path, docker_enabled):
+    pack = load_pack("coding-starter@1.0.0")
+    task = next(task for task in pack.tasks if task.id == "dedup")
+    pack = replace(pack, tasks=(task,))
+    command = ["python", "-c", (
+        "from pathlib import Path; "
+        "Path('helpers.py').write_text('def stable_unique(values):\\n    return list(dict.fromkeys(values))\\n'); "
+        "Path('solution.py').write_text('from helpers import stable_unique\\n'); "
+        "Path('empty-fixture').mkdir()"
+    )]
+    result = run_coding_eval(pack, command, artifacts_dir=tmp_path / "artifacts")
+    assert result.pass_rate == 1 and result.error_count == 0, result.case_results[0].error
+    case = result.case_results[0]
+    manifest = case.metadata["candidate_manifest"]
+    assert {"path": "empty-fixture", "type": "directory"} in manifest
+    artifacts = Path(case.metadata["artifacts"])
+    assert json.loads((artifacts / "candidate-manifest.json").read_text()) == manifest
+    assert json.loads((artifacts / "evidence.json").read_text())["candidate_manifest"] == manifest
+    assert "empty-fixture" in _snapshot_archive((artifacts / "candidate.tar").read_bytes()).directories
     _assert_no_resources(result)
 
 

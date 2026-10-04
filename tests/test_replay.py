@@ -86,6 +86,20 @@ def test_second_rescore_retains_history():
     assert second["cases"][0]["latency_ms"] == first["cases"][0]["latency_ms"]
 
 
+def test_custom_text_scorer_named_tests_supports_successive_rescores():
+    class TextTestsScorer:
+        name = "tests"
+
+        def score(self, expected, actual):
+            return float(expected in actual)
+
+    first = rescore_result(recording(), [TextTestsScorer()])
+    second = rescore_result(first, [ExactMatchScorer()])
+    assert first["scores"]["tests"]["per_case"] == {"city": 1, "country": 0}
+    assert second["metadata"]["rescore"]["source_run_id"] == first["run_id"]
+    assert second["metadata"]["rescore_history"] == [first["metadata"]["rescore"]]
+
+
 class BrokenScorer:
     name = "broken"
 
@@ -236,10 +250,14 @@ def test_multi_run_validation_checks_raw_children_and_top_summary():
         validate_recording(source)
 
 
-def test_coding_recordings_can_replay_but_cannot_text_rescore():
+@pytest.mark.parametrize("marker", ["evaluation_kind", "grader_type"])
+def test_coding_recordings_can_replay_but_cannot_text_rescore(marker):
     source = recording()
-    source["metadata"]["evaluation_kind"] = "coding"
-    assert validate_recording(source)["metadata"]["evaluation_kind"] == "coding"
+    if marker == "evaluation_kind":
+        source["metadata"]["evaluation_kind"] = "coding"
+    else:
+        source["metadata"]["grader_config"][0]["type"] = "harness.coding.held_out_tests"
+    assert validate_recording(source) == source
     with pytest.raises(ValueError, match="held-out tests"):
         rescore_result(source, [ContainsScorer()])
 

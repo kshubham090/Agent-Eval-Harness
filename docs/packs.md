@@ -121,8 +121,11 @@ mutation. Verify a correct implementation, the original broken implementation,
 and plausible partial fixes. Check candidate code in a child process and assert
 its results in the trusted parent when practical; importing candidate code into
 the test runner lets it accidentally or deliberately change the runner itself.
-The bundled graders reject a candidate that exits zero without returning valid
-probe results. They are not a formal defense against hostile candidate code.
+The bundled graders allow candidate code to import local workspace modules and
+reject a candidate that exits zero without returning valid probe results. Only
+the candidate child process imports those modules; expected answers and result
+comparisons remain in the grader parent. These graders are not a formal defense
+against hostile candidate code.
 
 Keep grader directories outside **every** task workspace. Tests are withheld
 from the agent's filesystem during editing, but bundled test files are public
@@ -161,10 +164,12 @@ up to 1,000 tasks. These conservative limits keep loading and copying bounded.
 Coding workspaces and candidate transfers also have the tighter per-task limits
 listed in the [container workflow](coding.md), including 32 MiB and 4,096 entries.
 
-The fingerprint hashes each relative file path, its executable flag, and its
-exact bytes in sorted portable order, including manifest, dataset, workspace,
-grader, license, and documentation files. Absolute host paths and timestamps
-are excluded. Source files with different line endings or executable flags have
+The fingerprint hashes every relative entry path and its type, including empty
+directories, in sorted portable order. File entries also include their executable
+flag and exact bytes, covering manifest, dataset, workspace, grader, license, and
+documentation files. Absolute host paths and timestamps are excluded. Adding,
+removing, or renaming an empty workspace or grader directory therefore changes
+the fingerprint. Source files with different line endings or executable flags have
 different fingerprints because their transferred contents or execution behavior
 differ. The fingerprint identifies the pack; also record resolved images, agent
 configuration, prompts, harness version, and grading outcomes to reproduce a run.
