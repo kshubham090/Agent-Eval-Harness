@@ -103,6 +103,20 @@ def test_archive_rejects_escaping_and_unsupported_paths(name):
         _snapshot_archive(_tar([(name, b"bad", None)]))
 
 
+@pytest.mark.parametrize("length", [238, 239, 240])
+def test_archive_path_limit_excludes_optional_root_prefix(length):
+    name = "x" * length
+    expected = _Snapshot({name: _File(b"data")})
+    for prefix in ("", "./"):
+        assert _snapshot_archive(_tar([(prefix + name, b"data", None)])) == expected
+
+
+@pytest.mark.parametrize("prefix", ["", "./"])
+def test_archive_rejects_paths_over_canonical_length_limit(prefix):
+    with pytest.raises(CodingError, match="unsupported path"):
+        _snapshot_archive(_tar([(prefix + "x" * 241, b"data", None)]))
+
+
 @pytest.mark.parametrize("kind", [tarfile.SYMTYPE, tarfile.LNKTYPE, tarfile.CHRTYPE, tarfile.BLKTYPE, tarfile.FIFOTYPE])
 def test_archive_rejects_links_and_special_files(kind):
     with pytest.raises(CodingError, match="links|special"):
@@ -370,6 +384,19 @@ def test_docker_e2e_workspace_at_entry_limit_roundtrips(tmp_path, docker_enabled
     candidate = _snapshot_archive((Path(case.metadata["artifacts"]) / "candidate.tar").read_bytes())
     assert candidate == _snapshot_directory(pack.tasks[0].workspace)
     assert len(case.metadata["candidate_manifest"]) == coding.MAX_ENTRIES
+    _assert_no_resources(result)
+
+
+@pytest.mark.parametrize("length", [239, 240])
+def test_docker_e2e_paths_at_length_limit_roundtrip(tmp_path, docker_enabled, length):
+    pack = _pack(tmp_path, grader_source="print('passed')\n")
+    (pack.tasks[0].workspace / ("x" * length)).write_bytes(b"data")
+    initial = _snapshot_directory(pack.tasks[0].workspace)
+    result = run_coding_eval(pack, ["python", "-c", "pass"], artifacts_dir=tmp_path / "artifacts")
+    assert result.pass_rate == 1 and result.error_count == 0, result.case_results[0].error
+    case = result.case_results[0]
+    candidate = _snapshot_archive((Path(case.metadata["artifacts"]) / "candidate.tar").read_bytes())
+    assert candidate == initial
     _assert_no_resources(result)
 
 

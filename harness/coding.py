@@ -101,9 +101,13 @@ class _Snapshot:
 
 
 def _safe_name(name: str) -> str:
-    if not isinstance(name, str) or len(name.encode("utf-8")) > 240 or "\\" in name or "\0" in name:
+    if not isinstance(name, str) or "\\" in name or "\0" in name:
         raise CodingError("workspace contains an unsupported path", phase="validation")
     raw = name.removeprefix("./").rstrip("/")
+    # Docker prefixes copied paths with './'; bound the canonical workspace
+    # name so every accepted input path can round-trip through its archive.
+    if len(raw.encode("utf-8")) > 240:
+        raise CodingError("workspace contains an unsupported path", phase="validation")
     if raw in ("", "."):
         return ""
     if raw.startswith("/") or any(part in ("", ".", "..") for part in raw.split("/")):
