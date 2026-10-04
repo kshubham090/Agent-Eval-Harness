@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "workload_version": "docker-coding-fixtures-v1",
-  "started_at": "2026-10-04T09:02:12+00:00",
+  "started_at": "2026-10-04T09:27:46+00:00",
   "benchmark_type": "deterministic real-container workflow; not an AI model benchmark",
   "config": {
     "pack": "coding-starter@1.0.0",
-    "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+    "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
     "case_count": 3,
     "image_reference": "agent-eval-fixture:local",
     "repetitions": 3,
@@ -46,12 +46,12 @@
   },
   "provenance": {
     "git": {
-      "revision": "92d31c7500a3d0c049d090eaf893451b5baef93b",
+      "revision": "9be8aafc68b5e9963c25b54ef5c0004274149089",
       "dirty": false,
       "status": []
     },
     "source": {
-      "sha256": "bff4568ca96659194539ad4de918cb8f73fad1b82676feb7cdc79e55760ef612",
+      "sha256": "0e63e40b994bda9515bd0717e8b753b13396242d0d75176ddd1630a8d41c0335",
       "files": {
         "examples/Dockerfile.fixture": {
           "sha256": "21f582fd4b5287f78d377d967d5d92d03cab80d9692ade52fbe6035d4bc654c4",
@@ -70,7 +70,7 @@
           "executable": false
         },
         "harness/adapters.py": {
-          "sha256": "8f5b16e84d738964a29d56c21e6e7e378ad8c5a229b06ac5e7212b759f87545a",
+          "sha256": "b2ff3cfa826359d234f1294a3861765f59e1e563601926ab9a26bc17220c6a55",
           "executable": false
         },
         "harness/baseline.py": {
@@ -78,11 +78,11 @@
           "executable": false
         },
         "harness/cli.py": {
-          "sha256": "a6568f3596a535076f5dab8e1dca84265f4dcd15ce7656ab8a9f143580ce6627",
+          "sha256": "f1a798b1abd4c436f941c7eb5acd30ada6571ed945fa4651635cf7416aaedc90",
           "executable": false
         },
         "harness/coding.py": {
-          "sha256": "1de5f6fa40fbfe2344302e6780c237c4ebb3ce5ffd505410ede87202e426ebf6",
+          "sha256": "1a5f921f3da30cff42a74c62c26ec8a210bc90be2d521be63280aa07156cec1a",
           "executable": false
         },
         "harness/config.py": {
@@ -94,7 +94,7 @@
           "executable": false
         },
         "harness/eval_runner.py": {
-          "sha256": "68ac5774692962beb94494dde0258226261dd3516f1abd1e4bb4ef25bb4d3506",
+          "sha256": "acf7d2295116a96cc858a9774436ae426dc63ee93f7486aa08387f75705e0950",
           "executable": false
         },
         "harness/gates.py": {
@@ -110,7 +110,7 @@
           "executable": false
         },
         "harness/packs.py": {
-          "sha256": "ede2140e0b4facf1a0035f265d56d11b3eee842717dfccafe701d8fe778c1a75",
+          "sha256": "eceb1609c08de11116578e445052162c5d9be9759bf8e343622c61634f2788b6",
           "executable": false
         },
         "harness/packs_data/__init__.py": {
@@ -122,7 +122,7 @@
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/README.md": {
-          "sha256": "343ad7a66e901b61dc8ef99c718dba51c79dc4797b17a33c209732f6552b7a77",
+          "sha256": "6a0be912aee521f865739cde38dbe904263149d5a7c23acaf58babbd95796297",
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/pack.toml": {
@@ -134,7 +134,7 @@
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/tasks/dedup/grader/test_solution.py": {
-          "sha256": "3f8707b1c24013e6c8accf4487261d73f310d4eb6900c27965eee5866a889509",
+          "sha256": "7844d4d6340be7eb360a9f3bd1fa0f7792abeabd8479d19e10f188c350811be4",
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/tasks/dedup/workspace/README.md": {
@@ -146,7 +146,7 @@
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/tasks/intervals/grader/test_solution.py": {
-          "sha256": "7045589ca38b3253594d6927573cb10fc377431cc15c9037cf2447efe09b1812",
+          "sha256": "1778b146f4f33392112bc95c97034e0c4c8d0291023f343df161846d3bf03b9c",
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/tasks/intervals/workspace/README.md": {
@@ -158,7 +158,7 @@
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/tasks/slug/grader/test_solution.py": {
-          "sha256": "1c97e8326018b4d991722a25a12ae6e5831620e8be92637c5410ae9ea90ca05f",
+          "sha256": "e28cb63c3abb1b20e54aa3259d6fe84b4924c1665dfa904cf086bec1a833346b",
           "executable": false
         },
         "harness/packs_data/coding-starter/1.0.0/tasks/slug/workspace/README.md": {
@@ -190,7 +190,7 @@
           "executable": false
         },
         "harness/replay.py": {
-          "sha256": "c2cf798c3d6890df6db2490ecdc03afd49f4a1044c6ff297f685f16c8e8627b2",
+          "sha256": "4ef87103f49b684eb955e15def7236d6b46729d0d0907fbdfaed361d3122da5b",
           "executable": false
         },
         "harness/report.py": {
@@ -202,7 +202,7 @@
           "executable": false
         },
         "harness/runner.py": {
-          "sha256": "61a05cafbb9d81d6726005de22c4dfb0e3e4be297754b99112937adb80ac0ae8",
+          "sha256": "0c70335af23f1529e2aeffb6511432bcff646c51a2df3f3f7c8afabd84f0a8fd",
           "executable": false
         },
         "harness/scorers/__init__.py": {
@@ -238,7 +238,7 @@
           "executable": false
         },
         "harness/workflows.py": {
-          "sha256": "6555694aa37a65a5a57667a40b0e1cb767c8d69c7e18aed6a44af813b4732003",
+          "sha256": "883d6d1ca56cd4e8e704fd0c097120038585ca987b5c31769071962c75507847",
           "executable": false
         },
         "scripts/benchmark_coding.py": {
@@ -263,21 +263,21 @@
       "repetition": 1,
       "variant": "correct",
       "sequence": 1,
-      "elapsed_ms": 3659.5367080299184,
+      "elapsed_ms": 2870.303832984064,
       "agent_execution_ms": [
-        126.03412504540756,
-        114.06420799903572,
-        112.28175001451746
+        80.11625002836809,
+        89.34412495000288,
+        89.96420801850036
       ],
       "grader_execution_ms": [
-        246.4919580379501,
-        285.59308301191777,
-        291.61041596671566
+        167.23583301063627,
+        189.0353339840658,
+        184.86987496726215
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "37543979",
-        "timestamp": "2026-10-04T09:02:16+00:00",
+        "run_id": "994df1f4",
+        "timestamp": "2026-10-04T09:27:49+00:00",
         "scores": {
           "tests": {
             "mean": 1.0,
@@ -302,8 +302,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1193.3664589887485,
-            "agent_latency_ms": 126.03412504540756,
+            "latency_ms": 916.6620830073953,
+            "agent_latency_ms": 80.11625002836809,
             "tags": [
               "python",
               "repository-edit",
@@ -314,17 +314,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/41f00bb85ecd419b927cc21e45e3c0df/0000-cd03861f0f",
+              "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -333,8 +335,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4537,
-                  "sha256": "1c97e8326018b4d991722a25a12ae6e5831620e8be92637c5410ae9ea90ca05f",
+                  "type": "file",
+                  "bytes": 4594,
+                  "sha256": "e28cb63c3abb1b20e54aa3259d6fe84b4924c1665dfa904cf086bec1a833346b",
                   "executable": false
                 }
               ],
@@ -353,12 +356,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 284,
                   "sha256": "0fd918d67081cecb48aa3a278ba39bd2e2fd7b1f4a439904cf53bbc4521164a3",
                   "executable": false
@@ -366,13 +371,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 246.4919580379501
+              "grader_latency_ms": 167.23583301063627
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/41f00bb85ecd419b927cc21e45e3c0df/0000-cd03861f0f",
+                "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -391,8 +396,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1203.4623749786988,
-            "agent_latency_ms": 114.06420799903572,
+            "latency_ms": 963.4277910226956,
+            "agent_latency_ms": 89.34412495000288,
             "tags": [
               "python",
               "repository-edit",
@@ -403,17 +408,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/41f00bb85ecd419b927cc21e45e3c0df/0001-8297e58c62",
+              "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -422,8 +429,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4509,
-                  "sha256": "3f8707b1c24013e6c8accf4487261d73f310d4eb6900c27965eee5866a889509",
+                  "type": "file",
+                  "bytes": 4566,
+                  "sha256": "7844d4d6340be7eb360a9f3bd1fa0f7792abeabd8479d19e10f188c350811be4",
                   "executable": false
                 }
               ],
@@ -442,12 +450,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 66,
                   "sha256": "cef592b737dd6936bd424537eb3ca8ba95a2836ba9a9175148a99323b7140096",
                   "executable": false
@@ -455,13 +465,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 285.59308301191777
+              "grader_latency_ms": 189.0353339840658
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/41f00bb85ecd419b927cc21e45e3c0df/0001-8297e58c62",
+                "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -480,8 +490,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1226.1140840128064,
-            "agent_latency_ms": 112.28175001451746,
+            "latency_ms": 961.928375007119,
+            "agent_latency_ms": 89.96420801850036,
             "tags": [
               "python",
               "repository-edit",
@@ -492,17 +502,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/41f00bb85ecd419b927cc21e45e3c0df/0002-ec3f30fe82",
+              "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -511,8 +523,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 5264,
-                  "sha256": "7045589ca38b3253594d6927573cb10fc377431cc15c9037cf2447efe09b1812",
+                  "type": "file",
+                  "bytes": 5321,
+                  "sha256": "1778b146f4f33392112bc95c97034e0c4c8d0291023f343df161846d3bf03b9c",
                   "executable": false
                 }
               ],
@@ -531,12 +544,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 357,
                   "sha256": "2b5904fe04ebbb342a40354cc62941046cbbda3af3a60f6e41acf49f620fa873",
                   "executable": false
@@ -544,13 +559,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 291.61041596671566
+              "grader_latency_ms": 184.86987496726215
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/41f00bb85ecd419b927cc21e45e3c0df/0002-ec3f30fe82",
+                "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -579,23 +594,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1207.6476393267512,
-            "min": 1193.3664589887485,
-            "max": 1226.1140840128064,
-            "p50": 1203.4623749786988,
-            "p95": 1223.8489131093957,
-            "p99": 1225.6610498321243,
+            "mean": 947.3394163457366,
+            "min": 916.6620830073953,
+            "max": 963.4277910226956,
+            "p50": 961.928375007119,
+            "p95": 963.277849421138,
+            "p99": 963.3978027023841,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 117.46002768632025,
-            "min": 112.28175001451746,
-            "max": 126.03412504540756,
-            "p50": 114.06420799903572,
-            "p95": 124.83713334077038,
-            "p99": 125.79472670448013,
+            "mean": 86.47486099895711,
+            "min": 80.11625002836809,
+            "max": 89.96420801850036,
+            "p50": 89.34412495000288,
+            "p95": 89.90219971165061,
+            "p99": 89.95180635713041,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -630,23 +645,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1226.1140840128064,
-                "min": 1226.1140840128064,
-                "max": 1226.1140840128064,
-                "p50": 1226.1140840128064,
-                "p95": 1226.1140840128064,
-                "p99": 1226.1140840128064,
+                "mean": 961.928375007119,
+                "min": 961.928375007119,
+                "max": 961.928375007119,
+                "p50": 961.928375007119,
+                "p95": 961.928375007119,
+                "p99": 961.928375007119,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 112.28175001451746,
-                "min": 112.28175001451746,
-                "max": 112.28175001451746,
-                "p50": 112.28175001451746,
-                "p95": 112.28175001451746,
-                "p99": 112.28175001451746,
+                "mean": 89.96420801850036,
+                "min": 89.96420801850036,
+                "max": 89.96420801850036,
+                "p50": 89.96420801850036,
+                "p95": 89.96420801850036,
+                "p99": 89.96420801850036,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -681,23 +696,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1203.4623749786988,
-                "min": 1203.4623749786988,
-                "max": 1203.4623749786988,
-                "p50": 1203.4623749786988,
-                "p95": 1203.4623749786988,
-                "p99": 1203.4623749786988,
+                "mean": 963.4277910226956,
+                "min": 963.4277910226956,
+                "max": 963.4277910226956,
+                "p50": 963.4277910226956,
+                "p95": 963.4277910226956,
+                "p99": 963.4277910226956,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 114.06420799903572,
-                "min": 114.06420799903572,
-                "max": 114.06420799903572,
-                "p50": 114.06420799903572,
-                "p95": 114.06420799903572,
-                "p99": 114.06420799903572,
+                "mean": 89.34412495000288,
+                "min": 89.34412495000288,
+                "max": 89.34412495000288,
+                "p50": 89.34412495000288,
+                "p95": 89.34412495000288,
+                "p99": 89.34412495000288,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -732,23 +747,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1226.1140840128064,
-                "min": 1226.1140840128064,
-                "max": 1226.1140840128064,
-                "p50": 1226.1140840128064,
-                "p95": 1226.1140840128064,
-                "p99": 1226.1140840128064,
+                "mean": 961.928375007119,
+                "min": 961.928375007119,
+                "max": 961.928375007119,
+                "p50": 961.928375007119,
+                "p95": 961.928375007119,
+                "p99": 961.928375007119,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 112.28175001451746,
-                "min": 112.28175001451746,
-                "max": 112.28175001451746,
-                "p50": 112.28175001451746,
-                "p95": 112.28175001451746,
-                "p99": 112.28175001451746,
+                "mean": 89.96420801850036,
+                "min": 89.96420801850036,
+                "max": 89.96420801850036,
+                "p50": 89.96420801850036,
+                "p95": 89.96420801850036,
+                "p99": 89.96420801850036,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -783,23 +798,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1203.4623749786988,
-                "min": 1203.4623749786988,
-                "max": 1203.4623749786988,
-                "p50": 1203.4623749786988,
-                "p95": 1203.4623749786988,
-                "p99": 1203.4623749786988,
+                "mean": 963.4277910226956,
+                "min": 963.4277910226956,
+                "max": 963.4277910226956,
+                "p50": 963.4277910226956,
+                "p95": 963.4277910226956,
+                "p99": 963.4277910226956,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 114.06420799903572,
-                "min": 114.06420799903572,
-                "max": 114.06420799903572,
-                "p50": 114.06420799903572,
-                "p95": 114.06420799903572,
-                "p99": 114.06420799903572,
+                "mean": 89.34412495000288,
+                "min": 89.34412495000288,
+                "max": 89.34412495000288,
+                "p50": 89.34412495000288,
+                "p95": 89.34412495000288,
+                "p99": 89.34412495000288,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -834,23 +849,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1207.6476393267512,
-                "min": 1193.3664589887485,
-                "max": 1226.1140840128064,
-                "p50": 1203.4623749786988,
-                "p95": 1223.8489131093957,
-                "p99": 1225.6610498321243,
+                "mean": 947.3394163457366,
+                "min": 916.6620830073953,
+                "max": 963.4277910226956,
+                "p50": 961.928375007119,
+                "p95": 963.277849421138,
+                "p99": 963.3978027023841,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 117.46002768632025,
-                "min": 112.28175001451746,
-                "max": 126.03412504540756,
-                "p50": 114.06420799903572,
-                "p95": 124.83713334077038,
-                "p99": 125.79472670448013,
+                "mean": 86.47486099895711,
+                "min": 80.11625002836809,
+                "max": 89.96420801850036,
+                "p50": 89.34412495000288,
+                "p95": 89.90219971165061,
+                "p99": 89.95180635713041,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -885,23 +900,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1207.6476393267512,
-                "min": 1193.3664589887485,
-                "max": 1226.1140840128064,
-                "p50": 1203.4623749786988,
-                "p95": 1223.8489131093957,
-                "p99": 1225.6610498321243,
+                "mean": 947.3394163457366,
+                "min": 916.6620830073953,
+                "max": 963.4277910226956,
+                "p50": 961.928375007119,
+                "p95": 963.277849421138,
+                "p99": 963.3978027023841,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 117.46002768632025,
-                "min": 112.28175001451746,
-                "max": 126.03412504540756,
-                "p50": 114.06420799903572,
-                "p95": 124.83713334077038,
-                "p99": 125.79472670448013,
+                "mean": 86.47486099895711,
+                "min": 80.11625002836809,
+                "max": 89.96420801850036,
+                "p50": 89.34412495000288,
+                "p95": 89.90219971165061,
+                "p99": 89.95180635713041,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -936,23 +951,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1193.3664589887485,
-                "min": 1193.3664589887485,
-                "max": 1193.3664589887485,
-                "p50": 1193.3664589887485,
-                "p95": 1193.3664589887485,
-                "p99": 1193.3664589887485,
+                "mean": 916.6620830073953,
+                "min": 916.6620830073953,
+                "max": 916.6620830073953,
+                "p50": 916.6620830073953,
+                "p95": 916.6620830073953,
+                "p99": 916.6620830073953,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 126.03412504540756,
-                "min": 126.03412504540756,
-                "max": 126.03412504540756,
-                "p50": 126.03412504540756,
-                "p95": 126.03412504540756,
-                "p99": 126.03412504540756,
+                "mean": 80.11625002836809,
+                "min": 80.11625002836809,
+                "max": 80.11625002836809,
+                "p50": 80.11625002836809,
+                "p95": 80.11625002836809,
+                "p99": 80.11625002836809,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -987,23 +1002,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1193.3664589887485,
-                "min": 1193.3664589887485,
-                "max": 1193.3664589887485,
-                "p50": 1193.3664589887485,
-                "p95": 1193.3664589887485,
-                "p99": 1193.3664589887485,
+                "mean": 916.6620830073953,
+                "min": 916.6620830073953,
+                "max": 916.6620830073953,
+                "p50": 916.6620830073953,
+                "p95": 916.6620830073953,
+                "p99": 916.6620830073953,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 126.03412504540756,
-                "min": 126.03412504540756,
-                "max": 126.03412504540756,
-                "p50": 126.03412504540756,
-                "p95": 126.03412504540756,
-                "p99": 126.03412504540756,
+                "mean": 80.11625002836809,
+                "min": 80.11625002836809,
+                "max": 80.11625002836809,
+                "p50": 80.11625002836809,
+                "p95": 80.11625002836809,
+                "p99": 80.11625002836809,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1020,12 +1035,12 @@
             }
           }
         },
-        "dataset_sha": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+        "dataset_sha": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
         "metadata": {
           "evaluation_kind": "coding",
           "pack_id": "coding-starter",
           "pack_version": "1.0.0",
-          "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+          "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
           "image": {
             "id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
             "repo_digests": [
@@ -1040,8 +1055,8 @@
           "environment_names": [],
           "command_sha256": "88582f4023b913e2c4738b5c7262d48e09abc55b0b166d4b3140f92dcfdc9a7f",
           "command_argument_count": 4,
-          "artifacts": "artifacts/41f00bb85ecd419b927cc21e45e3c0df",
-          "container_run_label": "41f00bb85ecd419b927cc21e45e3c0df",
+          "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4",
+          "container_run_label": "b93e5187e6af4527a3d214aeee2ccab4",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -1059,7 +1074,7 @@
               "name": "tests",
               "type": "harness.coding.held_out_tests",
               "settings": {
-                "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+                "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
                 "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
                 "grading": "exit_status",
                 "limits": {
@@ -1092,21 +1107,21 @@
       "repetition": 1,
       "variant": "noop",
       "sequence": 2,
-      "elapsed_ms": 3985.6482499744743,
+      "elapsed_ms": 3071.834166010376,
       "agent_execution_ms": [
-        151.21933299815282,
-        146.55579102691263,
-        122.4070829921402
+        112.28537501301616,
+        88.08616601163521,
+        107.1489579626359
       ],
       "grader_execution_ms": [
-        277.3457079892978,
-        307.42529104463756,
-        288.61587500432506
+        174.45054202107713,
+        209.48658301495016,
+        189.21512499218807
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "61a82465",
-        "timestamp": "2026-10-04T09:02:20+00:00",
+        "run_id": "54021947",
+        "timestamp": "2026-10-04T09:27:52+00:00",
         "scores": {
           "tests": {
             "mean": 0.0,
@@ -1131,8 +1146,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1272.5326250074431,
-            "agent_latency_ms": 151.21933299815282,
+            "latency_ms": 965.6855000066571,
+            "agent_latency_ms": 112.28537501301616,
             "tags": [
               "python",
               "repository-edit",
@@ -1143,17 +1158,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/11acc13c36d34daa84f124319d755503/0000-cd03861f0f",
+              "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -1162,8 +1179,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4537,
-                  "sha256": "1c97e8326018b4d991722a25a12ae6e5831620e8be92637c5410ae9ea90ca05f",
+                  "type": "file",
+                  "bytes": 4594,
+                  "sha256": "e28cb63c3abb1b20e54aa3259d6fe84b4924c1665dfa904cf086bec1a833346b",
                   "executable": false
                 }
               ],
@@ -1182,12 +1200,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -1195,13 +1215,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 277.3457079892978
+              "grader_latency_ms": 174.45054202107713
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/11acc13c36d34daa84f124319d755503/0000-cd03861f0f",
+                "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -1220,8 +1240,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1330.228915961925,
-            "agent_latency_ms": 146.55579102691263,
+            "latency_ms": 1082.5670409831218,
+            "agent_latency_ms": 88.08616601163521,
             "tags": [
               "python",
               "repository-edit",
@@ -1232,17 +1252,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/11acc13c36d34daa84f124319d755503/0001-8297e58c62",
+              "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -1251,8 +1273,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4509,
-                  "sha256": "3f8707b1c24013e6c8accf4487261d73f310d4eb6900c27965eee5866a889509",
+                  "type": "file",
+                  "bytes": 4566,
+                  "sha256": "7844d4d6340be7eb360a9f3bd1fa0f7792abeabd8479d19e10f188c350811be4",
                   "executable": false
                 }
               ],
@@ -1271,12 +1294,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -1284,13 +1309,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 307.42529104463756
+              "grader_latency_ms": 209.48658301495016
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/11acc13c36d34daa84f124319d755503/0001-8297e58c62",
+                "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -1309,8 +1334,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1335.9047920093872,
-            "agent_latency_ms": 122.4070829921402,
+            "latency_ms": 976.1061670142226,
+            "agent_latency_ms": 107.1489579626359,
             "tags": [
               "python",
               "repository-edit",
@@ -1321,17 +1346,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/11acc13c36d34daa84f124319d755503/0002-ec3f30fe82",
+              "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -1340,8 +1367,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 5264,
-                  "sha256": "7045589ca38b3253594d6927573cb10fc377431cc15c9037cf2447efe09b1812",
+                  "type": "file",
+                  "bytes": 5321,
+                  "sha256": "1778b146f4f33392112bc95c97034e0c4c8d0291023f343df161846d3bf03b9c",
                   "executable": false
                 }
               ],
@@ -1360,12 +1388,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -1373,13 +1403,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 288.61587500432506
+              "grader_latency_ms": 189.21512499218807
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/11acc13c36d34daa84f124319d755503/0002-ec3f30fe82",
+                "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -1408,23 +1438,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1312.888777659585,
-            "min": 1272.5326250074431,
-            "max": 1335.9047920093872,
-            "p50": 1330.228915961925,
-            "p95": 1335.337204404641,
-            "p99": 1335.791274488438,
+            "mean": 1008.1195693346672,
+            "min": 965.6855000066571,
+            "max": 1082.5670409831218,
+            "p50": 976.1061670142226,
+            "p95": 1071.920953586232,
+            "p99": 1080.4378235037439,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 140.06073567240188,
-            "min": 122.4070829921402,
-            "max": 151.21933299815282,
-            "p50": 146.55579102691263,
-            "p95": 150.7529788010288,
-            "p99": 151.12606215872802,
+            "mean": 102.50683299576242,
+            "min": 88.08616601163521,
+            "max": 112.28537501301616,
+            "p50": 107.1489579626359,
+            "p95": 111.77173330797814,
+            "p99": 112.18264667200856,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -1459,23 +1489,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1335.9047920093872,
-                "min": 1335.9047920093872,
-                "max": 1335.9047920093872,
-                "p50": 1335.9047920093872,
-                "p95": 1335.9047920093872,
-                "p99": 1335.9047920093872,
+                "mean": 976.1061670142226,
+                "min": 976.1061670142226,
+                "max": 976.1061670142226,
+                "p50": 976.1061670142226,
+                "p95": 976.1061670142226,
+                "p99": 976.1061670142226,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 122.4070829921402,
-                "min": 122.4070829921402,
-                "max": 122.4070829921402,
-                "p50": 122.4070829921402,
-                "p95": 122.4070829921402,
-                "p99": 122.4070829921402,
+                "mean": 107.1489579626359,
+                "min": 107.1489579626359,
+                "max": 107.1489579626359,
+                "p50": 107.1489579626359,
+                "p95": 107.1489579626359,
+                "p99": 107.1489579626359,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1510,23 +1540,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1330.228915961925,
-                "min": 1330.228915961925,
-                "max": 1330.228915961925,
-                "p50": 1330.228915961925,
-                "p95": 1330.228915961925,
-                "p99": 1330.228915961925,
+                "mean": 1082.5670409831218,
+                "min": 1082.5670409831218,
+                "max": 1082.5670409831218,
+                "p50": 1082.5670409831218,
+                "p95": 1082.5670409831218,
+                "p99": 1082.5670409831218,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 146.55579102691263,
-                "min": 146.55579102691263,
-                "max": 146.55579102691263,
-                "p50": 146.55579102691263,
-                "p95": 146.55579102691263,
-                "p99": 146.55579102691263,
+                "mean": 88.08616601163521,
+                "min": 88.08616601163521,
+                "max": 88.08616601163521,
+                "p50": 88.08616601163521,
+                "p95": 88.08616601163521,
+                "p99": 88.08616601163521,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1561,23 +1591,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1335.9047920093872,
-                "min": 1335.9047920093872,
-                "max": 1335.9047920093872,
-                "p50": 1335.9047920093872,
-                "p95": 1335.9047920093872,
-                "p99": 1335.9047920093872,
+                "mean": 976.1061670142226,
+                "min": 976.1061670142226,
+                "max": 976.1061670142226,
+                "p50": 976.1061670142226,
+                "p95": 976.1061670142226,
+                "p99": 976.1061670142226,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 122.4070829921402,
-                "min": 122.4070829921402,
-                "max": 122.4070829921402,
-                "p50": 122.4070829921402,
-                "p95": 122.4070829921402,
-                "p99": 122.4070829921402,
+                "mean": 107.1489579626359,
+                "min": 107.1489579626359,
+                "max": 107.1489579626359,
+                "p50": 107.1489579626359,
+                "p95": 107.1489579626359,
+                "p99": 107.1489579626359,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1612,23 +1642,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1330.228915961925,
-                "min": 1330.228915961925,
-                "max": 1330.228915961925,
-                "p50": 1330.228915961925,
-                "p95": 1330.228915961925,
-                "p99": 1330.228915961925,
+                "mean": 1082.5670409831218,
+                "min": 1082.5670409831218,
+                "max": 1082.5670409831218,
+                "p50": 1082.5670409831218,
+                "p95": 1082.5670409831218,
+                "p99": 1082.5670409831218,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 146.55579102691263,
-                "min": 146.55579102691263,
-                "max": 146.55579102691263,
-                "p50": 146.55579102691263,
-                "p95": 146.55579102691263,
-                "p99": 146.55579102691263,
+                "mean": 88.08616601163521,
+                "min": 88.08616601163521,
+                "max": 88.08616601163521,
+                "p50": 88.08616601163521,
+                "p95": 88.08616601163521,
+                "p99": 88.08616601163521,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1663,23 +1693,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1312.888777659585,
-                "min": 1272.5326250074431,
-                "max": 1335.9047920093872,
-                "p50": 1330.228915961925,
-                "p95": 1335.337204404641,
-                "p99": 1335.791274488438,
+                "mean": 1008.1195693346672,
+                "min": 965.6855000066571,
+                "max": 1082.5670409831218,
+                "p50": 976.1061670142226,
+                "p95": 1071.920953586232,
+                "p99": 1080.4378235037439,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 140.06073567240188,
-                "min": 122.4070829921402,
-                "max": 151.21933299815282,
-                "p50": 146.55579102691263,
-                "p95": 150.7529788010288,
-                "p99": 151.12606215872802,
+                "mean": 102.50683299576242,
+                "min": 88.08616601163521,
+                "max": 112.28537501301616,
+                "p50": 107.1489579626359,
+                "p95": 111.77173330797814,
+                "p99": 112.18264667200856,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1714,23 +1744,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1312.888777659585,
-                "min": 1272.5326250074431,
-                "max": 1335.9047920093872,
-                "p50": 1330.228915961925,
-                "p95": 1335.337204404641,
-                "p99": 1335.791274488438,
+                "mean": 1008.1195693346672,
+                "min": 965.6855000066571,
+                "max": 1082.5670409831218,
+                "p50": 976.1061670142226,
+                "p95": 1071.920953586232,
+                "p99": 1080.4378235037439,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 140.06073567240188,
-                "min": 122.4070829921402,
-                "max": 151.21933299815282,
-                "p50": 146.55579102691263,
-                "p95": 150.7529788010288,
-                "p99": 151.12606215872802,
+                "mean": 102.50683299576242,
+                "min": 88.08616601163521,
+                "max": 112.28537501301616,
+                "p50": 107.1489579626359,
+                "p95": 111.77173330797814,
+                "p99": 112.18264667200856,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1765,23 +1795,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1272.5326250074431,
-                "min": 1272.5326250074431,
-                "max": 1272.5326250074431,
-                "p50": 1272.5326250074431,
-                "p95": 1272.5326250074431,
-                "p99": 1272.5326250074431,
+                "mean": 965.6855000066571,
+                "min": 965.6855000066571,
+                "max": 965.6855000066571,
+                "p50": 965.6855000066571,
+                "p95": 965.6855000066571,
+                "p99": 965.6855000066571,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 151.21933299815282,
-                "min": 151.21933299815282,
-                "max": 151.21933299815282,
-                "p50": 151.21933299815282,
-                "p95": 151.21933299815282,
-                "p99": 151.21933299815282,
+                "mean": 112.28537501301616,
+                "min": 112.28537501301616,
+                "max": 112.28537501301616,
+                "p50": 112.28537501301616,
+                "p95": 112.28537501301616,
+                "p99": 112.28537501301616,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1816,23 +1846,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1272.5326250074431,
-                "min": 1272.5326250074431,
-                "max": 1272.5326250074431,
-                "p50": 1272.5326250074431,
-                "p95": 1272.5326250074431,
-                "p99": 1272.5326250074431,
+                "mean": 965.6855000066571,
+                "min": 965.6855000066571,
+                "max": 965.6855000066571,
+                "p50": 965.6855000066571,
+                "p95": 965.6855000066571,
+                "p99": 965.6855000066571,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 151.21933299815282,
-                "min": 151.21933299815282,
-                "max": 151.21933299815282,
-                "p50": 151.21933299815282,
-                "p95": 151.21933299815282,
-                "p99": 151.21933299815282,
+                "mean": 112.28537501301616,
+                "min": 112.28537501301616,
+                "max": 112.28537501301616,
+                "p50": 112.28537501301616,
+                "p95": 112.28537501301616,
+                "p99": 112.28537501301616,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1849,12 +1879,12 @@
             }
           }
         },
-        "dataset_sha": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+        "dataset_sha": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
         "metadata": {
           "evaluation_kind": "coding",
           "pack_id": "coding-starter",
           "pack_version": "1.0.0",
-          "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+          "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
           "image": {
             "id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
             "repo_digests": [
@@ -1869,8 +1899,8 @@
           "environment_names": [],
           "command_sha256": "0752f0a37e125544c729cbce17ad562c2dfff118225b19ba6091922e427bfcb0",
           "command_argument_count": 5,
-          "artifacts": "artifacts/11acc13c36d34daa84f124319d755503",
-          "container_run_label": "11acc13c36d34daa84f124319d755503",
+          "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1",
+          "container_run_label": "c07ef865c24b4dbfbd9cecfd8389bae1",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -1888,7 +1918,7 @@
               "name": "tests",
               "type": "harness.coding.held_out_tests",
               "settings": {
-                "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+                "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
                 "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
                 "grading": "exit_status",
                 "limits": {
@@ -1921,21 +1951,21 @@
       "repetition": 2,
       "variant": "noop",
       "sequence": 3,
-      "elapsed_ms": 4727.180292014964,
+      "elapsed_ms": 3082.5772079988383,
       "agent_execution_ms": [
-        172.4556250264868,
-        132.5117919477634,
-        126.32991600548849
+        89.23595800297335,
+        89.65679199900478,
+        116.11404101131484
       ],
       "grader_execution_ms": [
-        273.61533395014703,
-        464.69820803031325,
-        368.35716699715704
+        198.0008750106208,
+        172.01854201266542,
+        196.5719169820659
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "8741c375",
-        "timestamp": "2026-10-04T09:02:25+00:00",
+        "run_id": "b6fc0d76",
+        "timestamp": "2026-10-04T09:27:55+00:00",
         "scores": {
           "tests": {
             "mean": 0.0,
@@ -1960,8 +1990,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1439.7214589989744,
-            "agent_latency_ms": 172.4556250264868,
+            "latency_ms": 995.3614170080982,
+            "agent_latency_ms": 89.23595800297335,
             "tags": [
               "python",
               "repository-edit",
@@ -1972,17 +2002,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/54ae70ecc87f4a34a975d952da69c344/0000-cd03861f0f",
+              "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -1991,8 +2023,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4537,
-                  "sha256": "1c97e8326018b4d991722a25a12ae6e5831620e8be92637c5410ae9ea90ca05f",
+                  "type": "file",
+                  "bytes": 4594,
+                  "sha256": "e28cb63c3abb1b20e54aa3259d6fe84b4924c1665dfa904cf086bec1a833346b",
                   "executable": false
                 }
               ],
@@ -2011,12 +2044,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -2024,13 +2059,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 273.61533395014703
+              "grader_latency_ms": 198.0008750106208
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/54ae70ecc87f4a34a975d952da69c344/0000-cd03861f0f",
+                "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -2049,8 +2084,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1669.602499983739,
-            "agent_latency_ms": 132.5117919477634,
+            "latency_ms": 1000.9926249622367,
+            "agent_latency_ms": 89.65679199900478,
             "tags": [
               "python",
               "repository-edit",
@@ -2061,17 +2096,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/54ae70ecc87f4a34a975d952da69c344/0001-8297e58c62",
+              "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -2080,8 +2117,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4509,
-                  "sha256": "3f8707b1c24013e6c8accf4487261d73f310d4eb6900c27965eee5866a889509",
+                  "type": "file",
+                  "bytes": 4566,
+                  "sha256": "7844d4d6340be7eb360a9f3bd1fa0f7792abeabd8479d19e10f188c350811be4",
                   "executable": false
                 }
               ],
@@ -2100,12 +2138,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -2113,13 +2153,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 464.69820803031325
+              "grader_latency_ms": 172.01854201266542
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/54ae70ecc87f4a34a975d952da69c344/0001-8297e58c62",
+                "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -2138,8 +2178,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1559.6409999998286,
-            "agent_latency_ms": 126.32991600548849,
+            "latency_ms": 1051.678667019587,
+            "agent_latency_ms": 116.11404101131484,
             "tags": [
               "python",
               "repository-edit",
@@ -2150,17 +2190,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/54ae70ecc87f4a34a975d952da69c344/0002-ec3f30fe82",
+              "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -2169,8 +2211,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 5264,
-                  "sha256": "7045589ca38b3253594d6927573cb10fc377431cc15c9037cf2447efe09b1812",
+                  "type": "file",
+                  "bytes": 5321,
+                  "sha256": "1778b146f4f33392112bc95c97034e0c4c8d0291023f343df161846d3bf03b9c",
                   "executable": false
                 }
               ],
@@ -2189,12 +2232,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -2202,13 +2247,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 368.35716699715704
+              "grader_latency_ms": 196.5719169820659
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/54ae70ecc87f4a34a975d952da69c344/0002-ec3f30fe82",
+                "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -2237,23 +2282,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1556.3216529941808,
-            "min": 1439.7214589989744,
-            "max": 1669.602499983739,
-            "p50": 1559.6409999998286,
-            "p95": 1658.606349985348,
-            "p99": 1667.403269984061,
+            "mean": 1016.0109029966407,
+            "min": 995.3614170080982,
+            "max": 1051.678667019587,
+            "p50": 1000.9926249622367,
+            "p95": 1046.610062813852,
+            "p99": 1050.66494617844,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 143.7657776599129,
-            "min": 126.32991600548849,
-            "max": 172.4556250264868,
-            "p50": 132.5117919477634,
-            "p95": 168.46124171861447,
-            "p99": 171.65674836491235,
+            "mean": 98.335597004431,
+            "min": 89.23595800297335,
+            "max": 116.11404101131484,
+            "p50": 89.65679199900478,
+            "p95": 113.46831611008383,
+            "p99": 115.58489603106864,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -2288,23 +2333,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1559.6409999998286,
-                "min": 1559.6409999998286,
-                "max": 1559.6409999998286,
-                "p50": 1559.6409999998286,
-                "p95": 1559.6409999998286,
-                "p99": 1559.6409999998286,
+                "mean": 1051.678667019587,
+                "min": 1051.678667019587,
+                "max": 1051.678667019587,
+                "p50": 1051.678667019587,
+                "p95": 1051.678667019587,
+                "p99": 1051.678667019587,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 126.32991600548849,
-                "min": 126.32991600548849,
-                "max": 126.32991600548849,
-                "p50": 126.32991600548849,
-                "p95": 126.32991600548849,
-                "p99": 126.32991600548849,
+                "mean": 116.11404101131484,
+                "min": 116.11404101131484,
+                "max": 116.11404101131484,
+                "p50": 116.11404101131484,
+                "p95": 116.11404101131484,
+                "p99": 116.11404101131484,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2339,23 +2384,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1669.602499983739,
-                "min": 1669.602499983739,
-                "max": 1669.602499983739,
-                "p50": 1669.602499983739,
-                "p95": 1669.602499983739,
-                "p99": 1669.602499983739,
+                "mean": 1000.9926249622367,
+                "min": 1000.9926249622367,
+                "max": 1000.9926249622367,
+                "p50": 1000.9926249622367,
+                "p95": 1000.9926249622367,
+                "p99": 1000.9926249622367,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 132.5117919477634,
-                "min": 132.5117919477634,
-                "max": 132.5117919477634,
-                "p50": 132.5117919477634,
-                "p95": 132.5117919477634,
-                "p99": 132.5117919477634,
+                "mean": 89.65679199900478,
+                "min": 89.65679199900478,
+                "max": 89.65679199900478,
+                "p50": 89.65679199900478,
+                "p95": 89.65679199900478,
+                "p99": 89.65679199900478,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2390,23 +2435,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1559.6409999998286,
-                "min": 1559.6409999998286,
-                "max": 1559.6409999998286,
-                "p50": 1559.6409999998286,
-                "p95": 1559.6409999998286,
-                "p99": 1559.6409999998286,
+                "mean": 1051.678667019587,
+                "min": 1051.678667019587,
+                "max": 1051.678667019587,
+                "p50": 1051.678667019587,
+                "p95": 1051.678667019587,
+                "p99": 1051.678667019587,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 126.32991600548849,
-                "min": 126.32991600548849,
-                "max": 126.32991600548849,
-                "p50": 126.32991600548849,
-                "p95": 126.32991600548849,
-                "p99": 126.32991600548849,
+                "mean": 116.11404101131484,
+                "min": 116.11404101131484,
+                "max": 116.11404101131484,
+                "p50": 116.11404101131484,
+                "p95": 116.11404101131484,
+                "p99": 116.11404101131484,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2441,23 +2486,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1669.602499983739,
-                "min": 1669.602499983739,
-                "max": 1669.602499983739,
-                "p50": 1669.602499983739,
-                "p95": 1669.602499983739,
-                "p99": 1669.602499983739,
+                "mean": 1000.9926249622367,
+                "min": 1000.9926249622367,
+                "max": 1000.9926249622367,
+                "p50": 1000.9926249622367,
+                "p95": 1000.9926249622367,
+                "p99": 1000.9926249622367,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 132.5117919477634,
-                "min": 132.5117919477634,
-                "max": 132.5117919477634,
-                "p50": 132.5117919477634,
-                "p95": 132.5117919477634,
-                "p99": 132.5117919477634,
+                "mean": 89.65679199900478,
+                "min": 89.65679199900478,
+                "max": 89.65679199900478,
+                "p50": 89.65679199900478,
+                "p95": 89.65679199900478,
+                "p99": 89.65679199900478,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2492,23 +2537,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1556.3216529941808,
-                "min": 1439.7214589989744,
-                "max": 1669.602499983739,
-                "p50": 1559.6409999998286,
-                "p95": 1658.606349985348,
-                "p99": 1667.403269984061,
+                "mean": 1016.0109029966407,
+                "min": 995.3614170080982,
+                "max": 1051.678667019587,
+                "p50": 1000.9926249622367,
+                "p95": 1046.610062813852,
+                "p99": 1050.66494617844,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 143.7657776599129,
-                "min": 126.32991600548849,
-                "max": 172.4556250264868,
-                "p50": 132.5117919477634,
-                "p95": 168.46124171861447,
-                "p99": 171.65674836491235,
+                "mean": 98.335597004431,
+                "min": 89.23595800297335,
+                "max": 116.11404101131484,
+                "p50": 89.65679199900478,
+                "p95": 113.46831611008383,
+                "p99": 115.58489603106864,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2543,23 +2588,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1556.3216529941808,
-                "min": 1439.7214589989744,
-                "max": 1669.602499983739,
-                "p50": 1559.6409999998286,
-                "p95": 1658.606349985348,
-                "p99": 1667.403269984061,
+                "mean": 1016.0109029966407,
+                "min": 995.3614170080982,
+                "max": 1051.678667019587,
+                "p50": 1000.9926249622367,
+                "p95": 1046.610062813852,
+                "p99": 1050.66494617844,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 143.7657776599129,
-                "min": 126.32991600548849,
-                "max": 172.4556250264868,
-                "p50": 132.5117919477634,
-                "p95": 168.46124171861447,
-                "p99": 171.65674836491235,
+                "mean": 98.335597004431,
+                "min": 89.23595800297335,
+                "max": 116.11404101131484,
+                "p50": 89.65679199900478,
+                "p95": 113.46831611008383,
+                "p99": 115.58489603106864,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2594,23 +2639,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1439.7214589989744,
-                "min": 1439.7214589989744,
-                "max": 1439.7214589989744,
-                "p50": 1439.7214589989744,
-                "p95": 1439.7214589989744,
-                "p99": 1439.7214589989744,
+                "mean": 995.3614170080982,
+                "min": 995.3614170080982,
+                "max": 995.3614170080982,
+                "p50": 995.3614170080982,
+                "p95": 995.3614170080982,
+                "p99": 995.3614170080982,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 172.4556250264868,
-                "min": 172.4556250264868,
-                "max": 172.4556250264868,
-                "p50": 172.4556250264868,
-                "p95": 172.4556250264868,
-                "p99": 172.4556250264868,
+                "mean": 89.23595800297335,
+                "min": 89.23595800297335,
+                "max": 89.23595800297335,
+                "p50": 89.23595800297335,
+                "p95": 89.23595800297335,
+                "p99": 89.23595800297335,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2645,23 +2690,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1439.7214589989744,
-                "min": 1439.7214589989744,
-                "max": 1439.7214589989744,
-                "p50": 1439.7214589989744,
-                "p95": 1439.7214589989744,
-                "p99": 1439.7214589989744,
+                "mean": 995.3614170080982,
+                "min": 995.3614170080982,
+                "max": 995.3614170080982,
+                "p50": 995.3614170080982,
+                "p95": 995.3614170080982,
+                "p99": 995.3614170080982,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 172.4556250264868,
-                "min": 172.4556250264868,
-                "max": 172.4556250264868,
-                "p50": 172.4556250264868,
-                "p95": 172.4556250264868,
-                "p99": 172.4556250264868,
+                "mean": 89.23595800297335,
+                "min": 89.23595800297335,
+                "max": 89.23595800297335,
+                "p50": 89.23595800297335,
+                "p95": 89.23595800297335,
+                "p99": 89.23595800297335,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2678,12 +2723,12 @@
             }
           }
         },
-        "dataset_sha": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+        "dataset_sha": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
         "metadata": {
           "evaluation_kind": "coding",
           "pack_id": "coding-starter",
           "pack_version": "1.0.0",
-          "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+          "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
           "image": {
             "id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
             "repo_digests": [
@@ -2698,8 +2743,8 @@
           "environment_names": [],
           "command_sha256": "0752f0a37e125544c729cbce17ad562c2dfff118225b19ba6091922e427bfcb0",
           "command_argument_count": 5,
-          "artifacts": "artifacts/54ae70ecc87f4a34a975d952da69c344",
-          "container_run_label": "54ae70ecc87f4a34a975d952da69c344",
+          "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7",
+          "container_run_label": "51dc5add2a174396845a4f611ba18ff7",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -2717,7 +2762,7 @@
               "name": "tests",
               "type": "harness.coding.held_out_tests",
               "settings": {
-                "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+                "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
                 "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
                 "grading": "exit_status",
                 "limits": {
@@ -2750,21 +2795,21 @@
       "repetition": 2,
       "variant": "correct",
       "sequence": 4,
-      "elapsed_ms": 4637.200917000882,
+      "elapsed_ms": 3178.647291031666,
       "agent_execution_ms": [
-        158.3048750180751,
-        211.5643749712035,
-        145.81945800455287
+        98.39333296986297,
+        98.50024996558204,
+        87.47570804553106
       ],
       "grader_execution_ms": [
-        404.36737501295283,
-        334.1066670254804,
-        333.1425000214949
+        220.90570797445253,
+        203.68958305334672,
+        209.62466701166704
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "d4c4c837",
-        "timestamp": "2026-10-04T09:02:29+00:00",
+        "run_id": "cf06c24b",
+        "timestamp": "2026-10-04T09:27:58+00:00",
         "scores": {
           "tests": {
             "mean": 1.0,
@@ -2789,8 +2834,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1589.044708001893,
-            "agent_latency_ms": 158.3048750180751,
+            "latency_ms": 1027.3255839711055,
+            "agent_latency_ms": 98.39333296986297,
             "tags": [
               "python",
               "repository-edit",
@@ -2801,17 +2846,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/5df5f832337f4034ada603383e667aff/0000-cd03861f0f",
+              "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -2820,8 +2867,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4537,
-                  "sha256": "1c97e8326018b4d991722a25a12ae6e5831620e8be92637c5410ae9ea90ca05f",
+                  "type": "file",
+                  "bytes": 4594,
+                  "sha256": "e28cb63c3abb1b20e54aa3259d6fe84b4924c1665dfa904cf086bec1a833346b",
                   "executable": false
                 }
               ],
@@ -2840,12 +2888,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 284,
                   "sha256": "0fd918d67081cecb48aa3a278ba39bd2e2fd7b1f4a439904cf53bbc4521164a3",
                   "executable": false
@@ -2853,13 +2903,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 404.36737501295283
+              "grader_latency_ms": 220.90570797445253
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/5df5f832337f4034ada603383e667aff/0000-cd03861f0f",
+                "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -2878,8 +2928,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1534.456915978808,
-            "agent_latency_ms": 211.5643749712035,
+            "latency_ms": 1100.6577920052223,
+            "agent_latency_ms": 98.50024996558204,
             "tags": [
               "python",
               "repository-edit",
@@ -2890,17 +2940,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/5df5f832337f4034ada603383e667aff/0001-8297e58c62",
+              "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -2909,8 +2961,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4509,
-                  "sha256": "3f8707b1c24013e6c8accf4487261d73f310d4eb6900c27965eee5866a889509",
+                  "type": "file",
+                  "bytes": 4566,
+                  "sha256": "7844d4d6340be7eb360a9f3bd1fa0f7792abeabd8479d19e10f188c350811be4",
                   "executable": false
                 }
               ],
@@ -2929,12 +2982,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 66,
                   "sha256": "cef592b737dd6936bd424537eb3ca8ba95a2836ba9a9175148a99323b7140096",
                   "executable": false
@@ -2942,13 +2997,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 334.1066670254804
+              "grader_latency_ms": 203.68958305334672
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/5df5f832337f4034ada603383e667aff/0001-8297e58c62",
+                "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -2967,8 +3022,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1443.9394159708172,
-            "agent_latency_ms": 145.81945800455287,
+            "latency_ms": 1001.9366669584997,
+            "agent_latency_ms": 87.47570804553106,
             "tags": [
               "python",
               "repository-edit",
@@ -2979,17 +3034,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/5df5f832337f4034ada603383e667aff/0002-ec3f30fe82",
+              "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -2998,8 +3055,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 5264,
-                  "sha256": "7045589ca38b3253594d6927573cb10fc377431cc15c9037cf2447efe09b1812",
+                  "type": "file",
+                  "bytes": 5321,
+                  "sha256": "1778b146f4f33392112bc95c97034e0c4c8d0291023f343df161846d3bf03b9c",
                   "executable": false
                 }
               ],
@@ -3018,12 +3076,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 357,
                   "sha256": "2b5904fe04ebbb342a40354cc62941046cbbda3af3a60f6e41acf49f620fa873",
                   "executable": false
@@ -3031,13 +3091,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 333.1425000214949
+              "grader_latency_ms": 209.62466701166704
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/5df5f832337f4034ada603383e667aff/0002-ec3f30fe82",
+                "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3066,23 +3126,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1522.4803466505061,
-            "min": 1443.9394159708172,
-            "max": 1589.044708001893,
-            "p50": 1534.456915978808,
-            "p95": 1583.5859287995845,
-            "p99": 1587.9529521614313,
+            "mean": 1043.3066809782758,
+            "min": 1001.9366669584997,
+            "max": 1100.6577920052223,
+            "p50": 1027.3255839711055,
+            "p95": 1093.3245712018106,
+            "p99": 1099.19114784454,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 171.89623599794382,
-            "min": 145.81945800455287,
-            "max": 211.5643749712035,
-            "p50": 158.3048750180751,
-            "p95": 206.23842497589067,
-            "p99": 210.49918497214094,
+            "mean": 94.78976366032536,
+            "min": 87.47570804553106,
+            "max": 98.50024996558204,
+            "p50": 98.39333296986297,
+            "p95": 98.48955826601014,
+            "p99": 98.49811162566766,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -3117,23 +3177,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1443.9394159708172,
-                "min": 1443.9394159708172,
-                "max": 1443.9394159708172,
-                "p50": 1443.9394159708172,
-                "p95": 1443.9394159708172,
-                "p99": 1443.9394159708172,
+                "mean": 1001.9366669584997,
+                "min": 1001.9366669584997,
+                "max": 1001.9366669584997,
+                "p50": 1001.9366669584997,
+                "p95": 1001.9366669584997,
+                "p99": 1001.9366669584997,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 145.81945800455287,
-                "min": 145.81945800455287,
-                "max": 145.81945800455287,
-                "p50": 145.81945800455287,
-                "p95": 145.81945800455287,
-                "p99": 145.81945800455287,
+                "mean": 87.47570804553106,
+                "min": 87.47570804553106,
+                "max": 87.47570804553106,
+                "p50": 87.47570804553106,
+                "p95": 87.47570804553106,
+                "p99": 87.47570804553106,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3168,23 +3228,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1534.456915978808,
-                "min": 1534.456915978808,
-                "max": 1534.456915978808,
-                "p50": 1534.456915978808,
-                "p95": 1534.456915978808,
-                "p99": 1534.456915978808,
+                "mean": 1100.6577920052223,
+                "min": 1100.6577920052223,
+                "max": 1100.6577920052223,
+                "p50": 1100.6577920052223,
+                "p95": 1100.6577920052223,
+                "p99": 1100.6577920052223,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 211.5643749712035,
-                "min": 211.5643749712035,
-                "max": 211.5643749712035,
-                "p50": 211.5643749712035,
-                "p95": 211.5643749712035,
-                "p99": 211.5643749712035,
+                "mean": 98.50024996558204,
+                "min": 98.50024996558204,
+                "max": 98.50024996558204,
+                "p50": 98.50024996558204,
+                "p95": 98.50024996558204,
+                "p99": 98.50024996558204,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3219,23 +3279,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1443.9394159708172,
-                "min": 1443.9394159708172,
-                "max": 1443.9394159708172,
-                "p50": 1443.9394159708172,
-                "p95": 1443.9394159708172,
-                "p99": 1443.9394159708172,
+                "mean": 1001.9366669584997,
+                "min": 1001.9366669584997,
+                "max": 1001.9366669584997,
+                "p50": 1001.9366669584997,
+                "p95": 1001.9366669584997,
+                "p99": 1001.9366669584997,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 145.81945800455287,
-                "min": 145.81945800455287,
-                "max": 145.81945800455287,
-                "p50": 145.81945800455287,
-                "p95": 145.81945800455287,
-                "p99": 145.81945800455287,
+                "mean": 87.47570804553106,
+                "min": 87.47570804553106,
+                "max": 87.47570804553106,
+                "p50": 87.47570804553106,
+                "p95": 87.47570804553106,
+                "p99": 87.47570804553106,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3270,23 +3330,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1534.456915978808,
-                "min": 1534.456915978808,
-                "max": 1534.456915978808,
-                "p50": 1534.456915978808,
-                "p95": 1534.456915978808,
-                "p99": 1534.456915978808,
+                "mean": 1100.6577920052223,
+                "min": 1100.6577920052223,
+                "max": 1100.6577920052223,
+                "p50": 1100.6577920052223,
+                "p95": 1100.6577920052223,
+                "p99": 1100.6577920052223,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 211.5643749712035,
-                "min": 211.5643749712035,
-                "max": 211.5643749712035,
-                "p50": 211.5643749712035,
-                "p95": 211.5643749712035,
-                "p99": 211.5643749712035,
+                "mean": 98.50024996558204,
+                "min": 98.50024996558204,
+                "max": 98.50024996558204,
+                "p50": 98.50024996558204,
+                "p95": 98.50024996558204,
+                "p99": 98.50024996558204,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3321,23 +3381,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1522.4803466505061,
-                "min": 1443.9394159708172,
-                "max": 1589.044708001893,
-                "p50": 1534.456915978808,
-                "p95": 1583.5859287995845,
-                "p99": 1587.9529521614313,
+                "mean": 1043.3066809782758,
+                "min": 1001.9366669584997,
+                "max": 1100.6577920052223,
+                "p50": 1027.3255839711055,
+                "p95": 1093.3245712018106,
+                "p99": 1099.19114784454,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 171.89623599794382,
-                "min": 145.81945800455287,
-                "max": 211.5643749712035,
-                "p50": 158.3048750180751,
-                "p95": 206.23842497589067,
-                "p99": 210.49918497214094,
+                "mean": 94.78976366032536,
+                "min": 87.47570804553106,
+                "max": 98.50024996558204,
+                "p50": 98.39333296986297,
+                "p95": 98.48955826601014,
+                "p99": 98.49811162566766,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3372,23 +3432,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1522.4803466505061,
-                "min": 1443.9394159708172,
-                "max": 1589.044708001893,
-                "p50": 1534.456915978808,
-                "p95": 1583.5859287995845,
-                "p99": 1587.9529521614313,
+                "mean": 1043.3066809782758,
+                "min": 1001.9366669584997,
+                "max": 1100.6577920052223,
+                "p50": 1027.3255839711055,
+                "p95": 1093.3245712018106,
+                "p99": 1099.19114784454,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 171.89623599794382,
-                "min": 145.81945800455287,
-                "max": 211.5643749712035,
-                "p50": 158.3048750180751,
-                "p95": 206.23842497589067,
-                "p99": 210.49918497214094,
+                "mean": 94.78976366032536,
+                "min": 87.47570804553106,
+                "max": 98.50024996558204,
+                "p50": 98.39333296986297,
+                "p95": 98.48955826601014,
+                "p99": 98.49811162566766,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3423,23 +3483,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1589.044708001893,
-                "min": 1589.044708001893,
-                "max": 1589.044708001893,
-                "p50": 1589.044708001893,
-                "p95": 1589.044708001893,
-                "p99": 1589.044708001893,
+                "mean": 1027.3255839711055,
+                "min": 1027.3255839711055,
+                "max": 1027.3255839711055,
+                "p50": 1027.3255839711055,
+                "p95": 1027.3255839711055,
+                "p99": 1027.3255839711055,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 158.3048750180751,
-                "min": 158.3048750180751,
-                "max": 158.3048750180751,
-                "p50": 158.3048750180751,
-                "p95": 158.3048750180751,
-                "p99": 158.3048750180751,
+                "mean": 98.39333296986297,
+                "min": 98.39333296986297,
+                "max": 98.39333296986297,
+                "p50": 98.39333296986297,
+                "p95": 98.39333296986297,
+                "p99": 98.39333296986297,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3474,23 +3534,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1589.044708001893,
-                "min": 1589.044708001893,
-                "max": 1589.044708001893,
-                "p50": 1589.044708001893,
-                "p95": 1589.044708001893,
-                "p99": 1589.044708001893,
+                "mean": 1027.3255839711055,
+                "min": 1027.3255839711055,
+                "max": 1027.3255839711055,
+                "p50": 1027.3255839711055,
+                "p95": 1027.3255839711055,
+                "p99": 1027.3255839711055,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 158.3048750180751,
-                "min": 158.3048750180751,
-                "max": 158.3048750180751,
-                "p50": 158.3048750180751,
-                "p95": 158.3048750180751,
-                "p99": 158.3048750180751,
+                "mean": 98.39333296986297,
+                "min": 98.39333296986297,
+                "max": 98.39333296986297,
+                "p50": 98.39333296986297,
+                "p95": 98.39333296986297,
+                "p99": 98.39333296986297,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3507,12 +3567,12 @@
             }
           }
         },
-        "dataset_sha": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+        "dataset_sha": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
         "metadata": {
           "evaluation_kind": "coding",
           "pack_id": "coding-starter",
           "pack_version": "1.0.0",
-          "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+          "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
           "image": {
             "id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
             "repo_digests": [
@@ -3527,8 +3587,8 @@
           "environment_names": [],
           "command_sha256": "88582f4023b913e2c4738b5c7262d48e09abc55b0b166d4b3140f92dcfdc9a7f",
           "command_argument_count": 4,
-          "artifacts": "artifacts/5df5f832337f4034ada603383e667aff",
-          "container_run_label": "5df5f832337f4034ada603383e667aff",
+          "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0",
+          "container_run_label": "b100ef564c234eb7bb65c7b68138e9e0",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -3546,7 +3606,7 @@
               "name": "tests",
               "type": "harness.coding.held_out_tests",
               "settings": {
-                "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+                "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
                 "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
                 "grading": "exit_status",
                 "limits": {
@@ -3579,21 +3639,21 @@
       "repetition": 3,
       "variant": "correct",
       "sequence": 5,
-      "elapsed_ms": 4628.209582995623,
+      "elapsed_ms": 3260.29429101618,
       "agent_execution_ms": [
-        193.4446669765748,
-        131.61379197845235,
-        134.00966697372496
+        95.66108300350606,
+        131.3277090084739,
+        98.4680830151774
       ],
       "grader_execution_ms": [
-        354.4761249795556,
-        387.7102079568431,
-        438.53966699680313
+        212.37908297916874,
+        252.91512499097735,
+        184.45245799375698
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "29f8ddbc",
-        "timestamp": "2026-10-04T09:02:34+00:00",
+        "run_id": "11c8e6d0",
+        "timestamp": "2026-10-04T09:28:01+00:00",
         "scores": {
           "tests": {
             "mean": 1.0,
@@ -3618,8 +3678,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1510.7172499992885,
-            "agent_latency_ms": 193.4446669765748,
+            "latency_ms": 1020.649540994782,
+            "agent_latency_ms": 95.66108300350606,
             "tags": [
               "python",
               "repository-edit",
@@ -3630,17 +3690,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b56cf497af5141a49d35322cac6011a4/0000-cd03861f0f",
+              "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -3649,8 +3711,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4537,
-                  "sha256": "1c97e8326018b4d991722a25a12ae6e5831620e8be92637c5410ae9ea90ca05f",
+                  "type": "file",
+                  "bytes": 4594,
+                  "sha256": "e28cb63c3abb1b20e54aa3259d6fe84b4924c1665dfa904cf086bec1a833346b",
                   "executable": false
                 }
               ],
@@ -3669,12 +3732,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 284,
                   "sha256": "0fd918d67081cecb48aa3a278ba39bd2e2fd7b1f4a439904cf53bbc4521164a3",
                   "executable": false
@@ -3682,13 +3747,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 354.4761249795556
+              "grader_latency_ms": 212.37908297916874
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b56cf497af5141a49d35322cac6011a4/0000-cd03861f0f",
+                "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3707,8 +3772,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1470.7412499701604,
-            "agent_latency_ms": 131.61379197845235,
+            "latency_ms": 1158.8473749579862,
+            "agent_latency_ms": 131.3277090084739,
             "tags": [
               "python",
               "repository-edit",
@@ -3719,17 +3784,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b56cf497af5141a49d35322cac6011a4/0001-8297e58c62",
+              "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -3738,8 +3805,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4509,
-                  "sha256": "3f8707b1c24013e6c8accf4487261d73f310d4eb6900c27965eee5866a889509",
+                  "type": "file",
+                  "bytes": 4566,
+                  "sha256": "7844d4d6340be7eb360a9f3bd1fa0f7792abeabd8479d19e10f188c350811be4",
                   "executable": false
                 }
               ],
@@ -3758,12 +3826,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 66,
                   "sha256": "cef592b737dd6936bd424537eb3ca8ba95a2836ba9a9175148a99323b7140096",
                   "executable": false
@@ -3771,13 +3841,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 387.7102079568431
+              "grader_latency_ms": 252.91512499097735
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b56cf497af5141a49d35322cac6011a4/0001-8297e58c62",
+                "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3796,8 +3866,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1589.6285419585183,
-            "agent_latency_ms": 134.00966697372496,
+            "latency_ms": 1043.188875017222,
+            "agent_latency_ms": 98.4680830151774,
             "tags": [
               "python",
               "repository-edit",
@@ -3808,17 +3878,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b56cf497af5141a49d35322cac6011a4/0002-ec3f30fe82",
+              "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -3827,8 +3899,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 5264,
-                  "sha256": "7045589ca38b3253594d6927573cb10fc377431cc15c9037cf2447efe09b1812",
+                  "type": "file",
+                  "bytes": 5321,
+                  "sha256": "1778b146f4f33392112bc95c97034e0c4c8d0291023f343df161846d3bf03b9c",
                   "executable": false
                 }
               ],
@@ -3847,12 +3920,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 357,
                   "sha256": "2b5904fe04ebbb342a40354cc62941046cbbda3af3a60f6e41acf49f620fa873",
                   "executable": false
@@ -3860,13 +3935,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 438.53966699680313
+              "grader_latency_ms": 184.45245799375698
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b56cf497af5141a49d35322cac6011a4/0002-ec3f30fe82",
+                "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3895,23 +3970,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1523.6956806426558,
-            "min": 1470.7412499701604,
-            "max": 1589.6285419585183,
-            "p50": 1510.7172499992885,
-            "p95": 1581.7374127625953,
-            "p99": 1588.0503161193337,
+            "mean": 1074.2285969899967,
+            "min": 1020.649540994782,
+            "max": 1158.8473749579862,
+            "p50": 1043.188875017222,
+            "p95": 1147.2815249639098,
+            "p99": 1156.534204959171,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 153.02270864291737,
-            "min": 131.61379197845235,
-            "max": 193.4446669765748,
-            "p50": 134.00966697372496,
-            "p95": 187.50116697628982,
-            "p99": 192.2559669765178,
+            "mean": 108.48562500905246,
+            "min": 95.66108300350606,
+            "max": 131.3277090084739,
+            "p50": 98.4680830151774,
+            "p95": 128.04174640914425,
+            "p99": 130.67051648860797,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -3946,23 +4021,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1589.6285419585183,
-                "min": 1589.6285419585183,
-                "max": 1589.6285419585183,
-                "p50": 1589.6285419585183,
-                "p95": 1589.6285419585183,
-                "p99": 1589.6285419585183,
+                "mean": 1043.188875017222,
+                "min": 1043.188875017222,
+                "max": 1043.188875017222,
+                "p50": 1043.188875017222,
+                "p95": 1043.188875017222,
+                "p99": 1043.188875017222,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 134.00966697372496,
-                "min": 134.00966697372496,
-                "max": 134.00966697372496,
-                "p50": 134.00966697372496,
-                "p95": 134.00966697372496,
-                "p99": 134.00966697372496,
+                "mean": 98.4680830151774,
+                "min": 98.4680830151774,
+                "max": 98.4680830151774,
+                "p50": 98.4680830151774,
+                "p95": 98.4680830151774,
+                "p99": 98.4680830151774,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3997,23 +4072,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1470.7412499701604,
-                "min": 1470.7412499701604,
-                "max": 1470.7412499701604,
-                "p50": 1470.7412499701604,
-                "p95": 1470.7412499701604,
-                "p99": 1470.7412499701604,
+                "mean": 1158.8473749579862,
+                "min": 1158.8473749579862,
+                "max": 1158.8473749579862,
+                "p50": 1158.8473749579862,
+                "p95": 1158.8473749579862,
+                "p99": 1158.8473749579862,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 131.61379197845235,
-                "min": 131.61379197845235,
-                "max": 131.61379197845235,
-                "p50": 131.61379197845235,
-                "p95": 131.61379197845235,
-                "p99": 131.61379197845235,
+                "mean": 131.3277090084739,
+                "min": 131.3277090084739,
+                "max": 131.3277090084739,
+                "p50": 131.3277090084739,
+                "p95": 131.3277090084739,
+                "p99": 131.3277090084739,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4048,23 +4123,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1589.6285419585183,
-                "min": 1589.6285419585183,
-                "max": 1589.6285419585183,
-                "p50": 1589.6285419585183,
-                "p95": 1589.6285419585183,
-                "p99": 1589.6285419585183,
+                "mean": 1043.188875017222,
+                "min": 1043.188875017222,
+                "max": 1043.188875017222,
+                "p50": 1043.188875017222,
+                "p95": 1043.188875017222,
+                "p99": 1043.188875017222,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 134.00966697372496,
-                "min": 134.00966697372496,
-                "max": 134.00966697372496,
-                "p50": 134.00966697372496,
-                "p95": 134.00966697372496,
-                "p99": 134.00966697372496,
+                "mean": 98.4680830151774,
+                "min": 98.4680830151774,
+                "max": 98.4680830151774,
+                "p50": 98.4680830151774,
+                "p95": 98.4680830151774,
+                "p99": 98.4680830151774,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4099,23 +4174,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1470.7412499701604,
-                "min": 1470.7412499701604,
-                "max": 1470.7412499701604,
-                "p50": 1470.7412499701604,
-                "p95": 1470.7412499701604,
-                "p99": 1470.7412499701604,
+                "mean": 1158.8473749579862,
+                "min": 1158.8473749579862,
+                "max": 1158.8473749579862,
+                "p50": 1158.8473749579862,
+                "p95": 1158.8473749579862,
+                "p99": 1158.8473749579862,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 131.61379197845235,
-                "min": 131.61379197845235,
-                "max": 131.61379197845235,
-                "p50": 131.61379197845235,
-                "p95": 131.61379197845235,
-                "p99": 131.61379197845235,
+                "mean": 131.3277090084739,
+                "min": 131.3277090084739,
+                "max": 131.3277090084739,
+                "p50": 131.3277090084739,
+                "p95": 131.3277090084739,
+                "p99": 131.3277090084739,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4150,23 +4225,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1523.6956806426558,
-                "min": 1470.7412499701604,
-                "max": 1589.6285419585183,
-                "p50": 1510.7172499992885,
-                "p95": 1581.7374127625953,
-                "p99": 1588.0503161193337,
+                "mean": 1074.2285969899967,
+                "min": 1020.649540994782,
+                "max": 1158.8473749579862,
+                "p50": 1043.188875017222,
+                "p95": 1147.2815249639098,
+                "p99": 1156.534204959171,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 153.02270864291737,
-                "min": 131.61379197845235,
-                "max": 193.4446669765748,
-                "p50": 134.00966697372496,
-                "p95": 187.50116697628982,
-                "p99": 192.2559669765178,
+                "mean": 108.48562500905246,
+                "min": 95.66108300350606,
+                "max": 131.3277090084739,
+                "p50": 98.4680830151774,
+                "p95": 128.04174640914425,
+                "p99": 130.67051648860797,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4201,23 +4276,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1523.6956806426558,
-                "min": 1470.7412499701604,
-                "max": 1589.6285419585183,
-                "p50": 1510.7172499992885,
-                "p95": 1581.7374127625953,
-                "p99": 1588.0503161193337,
+                "mean": 1074.2285969899967,
+                "min": 1020.649540994782,
+                "max": 1158.8473749579862,
+                "p50": 1043.188875017222,
+                "p95": 1147.2815249639098,
+                "p99": 1156.534204959171,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 153.02270864291737,
-                "min": 131.61379197845235,
-                "max": 193.4446669765748,
-                "p50": 134.00966697372496,
-                "p95": 187.50116697628982,
-                "p99": 192.2559669765178,
+                "mean": 108.48562500905246,
+                "min": 95.66108300350606,
+                "max": 131.3277090084739,
+                "p50": 98.4680830151774,
+                "p95": 128.04174640914425,
+                "p99": 130.67051648860797,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4252,23 +4327,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1510.7172499992885,
-                "min": 1510.7172499992885,
-                "max": 1510.7172499992885,
-                "p50": 1510.7172499992885,
-                "p95": 1510.7172499992885,
-                "p99": 1510.7172499992885,
+                "mean": 1020.649540994782,
+                "min": 1020.649540994782,
+                "max": 1020.649540994782,
+                "p50": 1020.649540994782,
+                "p95": 1020.649540994782,
+                "p99": 1020.649540994782,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 193.4446669765748,
-                "min": 193.4446669765748,
-                "max": 193.4446669765748,
-                "p50": 193.4446669765748,
-                "p95": 193.4446669765748,
-                "p99": 193.4446669765748,
+                "mean": 95.66108300350606,
+                "min": 95.66108300350606,
+                "max": 95.66108300350606,
+                "p50": 95.66108300350606,
+                "p95": 95.66108300350606,
+                "p99": 95.66108300350606,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4303,23 +4378,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1510.7172499992885,
-                "min": 1510.7172499992885,
-                "max": 1510.7172499992885,
-                "p50": 1510.7172499992885,
-                "p95": 1510.7172499992885,
-                "p99": 1510.7172499992885,
+                "mean": 1020.649540994782,
+                "min": 1020.649540994782,
+                "max": 1020.649540994782,
+                "p50": 1020.649540994782,
+                "p95": 1020.649540994782,
+                "p99": 1020.649540994782,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 193.4446669765748,
-                "min": 193.4446669765748,
-                "max": 193.4446669765748,
-                "p50": 193.4446669765748,
-                "p95": 193.4446669765748,
-                "p99": 193.4446669765748,
+                "mean": 95.66108300350606,
+                "min": 95.66108300350606,
+                "max": 95.66108300350606,
+                "p50": 95.66108300350606,
+                "p95": 95.66108300350606,
+                "p99": 95.66108300350606,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4336,12 +4411,12 @@
             }
           }
         },
-        "dataset_sha": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+        "dataset_sha": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
         "metadata": {
           "evaluation_kind": "coding",
           "pack_id": "coding-starter",
           "pack_version": "1.0.0",
-          "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+          "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
           "image": {
             "id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
             "repo_digests": [
@@ -4356,8 +4431,8 @@
           "environment_names": [],
           "command_sha256": "88582f4023b913e2c4738b5c7262d48e09abc55b0b166d4b3140f92dcfdc9a7f",
           "command_argument_count": 4,
-          "artifacts": "artifacts/b56cf497af5141a49d35322cac6011a4",
-          "container_run_label": "b56cf497af5141a49d35322cac6011a4",
+          "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709",
+          "container_run_label": "fc3b12000af14529bc1c4e5e732d2709",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -4375,7 +4450,7 @@
               "name": "tests",
               "type": "harness.coding.held_out_tests",
               "settings": {
-                "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+                "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
                 "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
                 "grading": "exit_status",
                 "limits": {
@@ -4408,21 +4483,21 @@
       "repetition": 3,
       "variant": "noop",
       "sequence": 6,
-      "elapsed_ms": 6108.044416003395,
+      "elapsed_ms": 3170.7710420014337,
       "agent_execution_ms": [
-        145.44466696679592,
-        207.7608330291696,
-        322.22270796773955
+        102.66845801379532,
+        105.31245899619535,
+        113.20783401606604
       ],
       "grader_execution_ms": [
-        372.6170000154525,
-        534.5352080184966,
-        503.7653329782188
+        191.78020901745185,
+        184.88833302399144,
+        242.7778749843128
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "2eb0bf03",
-        "timestamp": "2026-10-04T09:02:40+00:00",
+        "run_id": "a8789993",
+        "timestamp": "2026-10-04T09:28:04+00:00",
         "scores": {
           "tests": {
             "mean": 0.0,
@@ -4447,8 +4522,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1701.6000829753466,
-            "agent_latency_ms": 145.44466696679592,
+            "latency_ms": 1001.0709580383264,
+            "agent_latency_ms": 102.66845801379532,
             "tags": [
               "python",
               "repository-edit",
@@ -4459,17 +4534,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/a6f5f810f70a4ce18e0168d4e6966bc7/0000-cd03861f0f",
+              "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -4478,8 +4555,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4537,
-                  "sha256": "1c97e8326018b4d991722a25a12ae6e5831620e8be92637c5410ae9ea90ca05f",
+                  "type": "file",
+                  "bytes": 4594,
+                  "sha256": "e28cb63c3abb1b20e54aa3259d6fe84b4924c1665dfa904cf086bec1a833346b",
                   "executable": false
                 }
               ],
@@ -4498,12 +4576,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 211,
                   "sha256": "800d7ea36a889734e845c9b9c24f6de2745b2fb0eafdfa0d598dc2fc68020b60",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 143,
                   "sha256": "a962485da0d4e67770578d72ac26fa0571c1db84988d815257b7f7c1842058b9",
                   "executable": false
@@ -4511,13 +4591,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 372.6170000154525
+              "grader_latency_ms": 191.78020901745185
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/a6f5f810f70a4ce18e0168d4e6966bc7/0000-cd03861f0f",
+                "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -4536,8 +4616,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1979.286832967773,
-            "agent_latency_ms": 207.7608330291696,
+            "latency_ms": 1073.7818329944275,
+            "agent_latency_ms": 105.31245899619535,
             "tags": [
               "python",
               "repository-edit",
@@ -4548,17 +4628,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/a6f5f810f70a4ce18e0168d4e6966bc7/0001-8297e58c62",
+              "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -4567,8 +4649,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 4509,
-                  "sha256": "3f8707b1c24013e6c8accf4487261d73f310d4eb6900c27965eee5866a889509",
+                  "type": "file",
+                  "bytes": 4566,
+                  "sha256": "7844d4d6340be7eb360a9f3bd1fa0f7792abeabd8479d19e10f188c350811be4",
                   "executable": false
                 }
               ],
@@ -4587,12 +4670,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 221,
                   "sha256": "01b4f8614c1ae7a7fe131a4fce2e41e114d68b05cd6828e3261ce68c18c27915",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 134,
                   "sha256": "9857fd9b563c45a7d13a394fe642e0efb15886e194b520d93e2840ff38b716ee",
                   "executable": false
@@ -4600,13 +4685,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 534.5352080184966
+              "grader_latency_ms": 184.88833302399144
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/a6f5f810f70a4ce18e0168d4e6966bc7/0001-8297e58c62",
+                "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -4625,8 +4710,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 2354.0318749728613,
-            "agent_latency_ms": 322.22270796773955,
+            "latency_ms": 1049.1126659908332,
+            "agent_latency_ms": 113.20783401606604,
             "tags": [
               "python",
               "repository-edit",
@@ -4637,17 +4722,19 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/a6f5f810f70a4ce18e0168d4e6966bc7/0002-ec3f30fe82",
+              "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -4656,8 +4743,9 @@
               "grader_manifest": [
                 {
                   "path": "test_solution.py",
-                  "bytes": 5264,
-                  "sha256": "7045589ca38b3253594d6927573cb10fc377431cc15c9037cf2447efe09b1812",
+                  "type": "file",
+                  "bytes": 5321,
+                  "sha256": "1778b146f4f33392112bc95c97034e0c4c8d0291023f343df161846d3bf03b9c",
                   "executable": false
                 }
               ],
@@ -4676,12 +4764,14 @@
               "candidate_manifest": [
                 {
                   "path": "README.md",
+                  "type": "file",
                   "bytes": 228,
                   "sha256": "d5af7d40753eddf5cf047e5ff515f3cd98dc5b0aa803cfc57ab68b5ed3f9125f",
                   "executable": false
                 },
                 {
                   "path": "solution.py",
+                  "type": "file",
                   "bytes": 309,
                   "sha256": "91937ee88cbe499bee486485d5ef95fb3ba5866750cb3184651c79a2eebf71ea",
                   "executable": false
@@ -4689,13 +4779,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 503.7653329782188
+              "grader_latency_ms": 242.7778749843128
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/a6f5f810f70a4ce18e0168d4e6966bc7/0002-ec3f30fe82",
+                "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -4724,23 +4814,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 2011.6395969719936,
-            "min": 1701.6000829753466,
-            "max": 2354.0318749728613,
-            "p50": 1979.286832967773,
-            "p95": 2316.5573707723524,
-            "p99": 2346.5369741327595,
+            "mean": 1041.3218190078624,
+            "min": 1001.0709580383264,
+            "max": 1073.7818329944275,
+            "p50": 1049.1126659908332,
+            "p95": 1071.314916294068,
+            "p99": 1073.2884496543556,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 225.1427359879017,
-            "min": 145.44466696679592,
-            "max": 322.22270796773955,
-            "p50": 207.7608330291696,
-            "p95": 310.77652047388256,
-            "p99": 319.93347046896815,
+            "mean": 107.06291700868557,
+            "min": 102.66845801379532,
+            "max": 113.20783401606604,
+            "p50": 105.31245899619535,
+            "p95": 112.41829651407897,
+            "p99": 113.04992651566863,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -4775,23 +4865,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 2354.0318749728613,
-                "min": 2354.0318749728613,
-                "max": 2354.0318749728613,
-                "p50": 2354.0318749728613,
-                "p95": 2354.0318749728613,
-                "p99": 2354.0318749728613,
+                "mean": 1049.1126659908332,
+                "min": 1049.1126659908332,
+                "max": 1049.1126659908332,
+                "p50": 1049.1126659908332,
+                "p95": 1049.1126659908332,
+                "p99": 1049.1126659908332,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 322.22270796773955,
-                "min": 322.22270796773955,
-                "max": 322.22270796773955,
-                "p50": 322.22270796773955,
-                "p95": 322.22270796773955,
-                "p99": 322.22270796773955,
+                "mean": 113.20783401606604,
+                "min": 113.20783401606604,
+                "max": 113.20783401606604,
+                "p50": 113.20783401606604,
+                "p95": 113.20783401606604,
+                "p99": 113.20783401606604,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4826,23 +4916,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1979.286832967773,
-                "min": 1979.286832967773,
-                "max": 1979.286832967773,
-                "p50": 1979.286832967773,
-                "p95": 1979.286832967773,
-                "p99": 1979.286832967773,
+                "mean": 1073.7818329944275,
+                "min": 1073.7818329944275,
+                "max": 1073.7818329944275,
+                "p50": 1073.7818329944275,
+                "p95": 1073.7818329944275,
+                "p99": 1073.7818329944275,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 207.7608330291696,
-                "min": 207.7608330291696,
-                "max": 207.7608330291696,
-                "p50": 207.7608330291696,
-                "p95": 207.7608330291696,
-                "p99": 207.7608330291696,
+                "mean": 105.31245899619535,
+                "min": 105.31245899619535,
+                "max": 105.31245899619535,
+                "p50": 105.31245899619535,
+                "p95": 105.31245899619535,
+                "p99": 105.31245899619535,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4877,23 +4967,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 2354.0318749728613,
-                "min": 2354.0318749728613,
-                "max": 2354.0318749728613,
-                "p50": 2354.0318749728613,
-                "p95": 2354.0318749728613,
-                "p99": 2354.0318749728613,
+                "mean": 1049.1126659908332,
+                "min": 1049.1126659908332,
+                "max": 1049.1126659908332,
+                "p50": 1049.1126659908332,
+                "p95": 1049.1126659908332,
+                "p99": 1049.1126659908332,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 322.22270796773955,
-                "min": 322.22270796773955,
-                "max": 322.22270796773955,
-                "p50": 322.22270796773955,
-                "p95": 322.22270796773955,
-                "p99": 322.22270796773955,
+                "mean": 113.20783401606604,
+                "min": 113.20783401606604,
+                "max": 113.20783401606604,
+                "p50": 113.20783401606604,
+                "p95": 113.20783401606604,
+                "p99": 113.20783401606604,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4928,23 +5018,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1979.286832967773,
-                "min": 1979.286832967773,
-                "max": 1979.286832967773,
-                "p50": 1979.286832967773,
-                "p95": 1979.286832967773,
-                "p99": 1979.286832967773,
+                "mean": 1073.7818329944275,
+                "min": 1073.7818329944275,
+                "max": 1073.7818329944275,
+                "p50": 1073.7818329944275,
+                "p95": 1073.7818329944275,
+                "p99": 1073.7818329944275,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 207.7608330291696,
-                "min": 207.7608330291696,
-                "max": 207.7608330291696,
-                "p50": 207.7608330291696,
-                "p95": 207.7608330291696,
-                "p99": 207.7608330291696,
+                "mean": 105.31245899619535,
+                "min": 105.31245899619535,
+                "max": 105.31245899619535,
+                "p50": 105.31245899619535,
+                "p95": 105.31245899619535,
+                "p99": 105.31245899619535,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4979,23 +5069,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 2011.6395969719936,
-                "min": 1701.6000829753466,
-                "max": 2354.0318749728613,
-                "p50": 1979.286832967773,
-                "p95": 2316.5573707723524,
-                "p99": 2346.5369741327595,
+                "mean": 1041.3218190078624,
+                "min": 1001.0709580383264,
+                "max": 1073.7818329944275,
+                "p50": 1049.1126659908332,
+                "p95": 1071.314916294068,
+                "p99": 1073.2884496543556,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 225.1427359879017,
-                "min": 145.44466696679592,
-                "max": 322.22270796773955,
-                "p50": 207.7608330291696,
-                "p95": 310.77652047388256,
-                "p99": 319.93347046896815,
+                "mean": 107.06291700868557,
+                "min": 102.66845801379532,
+                "max": 113.20783401606604,
+                "p50": 105.31245899619535,
+                "p95": 112.41829651407897,
+                "p99": 113.04992651566863,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5030,23 +5120,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 2011.6395969719936,
-                "min": 1701.6000829753466,
-                "max": 2354.0318749728613,
-                "p50": 1979.286832967773,
-                "p95": 2316.5573707723524,
-                "p99": 2346.5369741327595,
+                "mean": 1041.3218190078624,
+                "min": 1001.0709580383264,
+                "max": 1073.7818329944275,
+                "p50": 1049.1126659908332,
+                "p95": 1071.314916294068,
+                "p99": 1073.2884496543556,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 225.1427359879017,
-                "min": 145.44466696679592,
-                "max": 322.22270796773955,
-                "p50": 207.7608330291696,
-                "p95": 310.77652047388256,
-                "p99": 319.93347046896815,
+                "mean": 107.06291700868557,
+                "min": 102.66845801379532,
+                "max": 113.20783401606604,
+                "p50": 105.31245899619535,
+                "p95": 112.41829651407897,
+                "p99": 113.04992651566863,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5081,23 +5171,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1701.6000829753466,
-                "min": 1701.6000829753466,
-                "max": 1701.6000829753466,
-                "p50": 1701.6000829753466,
-                "p95": 1701.6000829753466,
-                "p99": 1701.6000829753466,
+                "mean": 1001.0709580383264,
+                "min": 1001.0709580383264,
+                "max": 1001.0709580383264,
+                "p50": 1001.0709580383264,
+                "p95": 1001.0709580383264,
+                "p99": 1001.0709580383264,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 145.44466696679592,
-                "min": 145.44466696679592,
-                "max": 145.44466696679592,
-                "p50": 145.44466696679592,
-                "p95": 145.44466696679592,
-                "p99": 145.44466696679592,
+                "mean": 102.66845801379532,
+                "min": 102.66845801379532,
+                "max": 102.66845801379532,
+                "p50": 102.66845801379532,
+                "p95": 102.66845801379532,
+                "p99": 102.66845801379532,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5132,23 +5222,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1701.6000829753466,
-                "min": 1701.6000829753466,
-                "max": 1701.6000829753466,
-                "p50": 1701.6000829753466,
-                "p95": 1701.6000829753466,
-                "p99": 1701.6000829753466,
+                "mean": 1001.0709580383264,
+                "min": 1001.0709580383264,
+                "max": 1001.0709580383264,
+                "p50": 1001.0709580383264,
+                "p95": 1001.0709580383264,
+                "p99": 1001.0709580383264,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 145.44466696679592,
-                "min": 145.44466696679592,
-                "max": 145.44466696679592,
-                "p50": 145.44466696679592,
-                "p95": 145.44466696679592,
-                "p99": 145.44466696679592,
+                "mean": 102.66845801379532,
+                "min": 102.66845801379532,
+                "max": 102.66845801379532,
+                "p50": 102.66845801379532,
+                "p95": 102.66845801379532,
+                "p99": 102.66845801379532,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5165,12 +5255,12 @@
             }
           }
         },
-        "dataset_sha": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+        "dataset_sha": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
         "metadata": {
           "evaluation_kind": "coding",
           "pack_id": "coding-starter",
           "pack_version": "1.0.0",
-          "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+          "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
           "image": {
             "id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
             "repo_digests": [
@@ -5185,8 +5275,8 @@
           "environment_names": [],
           "command_sha256": "0752f0a37e125544c729cbce17ad562c2dfff118225b19ba6091922e427bfcb0",
           "command_argument_count": 5,
-          "artifacts": "artifacts/a6f5f810f70a4ce18e0168d4e6966bc7",
-          "container_run_label": "a6f5f810f70a4ce18e0168d4e6966bc7",
+          "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996",
+          "container_run_label": "7259fd658e3e4f1987692b49d3c53996",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -5204,7 +5294,7 @@
               "name": "tests",
               "type": "harness.coding.held_out_tests",
               "settings": {
-                "pack_fingerprint": "b16c5920076b65abb8828693ef1ace80c203ca9473b0590f29974fe40f72e6fd",
+                "pack_fingerprint": "a0af50bbcdd27d6fd09bf329807c1fcf9996a3d6d9cb5ba5edffc7c94e2850c6",
                 "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
                 "grading": "exit_status",
                 "limits": {
@@ -5243,29 +5333,29 @@
       "error_count": 0,
       "batch_elapsed_ms": {
         "sample_count": 3,
-        "median": 4628.209582995623,
-        "p95": 4637.200917000882,
-        "min": 3659.5367080299184,
-        "max": 4637.200917000882,
-        "stdev": 561.8771052291802,
+        "median": 3178.647291031666,
+        "p95": 3260.29429101618,
+        "min": 2870.303832984064,
+        "max": 3260.29429101618,
+        "stdev": 205.68360738576317,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "agent_execution_ms": {
         "sample_count": 9,
-        "median": 134.00966697372496,
-        "p95": 211.5643749712035,
-        "min": 112.28175001451746,
-        "max": 211.5643749712035,
-        "stdev": 34.61959932375375,
+        "median": 95.66108300350606,
+        "p95": 131.3277090084739,
+        "min": 80.11625002836809,
+        "max": 131.3277090084739,
+        "stdev": 14.44324134756763,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "grader_execution_ms": {
         "sample_count": 9,
-        "median": 334.1066670254804,
-        "p95": 438.53966699680313,
-        "min": 246.4919580379501,
-        "max": 438.53966699680313,
-        "stdev": 61.68229325876254,
+        "median": 203.68958305334672,
+        "p95": 252.91512499097735,
+        "min": 167.23583301063627,
+        "max": 252.91512499097735,
+        "stdev": 25.226140759438923,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "missing_agent_timing_count": 0,
@@ -5279,29 +5369,29 @@
       "error_count": 0,
       "batch_elapsed_ms": {
         "sample_count": 3,
-        "median": 4727.180292014964,
-        "p95": 6108.044416003395,
-        "min": 3985.6482499744743,
-        "max": 6108.044416003395,
-        "stdev": 1077.1274285389309,
+        "median": 3082.5772079988383,
+        "p95": 3170.7710420014337,
+        "min": 3071.834166010376,
+        "max": 3170.7710420014337,
+        "stdev": 54.28638678053201,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "agent_execution_ms": {
         "sample_count": 9,
-        "median": 146.55579102691263,
-        "p95": 322.22270796773955,
-        "min": 122.4070829921402,
-        "max": 322.22270796773955,
-        "stdev": 62.93393110591009,
+        "median": 105.31245899619535,
+        "p95": 116.11404101131484,
+        "min": 88.08616601163521,
+        "max": 116.11404101131484,
+        "stdev": 11.032801128153263,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "grader_execution_ms": {
         "sample_count": 9,
-        "median": 368.35716699715704,
-        "p95": 534.5352080184966,
-        "min": 273.61533395014703,
-        "max": 534.5352080184966,
-        "stdev": 101.20707828018791,
+        "median": 191.78020901745185,
+        "p95": 242.7778749843128,
+        "min": 172.01854201266542,
+        "max": 242.7778749843128,
+        "stdev": 21.20912892141484,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "missing_agent_timing_count": 0,
@@ -5330,5 +5420,5 @@
   "image_ids": [
     "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e"
   ],
-  "completed_at": "2026-10-04T09:02:40+00:00"
+  "completed_at": "2026-10-04T09:28:04+00:00"
 }
