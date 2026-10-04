@@ -127,21 +127,21 @@ The benchmark uses a deterministic calculator and controlled waiting. It
 makes no model calls and does not compare against other evaluation frameworks.
 
 <!-- BENCHMARK_RESULTS_START -->
-Measured **2026-10-04**, macOS arm64, Python 3.14.7, 10 logical CPUs, from clean source revision [`04e153c`](https://github.com/kshubham090/Agent-Eval-Harness/commit/04e153cb24b8ab389f23653e8bb7c0ceaabb281a).
+Measured **2026-10-04**, macOS arm64, Python 3.14.7, 10 logical CPUs, from clean source revision [`348189a`](https://github.com/kshubham090/Agent-Eval-Harness/commit/348189aeb616104df8f59c2a922513962e14a4a3).
 
 **Controlled waiting:** 128 arithmetic tasks per batch; 5 ms requested wait per task; 1 warmup excluded and 5 measured repetitions per level.
 
 | Concurrency | Median batch | P95 batch | Median cases/s | Speedup |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 776.20 ms | 799.37 ms | 164.9 | 1.00× |
-| 2 | 393.14 ms | 394.29 ms | 325.6 | 1.97× |
-| 4 | 196.27 ms | 199.79 ms | 652.2 | 3.95× |
-| 8 | 99.19 ms | 100.01 ms | 1290.4 | 7.83× |
+| 1 | 875.88 ms | 888.64 ms | 146.1 | 1.00× |
+| 2 | 436.61 ms | 449.92 ms | 293.2 | 2.01× |
+| 4 | 222.24 ms | 225.65 ms | 576.0 | 3.94× |
+| 8 | 109.68 ms | 114.07 ms | 1167.0 | 7.99× |
 
 P95 is the nearest-rank quantile of five batch samples (the maximum here).
 This demonstrates overlapping controlled waiting, not real provider throughput.
 
-**No-wait overhead:** 4,096 serial tasks took a median **23.73 ms** in the full harness versus **2.71 ms** in a direct calculator/scorer loop. The median paired difference was **5.13 µs per case**.
+**No-wait overhead:** 4,096 serial tasks took a median **23.02 ms** in the full harness versus **2.63 ms** in a direct calculator/scorer loop. The median paired difference was **4.97 µs per case**.
 
 **Functional checks: 9/9 passed.** The correct fixture scored 100%; a deliberately degraded fixture scored 75% and failed the regression gate. Injecting 32/128 crashes preserved all cases and scored the errors zero.
 
