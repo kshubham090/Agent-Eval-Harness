@@ -27,7 +27,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-from harness.runner import AgentOutput
+from harness.runner import AgentOutput, validate_json_value
 
 DEFAULT_MAX_OUTPUT_BYTES = 1_048_576
 _IS_WINDOWS = os.name == "nt"
@@ -59,7 +59,7 @@ def agent_output_from_payload(payload: Any, *, output_key: str = "output") -> Ag
 
     ``output_key`` names a top-level field. Optional fields are ``trajectory``
     (a list of tool names), ``usage`` (nonnegative numeric counters), ``cost_usd`` (a finite,
-    nonnegative number), and ``metadata`` (an object).
+    nonnegative number), ``metadata`` (an object), and ``events`` (JSON objects).
     """
     if not isinstance(payload, dict):
         raise AdapterError("agent response must be a JSON object")
@@ -78,20 +78,25 @@ def agent_output_from_payload(payload: Any, *, output_key: str = "output") -> Ag
     if any(not isinstance(key, str) or not key or not _nonnegative_number(value) for key, value in usage.items()):
         raise AdapterError("agent response usage must map nonempty names to finite nonnegative numbers")
     cost = payload.get("cost_usd")
+    events = payload.get("events", [])
+    if not isinstance(events, list) or any(not isinstance(event, dict) for event in events):
+        raise AdapterError("agent response events must be a list of JSON objects")
     if cost is not None and not _nonnegative_number(cost):
         raise AdapterError("agent response cost_usd must be a finite nonnegative number or null")
     try:
         if not _string_object_keys(metadata):
             raise ValueError("metadata object keys must be strings")
+        validate_json_value(events, "events")
         json.dumps({"usage": usage, "metadata": metadata}, allow_nan=False)
     except (TypeError, ValueError, OverflowError, RecursionError):
-        raise AdapterError("agent response usage and metadata must contain valid JSON values") from None
+        raise AdapterError("agent response usage, metadata and events must contain valid JSON values") from None
     return AgentOutput(
         output=output,
         trajectory=trajectory,
         usage=usage,
         cost_usd=float(cost) if cost is not None else None,
         metadata=metadata,
+        events=events,
     )
 
 
@@ -382,6 +387,7 @@ class FunctionRunner:
                 "usage": result.usage,
                 "cost_usd": result.cost_usd,
                 "metadata": result.metadata,
+                "events": result.events,
             })
         if isinstance(result, str):
             return AgentOutput(output=result)
@@ -469,6 +475,7 @@ class CodexRunner:
         completed = False
         usage: dict = {}
         trajectory: list[str] = []
+        events: list[dict] = []
         metadata = {"adapter": "codex"}
         provider_errors = 0
         for line in stdout.splitlines():
@@ -481,6 +488,7 @@ class CodexRunner:
             if kind == "turn.failed":
                 raise AdapterError("Codex reported a failed turn; provider details omitted")
             if kind == "error":
+                events.append({"type": "error", "details_omitted": True})
                 # Codex also emits this event for retryable stream errors.
                 # Completion after the error establishes recovery. A final
                 # message from this unfinished turn remains valid, but an
@@ -498,6 +506,8 @@ class CodexRunner:
                 if not isinstance(item, dict):
                     raise AdapterError("Codex item.completed must contain an item object")
                 item_type = item.get("type")
+                if not isinstance(item_type, str) or not item_type:
+                    raise AdapterError("Codex completed item must contain a string type")
                 if item_type == "agent_message":
                     if not isinstance(item.get("text"), str):
                         raise AdapterError("Codex agent_message must contain text")
@@ -505,8 +515,10 @@ class CodexRunner:
                 elif item_type == "mcp_tool_call":
                     tool = item.get("tool")
                     trajectory.append(tool if isinstance(tool, str) else "mcp_tool_call")
+                    events.append(event)
                 elif item_type in {"command_execution", "web_search", "file_change"}:
                     trajectory.append(item_type)
+                    events.append(event)
             if kind == "turn.completed":
                 completed = True
                 usage = event.get("usage", {})
@@ -517,7 +529,7 @@ class CodexRunner:
         if provider_errors:
             metadata["provider_error_events"] = provider_errors
         return agent_output_from_payload({
-            "output": final, "trajectory": trajectory, "usage": usage, "metadata": metadata,
+            "output": final, "trajectory": trajectory, "usage": usage, "metadata": metadata, "events": events,
         })
 
 

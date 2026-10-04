@@ -2,10 +2,11 @@
 
 # Agent Eval Harness
 
-**Bring your agent. Measure quality, failures, latency and regressions.**
+**Bring your agent. Test its answers and code. Keep the evidence.**
 
 [![Eval](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml/badge.svg)](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](pyproject.toml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green)](LICENSE)
 
 Codex · Claude Code · Python functions · any command · HTTP services
 
@@ -15,6 +16,15 @@ Evaluate the agent you already have, using your own tasks and existing login.
 Keep results locally, inspect every answer, and fail CI when quality drops.
 The core needs only Click and python-dotenv; model-based scorers are optional.
 There is no evaluation service account or framework migration.
+
+| Workflow | What you get |
+| --- | --- |
+| Existing-agent evaluation | Python, command, HTTP, Codex and Claude Code adapters |
+| Repository repair | Fresh Docker workspaces, separate test grading, candidate archives and patches |
+| Versioned task packs | Bundled starters, strict manifests, full content fingerprints and authoring tools |
+| Replay and rescore | Inspect saved attempts or apply new output graders without calling the agent again |
+| CI acceptance | Quality, error, latency and reported-cost gates; a reusable GitHub Action |
+| Open source | Apache-2.0, local artifacts, lightweight core and documented contribution/release paths |
 
 ## First result in three commands
 
@@ -42,6 +52,56 @@ python -m venv .venv
 python -m pip install -e ".[dev]"
 python -m pytest -q
 ```
+
+## Evaluate working code end to end
+
+The `coding` workflow gives each task a fresh workspace, runs your agent, freezes
+its edits, and copies the candidate into a **separate grading container**. Test
+files are withheld from the agent's runtime workspace. Every task produces
+bounded logs, a candidate archive, file hashes and a patch alongside its score.
+
+Try the entire pipeline without a provider account, from this checkout:
+
+```sh
+docker build -f examples/Dockerfile.fixture -t agent-eval-fixture:local .
+agent-eval coding --pack coding-starter@1.0.0 \
+  --image agent-eval-fixture:local --command '["python", "/opt/fixture_agent.py"]' \
+  --output results/coding.json --html results/coding.html --min-pass-rate 1
+agent-eval replay --result results/coding.json --html results/coding-replay.html
+```
+
+This fixture applies known solutions to three teaching tasks; it is **not an AI
+model benchmark**. Add `--noop` to its command array to leave the bugs intact and
+observe the quality gate fail. Replace the image and command with your own
+agent. Its command reads the prompt from stdin and edits `/workspace`.
+
+Containers use a read-only root filesystem, a non-root user and bounded
+resources. Agent networking defaults to off; graders always have no network.
+Provider access requires explicit networking and named credential variables.
+Docker and the selected image are trusted; these controls do not establish
+security against hostile code. [Coding guide and exact limits →](docs/coding.md)
+
+## Packs, replay and new graders
+
+```sh
+agent-eval pack list
+agent-eval pack inspect coding-starter@1.0.0
+agent-eval pack init my-pack --kind coding
+agent-eval eval --pack json-contracts@1.0.0 --agent my_agent.py::answer \
+  --output results/answers.json
+agent-eval rescore --result results/answers.json --scorers json,exact \
+  --output results/rescored.json --html results/rescored.html
+```
+
+Packs ship in the installed wheel and can also live in your repository. A pack's
+fingerprint covers its manifest, tasks, starter files and graders. Published
+versions should be immutable. [Pack format and contribution guide →](docs/packs.md)
+
+Replay validates and renders recorded evidence. Rescoring preserves the original
+answers, available tool events, agent timing, usage and cost while recording the
+new grader configuration and time separately. Agent failures remain failures;
+failed output graders can be retried. Coding results can be replayed, but cannot
+be regraded as text. [Recording and rescore semantics →](docs/replay.md)
 
 ## Connect your existing agent
 
@@ -80,8 +140,8 @@ choose a model explicitly; otherwise each CLI uses its own configuration.
 | --- | --- | --- |
 | Codex | Installed, authenticated `codex` | Final answer, reported tokens, supported completed tool events |
 | Claude Code | Installed, authenticated `claude` | Final answer, reported tokens and USD cost |
-| Command | An argv array | stdout; optional JSON answer, trace and usage |
-| HTTP | A JSON endpoint | Answer; optional trace, usage and cost |
+| Command | An argv array | stdout; optional JSON answer, events, trajectory, usage and cost |
+| HTTP | A JSON endpoint | Answer; optional events, trajectory, usage and cost |
 | Python | Function or original `get_agent()` factory | Text, `AgentOutput`, or JSON envelope |
 
 [Integration guide →](docs/integrations.md) Includes authentication, custom
@@ -108,11 +168,14 @@ arguments, framework bridges, request/response contracts and permissions.
 
 ```mermaid
 flowchart LR
-    D[Your JSONL tasks] --> E[Evaluation runner]
-    A[Codex / Claude Code / Python / Command / HTTP] --> E
-    E --> S[Output + trajectory scoring]
-    S --> R[JSON + HTML + dataset slices]
-    R --> G[Baseline and quality gates]
+    A[Your agent] --> O[Output tasks]
+    A --> C[Fresh coding workspace]
+    C --> T[Separate test container]
+    O --> S[Output and trajectory graders]
+    T --> R[Recorded attempts and artifacts]
+    S --> R
+    R --> P[Replay or rescore]
+    R --> G[Quality, latency and cost gates]
     G --> CI[CI pass or fail]
 ```
 
@@ -121,6 +184,26 @@ thread-safe workloads; use `--runs` to repeat stochastic evaluations. The
 harness sends only task inputs to agents, not reference answers.
 
 ## Reproducible benchmarks
+
+The repository includes two different measurements: real Docker workflow
+validation using known patches, and controlled harness-throughput measurements.
+Neither ranks model intelligence.
+
+<!-- CODING_BENCHMARK_RESULTS_START -->
+Docker workflow results are generated by `scripts/benchmark_coding.py`.
+<!-- CODING_BENCHMARK_RESULTS_END -->
+
+Reproduce the coding measurement after building the fixture image above:
+
+```sh
+python scripts/benchmark_coding.py --image agent-eval-fixture:local \
+  --output benchmarks/coding-latest.json --markdown benchmarks/coding-latest.md
+```
+
+The raw evidence retains every task result and trial, Docker/image identity,
+pack/source hashes, and the known fixture command. The three tasks contain 85
+checks; each task receives one binary pass/fail score. Three authored tasks
+are too small to support a general coding-agent ranking.
 
 **These are measured harness operations, not model intelligence scores.**
 The benchmark uses a deterministic calculator and controlled waiting. It
@@ -172,6 +255,26 @@ The older [Claude snapshot](baselines/claude-v1.json) is retained as historical
 example data. It lacks enough model, prompt and environment provenance for a
 reproducible comparison; its three scorer means are not three competing
 agents. [Provenance audit →](docs/benchmarking.md#historical-baseline-provenance)
+
+## Gate changes in your repository
+
+Use the included [GitHub Action](action.yml) with a reviewed commit pinned in
+your workflow, or enforce the same gates locally:
+
+```sh
+agent-eval gate --result results/answers.json --min-pass-rate 0.95 \
+  --max-p95-latency-ms 30000 --output results/gates.json
+# When every case reports agent cost, also add --max-cost-usd 2.00.
+```
+
+The action checks quality and latency in every run and total reported agent
+cost across all runs. Required but missing measurements fail the gate. These
+are checks after execution, not spending caps. Reports and failed-case evidence
+are retained when a gate fails. [Action setup and gate definitions →](docs/ci.md)
+
+Apache-2.0 licensed. [Contribute](CONTRIBUTING.md) · [Security](SECURITY.md) ·
+[Release procedure](docs/releases.md) · [Changelog](CHANGELOG.md).
+Release automation is included; this change does not publish a PyPI release.
 
 ## Configuration you can commit
 

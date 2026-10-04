@@ -71,6 +71,9 @@ def render_report(result: dict, comparison=None, title: str = "Eval report") -> 
     parts = [f"<style>{_CSS}</style>", f"<h1>{_esc(title)}</h1>"]
 
     meta = result.get("metadata", {})
+    if meta.get("evaluation_mode") == "rescore":
+        parts.append("<p><strong>Rescored recording.</strong> Agent timings, usage and cost below belong to the "
+                     "original execution. No agent was called again. New grading time is recorded per case.</p>")
     meta_bits = [f"run <code>{_esc(result.get('run_id'))}</code>", _esc(result.get("timestamp"))]
     if result.get("dataset_sha"):
         meta_bits.append(f"dataset <code>{_esc(result['dataset_sha'])}</code>")
@@ -159,8 +162,8 @@ def render_report(result: dict, comparison=None, title: str = "Eval report") -> 
             parts.append("<tr>" + "".join(row) + "</tr>")
         parts.append("</table></div>")
         for c in cases:
-            if c.get("trajectory") or c.get("usage") or c.get("metadata"):
-                detail = {key: c.get(key) for key in ("trajectory", "usage", "cost_usd", "metadata")}
+            if c.get("trajectory") or c.get("events") or c.get("usage") or c.get("metadata"):
+                detail = {key: c.get(key) for key in ("trajectory", "events", "usage", "cost_usd", "error_stage", "rescore_latency_ms", "metadata")}
                 parts.append(f"<details><summary>{_esc(c['id'])}: trace and usage</summary>"
                              f"<pre>{_esc(json.dumps(detail, indent=2, ensure_ascii=False))}</pre></details>")
 

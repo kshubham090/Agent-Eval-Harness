@@ -1,5 +1,47 @@
 # Benchmarking with evidence
 
+Two reproducible measurements are provided: the Docker coding workflow below,
+and the controlled harness performance benchmark that follows. Both use
+deterministic fixtures, with no inference from a paid or local model.
+
+## Real Docker coding workflow
+
+Build the known fixture image, then collect three interleaved repetitions of
+correct patches and unchanged buggy starters:
+
+```sh
+docker build -f examples/Dockerfile.fixture -t agent-eval-fixture:local .
+python scripts/benchmark_coding.py --image agent-eval-fixture:local \
+  --output benchmarks/coding-latest.json --markdown benchmarks/coding-latest.md
+```
+
+Each batch creates fresh agent and grader containers for the three versioned
+tasks. Timing includes image resolution, provisioning, file transfers, both
+commands and cleanup. There is no excluded warmup. P95 is the nearest-rank
+quantile of batch times; with three trials it is the maximum. Agent and grader
+execution times include Docker transport and are stored separately.
+
+The reference patch fixture must pass every task; the no-op fixture must fail
+every task without execution errors. The fixture also rejects an exposed
+`/grader` directory during the agent phase. Source hashes must stay unchanged
+during measurement and every trial must use the same immutable image ID.
+These checks produce a nonzero exit on failure; timing does not gate CI.
+
+The [raw JSON](../benchmarks/coding-latest.json) records all 18 task attempts
+at default settings, their source/candidate file hashes, grading evidence,
+image and Docker versions, machine details, Git revision/dirty state, task-pack
+hash and the known fixture commands. Local detailed archives/logs remain under
+`results/coding-benchmark/`; the published JSON normalizes host paths. Exact
+binary candidates are reproducible from the published fixture and source pack.
+
+This is functional workflow evidence from three authored tasks. It is not a
+representative coding benchmark, model comparison or evidence of security
+against adversarial code. Agent token use and cost are unknown because the
+generic coding-command interface does not meter them. See the [coding guide](coding.md)
+for isolation assumptions and limits.
+
+## Controlled harness performance
+
 The repository includes an offline benchmark of harness overhead, concurrency,
 error isolation and regression detection. Its arithmetic calculator is a
 deterministic fixture. It makes no calls to Codex, Claude Code, a hosted model,

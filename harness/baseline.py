@@ -13,7 +13,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from harness.results import flatten_metrics, protocol_metadata, validate_probability
+from harness.results import flatten_metrics, grader_config_key, protocol_metadata, validate_probability
 
 DEFAULT_BASELINES_DIR = "baselines"
 
@@ -36,6 +36,7 @@ def save_baseline(name: str, result: dict, baselines_dir: str | Path = DEFAULT_B
     path = _baseline_path(name, baselines_dir)
     flatten_metrics(result)
     protocol_metadata(result)
+    grader_config_key(result)
     serialized = json.dumps(result, indent=2, allow_nan=False)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(serialized, encoding="utf-8")
@@ -49,6 +50,7 @@ def load_baseline(name: str, baselines_dir: str | Path = DEFAULT_BASELINES_DIR) 
     result = json.loads(path.read_text(encoding="utf-8"))
     flatten_metrics(result)
     protocol_metadata(result)
+    grader_config_key(result)
     return result
 
 
@@ -88,6 +90,9 @@ def compare_to_baseline(
     different dataset versions is meaningless.
     """
     threshold = validate_probability(threshold, "regression threshold")
+    current_graders, baseline_graders = grader_config_key(current), grader_config_key(baseline)
+    if current_graders is not None and baseline_graders is not None and current_graders != baseline_graders:
+        raise ValueError("scoring protocol changed: grader_config differs; re-save the baseline with the same grader settings")
     current_protocol, baseline_protocol = protocol_metadata(current), protocol_metadata(baseline)
     for key in current_protocol.keys() & baseline_protocol.keys():
         if current_protocol[key] != baseline_protocol[key]:

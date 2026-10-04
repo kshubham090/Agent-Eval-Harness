@@ -1,0 +1,10 @@
+schema_version = 1
+authors = ["Agent Eval Harness contributors"]
+license = "Apache-2.0"
+origin = "Original prompt-only smoke tasks authored in this repository."
+source_path = "benchmarks/agent_smoke.jsonl"
+reference_generator = "benchmarks/generate_smoke.py"
+source_revision = "14acbcda093646ecd5df1ab405b86293e453b130"
+upstream_datasets = []
+intended_use = "Structured-output integration checks."
+limitations = "Small public prompt-only tasks; not a coding-agent leaderboard or held-out capability estimate."

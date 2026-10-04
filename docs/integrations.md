@@ -24,7 +24,9 @@ final answer and subsequently completes successfully. An earlier completed
 turn cannot supply a replacement answer. The number of recovered error events
 is recorded without provider error text. Each case starts a fresh conversation. MCP calls retain their tool
 name; shell, web and file events use `command_execution`, `web_search` and
-`file_change`. These event names are not an exhaustive tool trace.
+`file_change`. Supported completed tool payloads are also retained in the
+case's `events` array. These events are not an exhaustive tool trace; internal
+reasoning is not recorded. Review tool output before sharing recordings.
 
 Set `--model YOUR_MODEL` to record and pass an explicit model. Without it,
 Codex's own configuration selects the model; the harness labels that choice
@@ -119,6 +121,7 @@ For structured responses, set `output_format = "json"` in `[agent]` or use
 {
   "output": "Paris",
   "trajectory": ["search", "answer"],
+  "events": [{"type": "tool.completed", "name": "search", "output": "Paris"}],
   "usage": {"input_tokens": 100, "output_tokens": 8},
   "cost_usd": 0.0001,
   "metadata": {"model": "your-model-version"}
@@ -128,7 +131,10 @@ For structured responses, set `output_format = "json"` in `[agent]` or use
 Only `output` is required. It must be a string; use `output_key = "answer"`
 for a different top-level key. Usage values must be finite, nonnegative
 numeric counters. Cost is optional: missing is unknown, not zero. Metadata
-must be JSON serializable. Plain-text commands do not report usage or cost.
+must be JSON serializable. Optional `events` is a list of finite JSON objects
+with string keys; it records whatever activity your adapter exposes, without
+imposing a provider-specific event schema. The same envelope works for HTTP
+and Python functions. Plain-text commands do not report usage or cost.
 
 Each command/CLI invocation has a deadline and a 1 MiB limit per output
 stream. On POSIX, process groups terminate remaining descendants at timeout

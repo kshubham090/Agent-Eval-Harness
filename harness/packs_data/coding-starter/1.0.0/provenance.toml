@@ -1,0 +1,7 @@
+schema_version = 1
+authors = ["Agent Eval Harness contributors"]
+license = "Apache-2.0"
+origin = "Original tasks, starter implementations, and graders authored for this repository."
+upstream_datasets = []
+intended_use = "Integration checks and a small public coding smoke benchmark."
+limitations = "Public tests and small coverage; not a general coding leaderboard or contamination-resistant benchmark."

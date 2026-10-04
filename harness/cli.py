@@ -116,6 +116,7 @@ def cli() -> None:
 @cli.command("eval")
 @click.option("--config", type=click.Path(exists=True, dir_okay=False), help="TOML configuration. CLI flags override it.")
 @click.option("--dataset", type=click.Path(exists=True, dir_okay=False), help="JSONL golden dataset.")
+@click.option("--pack", help="Versioned output pack, e.g. json-contracts@1.0.0, or local pack directory.")
 @click.option("--agent", "agent_path", help="codex, claude-code, or a Python file[::callable].")
 @click.option("--command", help='Command as a JSON argv array, e.g. ["python", "agent.py"].')
 @click.option("--url", help="HTTP endpoint accepting POST {input: ...}.")
@@ -137,6 +138,8 @@ def cli() -> None:
 @click.option("--pass-threshold", default=0.5, type=click.FloatRange(0, 1), show_default=True,
               help="Minimum mean score for a case to pass.")
 @click.option("--min-pass-rate", type=click.FloatRange(0, 1), help="Fail if the measured pass rate is below this floor.")
+@click.option("--max-cost-usd", type=click.FloatRange(min=0), help="Post-run total agent cost limit; requires complete cost reporting.")
+@click.option("--max-p95-latency-ms", type=click.FloatRange(min=0), help="Post-run agent p95 latency limit for every run.")
 @click.option("--allow-errors/--no-allow-errors", default=False, help="Do not fail solely because cases raised errors.")
 @click.option("--output", type=click.Path(), help="Write result JSON.")
 @click.option("--html", "html_path", type=click.Path(), help="Write self-contained HTML.")
@@ -151,6 +154,7 @@ def eval_command(ctx, **options):
     from click.core import ParameterSource
     from harness.config import load_config
 
+    configured = {}
     if options["config"]:
         try:
             configured = load_config(options["config"])
@@ -169,8 +173,14 @@ def eval_command(ctx, **options):
                     for key, default in (("model", None), ("agent_args", ())):
                         if ctx.get_parameter_source(key) != ParameterSource.COMMANDLINE:
                             options[key] = default
+            selected_sources = [key for key in ("dataset", "pack")
+                                if ctx.get_parameter_source(key) == ParameterSource.COMMANDLINE]
+            if len(selected_sources) == 1:
+                options["pack" if selected_sources[0] == "dataset" else "dataset"] = None
         except (OSError, ValueError) as exc:
             raise click.ClickException(str(exc)) from exc
+    options["_scorers_explicit"] = ("scorer_names" in configured or
+        ctx.get_parameter_source("scorer_names") == ParameterSource.COMMANDLINE)
     try:
         _evaluate(options)
     except (OSError, ValueError, ImportError) as exc:
@@ -203,9 +213,23 @@ def _evaluate(o):
     import platform
     from importlib.metadata import version
 
+    pack = None
+    if o.get("pack"):
+        from harness.packs import load_pack
+        if o["dataset"]:
+            raise click.UsageError("choose --dataset or --pack, not both")
+        pack = load_pack(o["pack"])
+        if pack.kind != "output":
+            raise click.UsageError("use agent-eval coding --pack for coding packs")
+        o["dataset"] = str(pack.dataset)
+        if not o.get("_scorers_explicit"):
+            o["scorer_names"] = ",".join(pack.scorers)
     if not o["dataset"]:
-        raise click.UsageError("provide --dataset or eval.dataset in --config")
-    for name in ("timeout", "pass_threshold", "min_pass_rate", "threshold"):
+        raise click.UsageError("provide --dataset, --pack or eval.dataset in --config")
+    from harness.workflows import validate_output_paths
+    validate_output_paths(inputs=[o["dataset"], o.get("config")], outputs=[o["output"], o["html_path"]],
+                          protected_directories=[pack.root] if pack else [])
+    for name in ("timeout", "pass_threshold", "min_pass_rate", "threshold", "max_cost_usd", "max_p95_latency_ms"):
         if o[name] is not None and not math.isfinite(o[name]):
             raise ValueError(f"{name} must be finite")
     names = [n.strip() for n in o["scorer_names"].split(",") if n.strip()]
@@ -215,7 +239,7 @@ def _evaluate(o):
     if unknown:
         raise ValueError(f"unknown scorers {sorted(unknown)}; available: {list(SCORER_FACTORIES)}")
     cases = load_dataset(o["dataset"])
-    sha = dataset_sha(o["dataset"])
+    sha = pack.fingerprint if pack else dataset_sha(o["dataset"])
     if o["filter_tags"]:
         tags = sorted(set(t.strip() for t in o["filter_tags"].split(",") if t.strip()))
         cases = filter_by_tags(cases, tags)
@@ -242,28 +266,31 @@ def _evaluate(o):
         if scorer in names and importlib.util.find_spec(module) is None:
             raise ValueError(f"{scorer} requires optional dependencies; run pip install '.[{extra}]' in the checkout")
     saved_baseline = None
+    scorers = [SCORER_FACTORIES[n]() for n in names]
     if o["baseline_name"]:
         # Reject unusable gates before starting agent calls or loading model scorers.
         saved_baseline = load_baseline(o["baseline_name"], o["baselines_dir"])
+        from harness.eval_runner import describe_scorers
         probe = {
             "dataset_sha": sha,
             "scores": {SCORER_FACTORIES[n].name: {"mean": 0.0} for n in names},
             "pass_rate": 0.0,
             "metadata": {"pass_threshold": o["pass_threshold"], "pass_rule": PASS_RULE,
-                         "error_case_policy": ERROR_CASE_POLICY},
+                         "error_case_policy": ERROR_CASE_POLICY, "grader_config": describe_scorers(scorers)},
         }
         if any(c.expected_trajectory is not None for c in cases):
             probe["trajectory_score"] = {"mean": 0.0}
         compare_to_baseline(probe, saved_baseline, o["threshold"],
                             ignore_dataset_mismatch=o["allow_dataset_change"])
     agent = _make_runner(o)
-    scorers = [SCORER_FACTORIES[n]() for n in names]
     # Keep prompts, command arguments, auth headers, and URL query strings out of metadata.
     label = o["agent_path"] or ("command" if o["command"] else "http")
     metadata = {"dataset": str(o["dataset"]), "agent": label, "scorers": ",".join(names),
                 "concurrency": o["concurrency"], "harness_version": version("agent-eval-harness"),
                 "python": platform.python_version(), "model": o["model"] or "agent-configured",
                 "timeout_seconds": o["timeout"] if not o["agent_path"] or o["agent_path"] in {"codex", "claude-code"} else None}
+    if pack:
+        metadata["pack"] = {"id": pack.id, "version": pack.version, "fingerprint": pack.fingerprint}
     results = []
     for i in range(o["runs"]):
         result = run_eval(cases, agent, scorers, concurrency=o["concurrency"],
@@ -307,6 +334,11 @@ def _evaluate(o):
         failures.append(f"pass rate {rate:.3f} is below {o['min_pass_rate']:.3f}")
     if comparison is not None and not comparison.passed:
         failures.append(f"{len(comparison.regressions)} metric(s) regressed")
+    if o["max_cost_usd"] is not None or o["max_p95_latency_ms"] is not None:
+        from harness.gates import evaluate_gates
+        budgets = evaluate_gates(result_dict, max_error_rate=None, max_cost_usd=o["max_cost_usd"],
+                                 max_p95_latency_ms=o["max_p95_latency_ms"])
+        failures.extend(f"{c['metric']}: {c['reason']}" for c in budgets.checks if not c["passed"])
     if failures:
         click.echo("FAIL: " + "; ".join(failures))
         raise click.exceptions.Exit(1)
@@ -353,6 +385,9 @@ def baseline_list(baselines_dir):
 from harness.onboarding import register_commands
 
 register_commands(cli)
+from harness.workflows import register_workflows
+
+register_workflows(cli)
 
 if __name__ == "__main__":
     cli()
