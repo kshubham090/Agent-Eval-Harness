@@ -87,7 +87,15 @@ def sanitize_result(value: Any, *, artifacts: Path, root: Path = ROOT) -> Any:
             return [convert(child) for child in item]
         if isinstance(item, str):
             for prefix, replacement in substitutions:
-                item = item.replace(prefix, replacement)
+                if item == prefix or item.startswith(prefix + os.sep) or item.startswith(prefix + "/"):
+                    # Normalize only a redacted filesystem path. A blanket
+                    # backslash replacement would corrupt prompts or outputs.
+                    suffix = item[len(prefix):]
+                    if os.sep == "\\":
+                        suffix = suffix.replace("\\", "/")
+                    item = replacement + suffix
+                else:
+                    item = item.replace(prefix, replacement)
             return item
         return item
     return convert(value)
