@@ -1,7 +1,8 @@
 [project]
 name = "agent-eval-harness"
-version = "0.1.0"
-description = "A from-scratch eval harness for AI agents: golden datasets, pluggable scorers, baselines, and CI gates."
+version = "0.2.0"
+description = "Evaluate existing agents through Python, Codex, Claude Code, commands, or HTTP with reproducible benchmarks and CI gates."
+readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "click>=8.0",
@@ -12,9 +13,9 @@ dependencies = [
 agent-eval = "harness.cli:cli"
 
 [project.optional-dependencies]
-# Heavy/optional deps arrive with their build phase (see README Build Phases).
-embedding = ["sentence-transformers>=3.0", "numpy>=1.26"]  # Phase 4
-judge = ["anthropic>=0.30"]                                # Phase 5
+# Keep the core lightweight; install semantic scorers only when needed.
+embedding = ["sentence-transformers>=3.0", "numpy>=1.26"]
+judge = ["anthropic>=0.30"]
 dev = ["pytest>=8.0"]
 
 [build-system]

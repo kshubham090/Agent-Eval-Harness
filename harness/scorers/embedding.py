@@ -13,6 +13,7 @@ from __future__ import annotations
 import math
 import threading
 from collections.abc import Callable, Sequence
+from numbers import Real
 
 # An EmbedFn maps a list of texts to a list of same-length numeric vectors.
 EmbedFn = Callable[[list[str]], Sequence[Sequence[float]]]
@@ -21,12 +22,36 @@ DEFAULT_MODEL = "all-MiniLM-L6-v2"
 
 
 def cosine_similarity(a: Sequence[float], b: Sequence[float]) -> float:
-    dot = sum(x * y for x, y in zip(a, b, strict=True))
-    norm_a = math.sqrt(sum(x * x for x in a))
-    norm_b = math.sqrt(sum(y * y for y in b))
+    if len(a) != len(b) or len(a) == 0:
+        raise ValueError("embedding vectors must have the same nonzero dimension")
+
+    def scaled(vector: Sequence[float]) -> list[float]:
+        values = []
+        for value in vector:
+            if isinstance(value, bool) or not isinstance(value, Real):
+                raise ValueError("embedding vectors must contain finite real numbers")
+            try:
+                value = float(value)
+            except (OverflowError, ValueError) as exc:
+                raise ValueError("embedding vectors must contain finite real numbers") from exc
+            if not math.isfinite(value):
+                raise ValueError("embedding vectors must contain finite real numbers")
+            values.append(value)
+        scale = max(abs(value) for value in values)
+        # Cosine is invariant to positive scaling. Rescaling prevents valid
+        # very large/small components from overflowing/underflowing norms.
+        return [value / scale for value in values] if scale else values
+
+    left, right = scaled(a), scaled(b)
+    norm_a = math.sqrt(math.fsum(value * value for value in left))
+    norm_b = math.sqrt(math.fsum(value * value for value in right))
     if norm_a == 0.0 or norm_b == 0.0:
         return 0.0
-    return dot / (norm_a * norm_b)
+    dot = math.fsum(x * y for x, y in zip(left, right, strict=True))
+    similarity = dot / (norm_a * norm_b)
+    if not math.isfinite(similarity):
+        raise ValueError("embedding cosine similarity must be finite")
+    return similarity
 
 
 def _load_sentence_transformer(model_name: str) -> EmbedFn:

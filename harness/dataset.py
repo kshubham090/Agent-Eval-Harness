@@ -47,6 +47,10 @@ def _parse_case(record: dict, line_no: int) -> EvalCase:
     tags = record.get("tags", [])
     if not isinstance(tags, list) or not all(isinstance(t, str) for t in tags):
         raise DatasetError(f"line {line_no}: 'tags' must be a list of strings")
+    if any(not tag.strip() for tag in tags):
+        raise DatasetError(f"line {line_no}: 'tags' must contain nonempty strings")
+    if len(set(tags)) != len(tags):
+        raise DatasetError(f"line {line_no}: duplicate tags are not allowed")
 
     known = {"id", "input", "expected_output", "expected_trajectory", "tags"}
     unknown = set(record) - known
@@ -82,14 +86,25 @@ def load_dataset(path: str | Path) -> list[EvalCase]:
     cases: list[EvalCase] = []
     seen_ids: set[str] = set()
 
+    def reject_constant(value):
+        raise ValueError("nonfinite JSON constants are not allowed")
+
+    def unique_fields(pairs):
+        record = {}
+        for key, value in pairs:
+            if key in record:
+                raise ValueError(f"duplicate JSON field {key!r}")
+            record[key] = value
+        return record
+
     with path.open(encoding="utf-8") as f:
         for line_no, line in enumerate(f, start=1):
             line = line.strip()
             if not line:
                 continue
             try:
-                record = json.loads(line)
-            except json.JSONDecodeError as e:
+                record = json.loads(line, parse_constant=reject_constant, object_pairs_hook=unique_fields)
+            except (ValueError, RecursionError) as e:
                 raise DatasetError(f"line {line_no}: invalid JSON: {e}") from e
 
             case = _parse_case(record, line_no)

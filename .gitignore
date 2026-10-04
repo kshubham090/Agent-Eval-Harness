@@ -6,3 +6,6 @@ results/
 .pytest_cache/
 *.egg-info/
 build/
+dist/
+smoke/
+test-results.xml

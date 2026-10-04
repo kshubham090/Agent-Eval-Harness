@@ -7,6 +7,7 @@ and a per-case table sorted worst-first so failures surface at the top.
 from __future__ import annotations
 
 import html
+import json
 from pathlib import Path
 
 _CSS = """
@@ -25,6 +26,9 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .error { color: #c0392b; }
 .io { max-width: 26rem; overflow-wrap: anywhere; }
 .scroll { overflow-x: auto; }
+details { margin: 1rem 0; border: 1px solid #8885; border-radius: 8px; padding: 0.8rem; }
+summary { cursor: pointer; font-weight: 600; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.8rem; }
 """
 
 
@@ -37,6 +41,30 @@ def _fmt(value: float | None) -> str:
 
 
 def render_report(result: dict, comparison=None, title: str = "Eval report") -> str:
+    if result.get("type") == "multi_run":
+        means = result["mean"]
+        overview = {
+            "run_id": "repeated-run-summary", "timestamp": "",
+            "dataset_sha": result.get("dataset_sha"),
+            "metadata": {**result.get("metadata", {}), "run_count": result["run_count"]},
+            "scores": {name.removeprefix("scorer:"): {"mean": mean}
+                       for name, mean in means.items() if name.startswith("scorer:")},
+            "pass_rate": means["pass_rate"],
+            "error_count": sum(run.get("error_count", 0) for run in result["runs"]),
+        }
+        if "trajectory" in means:
+            overview["trajectory_score"] = {"mean": means["trajectory"]}
+        parts = [render_report(overview, comparison, title)]
+        parts.append("<h2>Across repeated runs</h2><p>Means and sample standard deviations across runs. "
+                     "The baseline comparison above uses these means; case details below belong to each run.</p>")
+        parts.append("<table><tr><th>Metric</th><th>Mean</th><th>Sample std</th></tr>")
+        for name, mean in means.items():
+            parts.append(f"<tr><td>{_esc(name)}</td><td>{_fmt(mean)}</td><td>{_fmt(result['std'][name])}</td></tr>")
+        parts.append("</table>")
+        for i, run in enumerate(result["runs"], 1):
+            parts.append(f"<details><summary>Run {i}: {_esc(run.get('run_id'))}</summary>"
+                         + render_report(run, title=f"Run {i}") + "</details>")
+        return "\n".join(parts)
     scorer_names = list(result.get("scores", {}))
     cases = result.get("cases", [])
 
@@ -58,7 +86,32 @@ def render_report(result: dict, comparison=None, title: str = "Eval report") -> 
     parts.append(f"<tr><td>pass_rate</td><td class='num'>{_fmt(result.get('pass_rate'))}</td></tr>")
     error_count = result.get("error_count", 0)
     error_class = "error" if error_count else "ok"
-    parts.append(f"<tr><td>errors</td><td class='num {error_class}'>{error_count}</td></tr></table>")
+    parts.append(f"<tr><td>errors</td><td class='num {error_class}'>{_esc(error_count)}</td></tr></table>")
+
+    summary = result.get("summary", {})
+    if summary:
+        parts.append("<h2>Reliability, latency and reported usage</h2>")
+        interval = summary.get("pass_rate_ci95", {})
+        if interval:
+            parts.append(f"<p>Pass rate: 95% Wilson interval {_fmt(interval.get('lower'))}–{_fmt(interval.get('upper'))}. "
+                         f"{_esc(interval.get('assumptions', 'Assumes independent, representative cases.'))}</p>")
+        parts.append("<table><tr><th>Measurement</th><th>Value</th></tr>")
+        for key, label in (("latency_ms", "Agent + scoring latency"), ("agent_latency_ms", "Agent latency")):
+            latency = summary.get(key, {})
+            parts.append(f"<tr><td>{label}</td><td>p50 {_fmt(latency.get('p50'))} ms · "
+                         f"p95 {_fmt(latency.get('p95'))} ms · p99 {_fmt(latency.get('p99'))} ms</td></tr>")
+        for key, label in (("cost_usd", "Reported agent cost (USD)"), ("tokens", "Reported agent tokens")):
+            usage = summary.get(key, {})
+            parts.append(f"<tr><td>{label}</td><td>{_fmt(usage.get('reported_total'))} "
+                         f"· reported on {_esc(usage.get('reported_count', 0))}/{_esc(summary.get('case_count', 0))} cases</td></tr>")
+        parts.append("</table><p class='meta'>Missing usage is unknown, never assumed free. "
+                     "Reported costs cover the agent, not optional model-based scorers.</p>")
+        if summary.get("by_tag"):
+            parts.append("<h2>Dataset slices</h2><table><tr><th>Tag</th><th>Cases</th><th>Pass rate</th><th>Errors</th></tr>")
+            for tag, group in summary["by_tag"].items():
+                parts.append(f"<tr><td>{_esc(tag)}</td><td>{_esc(group.get('case_count'))}</td>"
+                             f"<td>{_fmt(group.get('pass_rate'))}</td><td>{_esc(group.get('error_count'))}</td></tr>")
+            parts.append("</table>")
 
     # --- baseline comparison ---
     if comparison is not None:
@@ -84,7 +137,7 @@ def render_report(result: dict, comparison=None, title: str = "Eval report") -> 
     if cases:
         has_trajectory = any(c.get("trajectory_score") is not None for c in cases)
         parts.append("<h2>Cases (worst first)</h2><div class='scroll'><table>")
-        headers = ["id", "input", "expected", "actual"] + scorer_names
+        headers = ["id", "input", "expected", "actual"] + [_esc(n) for n in scorer_names]
         if has_trajectory:
             headers.append("trajectory")
         headers += ["latency&nbsp;ms", "error"]
@@ -105,6 +158,11 @@ def render_report(result: dict, comparison=None, title: str = "Eval report") -> 
             row.append(f"<td class='error io'>{_esc(c.get('error') or '')}</td>")
             parts.append("<tr>" + "".join(row) + "</tr>")
         parts.append("</table></div>")
+        for c in cases:
+            if c.get("trajectory") or c.get("usage") or c.get("metadata"):
+                detail = {key: c.get(key) for key in ("trajectory", "usage", "cost_usd", "metadata")}
+                parts.append(f"<details><summary>{_esc(c['id'])}: trace and usage</summary>"
+                             f"<pre>{_esc(json.dumps(detail, indent=2, ensure_ascii=False))}</pre></details>")
 
     return "\n".join(parts)
 
@@ -112,6 +170,6 @@ def render_report(result: dict, comparison=None, title: str = "Eval report") -> 
 def write_report(path: str | Path, result: dict, comparison=None, title: str = "Eval report") -> Path:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    doc = f"<!doctype html><html><head><meta charset='utf-8'><title>{html.escape(title)}</title></head><body>{render_report(result, comparison, title)}</body></html>"
+    doc = f"<!doctype html><html lang='en'><head><meta name='viewport' content='width=device-width, initial-scale=1'><meta charset='utf-8'><title>{html.escape(title)}</title></head><body>{render_report(result, comparison, title)}</body></html>"
     path.write_text(doc, encoding="utf-8")
     return path

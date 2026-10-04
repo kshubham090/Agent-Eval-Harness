@@ -69,3 +69,23 @@ def test_rejects_empty_dataset(tmp_path):
     path = write_jsonl(tmp_path, [""])
     with pytest.raises(DatasetError, match="empty"):
         load_dataset(path)
+
+
+@pytest.mark.parametrize("tags,match", [
+    ('[""]', "nonempty"), ('["  "]', "nonempty"),
+    ('["math", "math"]', "duplicate tags"),
+])
+def test_invalid_tags_fail_during_loading(tmp_path, tags, match):
+    path = write_jsonl(tmp_path, ['{"id":"a","input":"x","expected_output":"y","tags":' + tags + '}'])
+    with pytest.raises(DatasetError, match=match):
+        load_dataset(path)
+
+
+@pytest.mark.parametrize("line", [
+    '{"id":"a","id":"b","input":"x","expected_output":"y"}',
+    '{"id":"a","input":"x","expected_output":"y","tags":NaN}',
+    '{"id":"a","input":"x","expected_output":"y","expected_trajectory":Infinity}',
+])
+def test_dataset_rejects_ambiguous_or_nonstandard_json(tmp_path, line):
+    with pytest.raises(DatasetError, match="line 1: invalid JSON"):
+        load_dataset(write_jsonl(tmp_path, [line]))

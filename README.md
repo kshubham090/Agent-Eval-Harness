@@ -1,400 +1,298 @@
 <div align="center">
 
-# Lowq X1
+# Agent Eval Harness
 
-### Agent Eval Harness
+**Bring your agent. Measure quality, failures, latency and regressions.**
 
 [![Eval](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml/badge.svg)](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml)
-[![Real-agent eval](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/real-eval.yml/badge.svg)](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/real-eval.yml)
-[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-96%20passing-brightgreen.svg)](tests/)
-[![Last commit](https://img.shields.io/github/last-commit/kshubham090/Agent-Eval-Harness.svg)](https://github.com/kshubham090/Agent-Eval-Harness/commits/master)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](pyproject.toml)
 
-**A production-grade eval system for AI agents, built from scratch — no eval frameworks.**
+Codex · Claude Code · Python functions · any command · HTTP services
 
 </div>
 
----
+Evaluate the agent you already have, using your own tasks and existing login.
+Keep results locally, inspect every answer, and fail CI when quality drops.
+The core needs only Click and python-dotenv; model-based scorers are optional.
+There is no evaluation service account or framework migration.
 
-```mermaid
-flowchart LR
-    DS[("Golden Dataset<br/><sub>your test cases</sub>")] --> AR["Agent Runner"]
-    AR --> SC["Scorer(s)<br/><sub>exact · regex · embedding · llm-judge · trajectory</sub>"]
-    SC --> RS[("Results")]
-    RS --> BC{"Baseline Compare"}
-    BC --> GATE(["CI Gate"])
+## First result in three commands
+
+From a Python 3.12+ environment:
+
+```sh
+python -m pip install "git+https://github.com/kshubham090/Agent-Eval-Harness.git"
+agent-eval init my-evals
+agent-eval eval --config my-evals/agent-eval.toml
 ```
 
-The harness answers one question: **"Is my agent getting better or worse?"**
-And it blocks deploys when the answer is "worse."
+Open `my-evals/results/report.html`. You now have an editable configuration,
+three test cases, a JSON result, and a standalone HTML report. The starter
+agent is a deterministic arithmetic fixture, so this costs no model tokens.
+Replace it with your own agent and tasks.
 
-## Features
+For development:
 
-- **Pluggable scorers** — exact match, regex, embedding similarity (sentence-transformers), and LLM-as-judge (Anthropic API), all implementing one `Scorer` protocol (0.0–1.0)
-- **Trajectory scoring** — LCS-based comparison of the agent's tool-call sequence against the expected one; order matters, extra and missing steps both cost points
-- **Regression gate** — save a baseline from a known-good run; any metric dropping more than a threshold fails the run with exit code 1, wired into GitHub Actions
-- **Concurrency** — cases run in a thread pool (`--concurrency 8`); agents and LLM scorers are I/O-bound
-- **Failure isolation** — one crashing case records an error and scores 0.0; the run continues
-- **Multi-run statistics** — `--runs 3` reports mean ± std per metric, so you gate on signal, not single-run noise
-- **Dataset fingerprinting** — results carry a content hash of the dataset; the gate refuses to compare runs from different dataset versions (including tag-filtered subsets)
-- **HTML reports** — `--html report.html` writes a self-contained page: metrics, baseline deltas, and every case worst-first with expected vs actual, latency, and errors
-- **Meta-eval** — calibrate the LLM judge against human-graded cases and measure its agreement before trusting its scores
-- **CI-native** — regression tables land in the GitHub Actions job summary; the HTML report uploads as an artifact
-
-## System Design & Architecture
-
-### Component architecture
-
-How the pieces fit together — a dataset and an agent go in, a pass/fail decision comes out.
-
-```mermaid
-flowchart LR
-    subgraph Input
-        DS[("Golden Dataset<br/>JSONL")]
-        AG["Agent Under Test<br/>get_agent()"]
-    end
-
-    subgraph Core["harness/ core"]
-        DL["dataset.py<br/>load + validate + hash"]
-        ER["eval_runner.py<br/>ThreadPoolExecutor"]
-        SC["scorers/*<br/>exact · regex · embedding · llm_judge"]
-        TR["trajectory.py<br/>LCS step-match"]
-        AGG["results.py<br/>aggregate + multi-run stats"]
-    end
-
-    subgraph Storage
-        RES[("results/*.json")]
-        BASE[("baselines/*.json")]
-    end
-
-    subgraph Output
-        REP["report.py<br/>self-contained HTML"]
-        GATE{{"baseline.py<br/>compare_to_baseline"}}
-        CI["exit 0 / exit 1"]
-    end
-
-    DS --> DL --> ER
-    AG --> ER
-    ER --> SC --> AGG
-    ER --> TR --> AGG
-    AGG --> RES
-    RES -.save.-> BASE
-    RES --> REP
-    RES --> GATE
-    BASE --> GATE
-    GATE --> CI
-```
-
-### Eval run — process flow
-
-What happens inside a single `agent-eval eval` invocation.
-
-```mermaid
-sequenceDiagram
-    participant U as You
-    participant CLI as agent-eval CLI
-    participant D as Dataset Loader
-    participant P as Thread Pool
-    participant A as Agent
-    participant S as Scorers
-    participant G as Baseline Gate
-
-    U->>CLI: eval --dataset --agent --compare-baseline ci
-    CLI->>D: load_dataset(path)
-    D-->>CLI: cases[] + dataset_sha
-
-    par for every case, up to --concurrency
-        P->>A: run(input)
-        A-->>P: output + trajectory
-        P->>S: score(expected, actual)
-        S-->>P: 0.0 - 1.0
-        Note over P: exceptions caught here —<br/>one bad case never kills the run
-    end
-
-    P-->>CLI: CaseResult[] (order preserved)
-    CLI->>CLI: aggregate() -> means, pass_rate, errors
-    CLI->>G: compare_to_baseline(result, baseline)
-    G-->>CLI: regressions[] (metric, delta)
-    CLI-->>U: HTML report + console table + exit code
-```
-
-### CI regression gate
-
-The whole point of the project: an automatic, unbypassable check on every push.
-
-```mermaid
-flowchart TD
-    A["git push / pull request"] --> B["GitHub Actions: Eval workflow"]
-    B --> C["pytest -q"]
-    C -->|fail| X["Red X — merge blocked"]
-    C -->|pass| D["agent-eval eval --compare-baseline ci"]
-    D --> E{"any metric dropped<br/>more than threshold?"}
-    E -->|yes| F["exit 1<br/>regression table in job summary<br/>HTML report uploaded as artifact"]
-    E -->|no| H["exit 0 — PASS"]
-    F --> X
-    H --> G["Green check — merge allowed"]
-```
-
-### Scorer plugin model
-
-Every scorer implements one protocol, so adding a new grading strategy never touches the eval loop.
-
-```mermaid
-classDiagram
-    class Scorer {
-        <<protocol>>
-        +str name
-        +score(expected, actual) float
-    }
-    class ExactMatchScorer
-    class RegexScorer
-    class EmbeddingScorer {
-        -embed_fn : injectable
-    }
-    class LLMJudgeScorer {
-        -complete_fn : injectable
-    }
-    Scorer <|.. ExactMatchScorer
-    Scorer <|.. RegexScorer
-    Scorer <|.. EmbeddingScorer
-    Scorer <|.. LLMJudgeScorer
-```
-
-`embed_fn` and `complete_fn` are why the test suite runs offline in seconds and
-why swapping in Ollama as the judge backend is a one-function change, not a
-rewrite.
-
-## Datasets included
-
-| Dataset | Cases | What it covers |
-|---|---|---|
-| [simple_qa.jsonl](datasets/examples/simple_qa.jsonl) | 60 | Factual Q&A across geography, science, math, history, literature, technology, sports — every case tagged for `--filter-tags` slicing |
-| [tool_calling.jsonl](datasets/examples/tool_calling.jsonl) | 18 | Multi-step trajectories across travel, finance, email, calendar, devops, shopping, support |
-| [judge_calibration.jsonl](datasets/examples/judge_calibration.jsonl) | 40 | Human-graded pairs covering paraphrases, numeric formats, abbreviations, hedged answers, descriptions-without-naming, extra info, contradictions |
-
-## Quickstart
-
-```bash
+```sh
 git clone https://github.com/kshubham090/Agent-Eval-Harness.git
 cd Agent-Eval-Harness
 python -m venv .venv
-.venv/Scripts/activate            # Windows; on Unix: source .venv/bin/activate
-pip install -e .[dev]
-pytest -q                         # 96 tests
+# macOS/Linux: source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+python -m pytest -q
 ```
 
-Run your first eval (a stub agent that always answers "Paris"):
+## Connect your existing agent
 
-```bash
-agent-eval eval --dataset datasets/examples/simple_qa.jsonl \
-    --agent examples/stub_agent.py --scorers exact \
-    --output results/run_001.json --html results/report.html
+These examples run from this repository using the included
+[16-case JSON smoke suite](benchmarks/agent_smoke.jsonl). It checks Python
+tracing, data transformations, algorithms and response constraints. It is an
+authored smoke test, not a coding leaderboard or an industry benchmark.
+
+```sh
+# Codex: uses your installed CLI and existing authentication.
+agent-eval eval --agent codex --cwd /path/to/your/repository \
+  --dataset benchmarks/agent_smoke.jsonl --scorers json \
+  --output results/codex.json --html results/codex.html
+
+# Claude Code: uses your installed CLI and existing authentication.
+agent-eval eval --agent claude-code --cwd /path/to/your/project \
+  --dataset benchmarks/agent_smoke.jsonl --scorers json \
+  --output results/claude-code.json --html results/claude-code.html
+
+# Your existing sync or async Python function.
+agent-eval eval --agent my_agent.py::answer --dataset cases.jsonl
+
+# Any language: stdin contains the prompt; stdout contains the answer.
+agent-eval eval --command '["node", "my-agent.mjs"]' --dataset cases.jsonl
+
+# Your existing service: POST {"input": "..."}, receive {"output": "..."}.
+agent-eval eval --url http://localhost:8000/agent --dataset cases.jsonl
 ```
 
-Save it as a baseline, then watch the gate catch a regression:
+Use `agent-eval init evals --agent codex` (or `claude-code`, `command`, `http`,
+`python`) for a starter configuration. `agent-eval doctor` checks optional
+CLI availability without making a model call. Add `--model YOUR_MODEL` to
+choose a model explicitly; otherwise each CLI uses its own configuration.
 
-```bash
-agent-eval baseline save --name v1.0 --result results/run_001.json
+| Connection | What you provide | Captured automatically |
+| --- | --- | --- |
+| Codex | Installed, authenticated `codex` | Final answer, reported tokens, supported completed tool events |
+| Claude Code | Installed, authenticated `claude` | Final answer, reported tokens and USD cost |
+| Command | An argv array | stdout; optional JSON answer, trace and usage |
+| HTTP | A JSON endpoint | Answer; optional trace, usage and cost |
+| Python | Function or original `get_agent()` factory | Text, `AgentOutput`, or JSON envelope |
 
-# degraded agent answers "London" to everything -> exit code 1
-agent-eval eval --dataset datasets/examples/simple_qa.jsonl \
-    --agent examples/degraded_agent.py --scorers exact \
-    --compare-baseline v1.0 --threshold 0.01
+[Integration guide →](docs/integrations.md) Includes authentication, custom
+arguments, framework bridges, request/response contracts and permissions.
+
+## What you can measure
+
+- **Quality:** exact match, regex, substring assertions, structural JSON
+  equality, optional embeddings and an optional LLM judge.
+- **Tool order:** compare expected tool sequences with observed trajectories
+  using a longest-common-subsequence score.
+- **Reliability:** preserve every attempted case, its output and errors.
+  Crashes and scorer failures score zero and never count as passes.
+- **Latency and usage:** per-case agent and scoring latency, p50/p95/p99,
+  reported tokens and agent cost, with explicit coverage for missing data.
+- **Dataset slices:** pass rates, scores and errors by tag, alongside overall
+  results. Hard cases cannot disappear into an aggregate average.
+- **Repeated runs:** means and sample standard deviations across runs, plus a
+  per-run Wilson interval with its sampling assumptions recorded.
+- **Regression gates:** dataset fingerprints, scoring-protocol checks,
+  missing-metric detection, minimum pass rates and failing CI exit codes.
+- **Evidence:** versioned JSON, escaped standalone HTML, all repeated-run case
+  details, and offline report generation from saved results.
+
+```mermaid
+flowchart LR
+    D[Your JSONL tasks] --> E[Evaluation runner]
+    A[Codex / Claude Code / Python / Command / HTTP] --> E
+    E --> S[Output + trajectory scoring]
+    S --> R[JSON + HTML + dataset slices]
+    R --> G[Baseline and quality gates]
+    G --> CI[CI pass or fail]
 ```
 
-### Evaluate a real agent
+Concurrency defaults to one. Increase `--concurrency` for independent,
+thread-safe workloads; use `--runs` to repeat stochastic evaluations. The
+harness sends only task inputs to agents, not reference answers.
 
-The stub agents above are deterministic fixtures for exercising the harness.
-The real workflow evaluates a model-backed agent — put your key in `.env`
-(copy [.env.example](.env.example)) and run:
+## Reproducible benchmarks
 
-```bash
-pip install -e .[judge,embedding]
-agent-eval eval --dataset datasets/examples/simple_qa.jsonl \
-    --agent examples/claude_agent.py \
-    --scorers exact,embedding,llm_judge \
-    --concurrency 2 \
-    --output results/claude.json --html results/claude.html
+**These are measured harness operations, not model intelligence scores.**
+The benchmark uses a deterministic calculator and controlled waiting. It
+makes no model calls and does not compare against other evaluation frameworks.
+
+<!-- BENCHMARK_RESULTS_START -->
+Measured **2026-10-04**, macOS arm64, Python 3.14.7, 10 logical CPUs, from clean source revision [`348189a`](https://github.com/kshubham090/Agent-Eval-Harness/commit/348189aeb616104df8f59c2a922513962e14a4a3).
+
+**Controlled waiting:** 128 arithmetic tasks per batch; 5 ms requested wait per task; 1 warmup excluded and 5 measured repetitions per level.
+
+| Concurrency | Median batch | P95 batch | Median cases/s | Speedup |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 875.88 ms | 888.64 ms | 146.1 | 1.00× |
+| 2 | 436.61 ms | 449.92 ms | 293.2 | 2.01× |
+| 4 | 222.24 ms | 225.65 ms | 576.0 | 3.94× |
+| 8 | 109.68 ms | 114.07 ms | 1167.0 | 7.99× |
+
+P95 is the nearest-rank quantile of five batch samples (the maximum here).
+This demonstrates overlapping controlled waiting, not real provider throughput.
+
+**No-wait overhead:** 4,096 serial tasks took a median **23.02 ms** in the full harness versus **2.63 ms** in a direct calculator/scorer loop. The median paired difference was **4.97 µs per case**.
+
+**Functional checks: 9/9 passed.** The correct fixture scored 100%; a deliberately degraded fixture scored 75% and failed the regression gate. Injecting 32/128 crashes preserved all cases and scored the errors zero.
+
+[Raw samples and source hashes](benchmarks/latest.json) · [Full measured tables](benchmarks/latest.md)
+<!-- BENCHMARK_RESULTS_END -->
+
+Reproduce from the checkout:
+
+```sh
+python scripts/benchmark.py \
+  --output benchmarks/latest.json --markdown benchmarks/latest.md
 ```
 
-The committed [baselines/claude-v1.json](baselines/claude-v1.json) is a real
-run of this agent on the full 60-case dataset — gate your changes against it
-with `--compare-baseline claude-v1`. In CI, the
-[real-agent eval workflow](.github/workflows/real-eval.yml) runs the same
-thing on demand (Actions → "Real-agent eval" → Run workflow) once you add an
-`ANTHROPIC_API_KEY` repository secret.
+The JSON contains warmups and raw measured samples, dataset and source
+fingerprints, command, UTC timestamps, Git revision/dirty status, Python,
+OS and CPU count. The benchmark fails if a functional check fails; CI does
+not enforce machine-dependent speed thresholds.
 
-Actual results from that run — a live demonstration of why the scorer ladder
-exists:
+[Methodology and limitations →](docs/benchmarking.md)
 
-| Metric | Mean | What it says |
-|---|---|---|
-| exact_match | 0.867 | 8/60 answers differ only in formatting ("Six" vs "6", "Sir Arthur Conan Doyle", "H₂O" vs "H2O") |
-| embedding | 0.984 | rescues 7 of those 8 — but scores H₂O vs H2O only 0.48 (the subscript breaks tokenization) |
-| llm_judge | 1.000 | correctly grades all 60 as right |
-| pass_rate | 0.983 | |
+**Live-agent status:** no new authenticated Codex or Claude Code benchmark was
+run for this change. The validation machine had Codex CLI 0.160.0 without a
+login and no Claude Code executable. Both adapters have offline protocol and
+process tests. The included smoke suite and commands above let you measure
+your own configured agents without inventing a leaderboard.
 
-Same agent, three verdicts. Exact match under-reports by 13 points, embeddings
-have blind spots of their own, and the (calibrated) judge gets it right —
-which is why you calibrate it first.
+The older [Claude snapshot](baselines/claude-v1.json) is retained as historical
+example data. It lacks enough model, prompt and environment provenance for a
+reproducible comparison; its three scorer means are not three competing
+agents. [Provenance audit →](docs/benchmarking.md#historical-baseline-provenance)
 
-## CLI reference
+## Configuration you can commit
 
-```
-agent-eval eval
-  --dataset PATH              JSONL golden dataset (required)
-  --agent PATH                Python file exposing get_agent() (required)
-  --scorers NAMES             comma-separated: exact,regex,embedding,llm_judge  [exact]
-  --concurrency N             cases run in parallel  [4]
-  --runs N                    repeat N times, report mean +/- std  [1]
-  --filter-tags TAGS          only run cases carrying at least one tag
-  --output PATH               write result JSON
-  --html PATH                 write self-contained HTML report
-  --compare-baseline NAME     gate against a saved baseline (exit 1 on regression)
-  --threshold FLOAT           max allowed absolute drop per metric  [0.05]
-  --allow-dataset-change      compare even if the dataset changed since the baseline
+```toml
+# agent-eval.toml — paths are relative to this file
+[agent]
+type = "codex"
+cwd = "/path/to/your/repository"
+timeout = 120
+# model = "your-model"
 
-agent-eval baseline save --name NAME --result PATH
-agent-eval baseline list
-```
+[eval]
+dataset = "cases.jsonl"
+scorers = ["json"]
+concurrency = 1
+runs = 3
+pass_threshold = 1.0
+min_pass_rate = 0.95
 
-`python -m harness ...` works identically.
-
-## Writing an agent
-
-An agent is any Python file exposing `get_agent()` returning an object with
-`run(input: str) -> AgentOutput`:
-
-```python
-from harness.runner import AgentOutput
-
-class MyAgent:
-    def run(self, input: str) -> AgentOutput:
-        answer, steps = my_pipeline(input)
-        return AgentOutput(output=answer, trajectory=steps)  # trajectory optional
-
-def get_agent():
-    return MyAgent()
+[output]
+json = "results/run.json"
+html = "results/report.html"
 ```
 
-Included examples:
+Run `agent-eval eval --config agent-eval.toml`. Command-line options override
+configuration. Unknown sections and misspelled keys fail early. Keep tokens
+in environment variables; HTTP config accepts `token_env = "MY_AGENT_TOKEN"`.
 
-| File | What it is |
-|---|---|
-| [examples/stub_agent.py](examples/stub_agent.py) | Deterministic fixture (always "Paris") for testing the harness |
-| [examples/degraded_agent.py](examples/degraded_agent.py) | Deliberately worse fixture for demoing the gate |
-| [examples/claude_agent.py](examples/claude_agent.py) | Real agent on the Anthropic API (`AGENT_MODEL` to override) |
-| [examples/ollama_agent.py](examples/ollama_agent.py) | Local agent via Ollama — zero API cost (`OLLAMA_MODEL` to override) |
-
-## Datasets
-
-JSONL, one case per line. Output-only case:
+A dataset is JSONL, with one object per line:
 
 ```json
-{"id": "q1", "input": "What is the capital of France?", "expected_output": "Paris", "tags": ["geography"]}
+{"id":"sum","input":"Return only JSON: the sum of 17 and 25.","expected_output":"42","tags":["arithmetic"]}
+{"id":"route","input":"Return only JSON with city Paris and country France.","expected_output":"{\"city\":\"Paris\",\"country\":\"France\"}","tags":["structured"]}
 ```
 
-Trajectory case (the agent should take these steps, in order):
+`id`, `input` and `expected_output` are required strings. Optional `tags`
+select slices with `--filter-tags structured`; optional `expected_trajectory`
+is an array of tool names. Duplicate IDs, unknown fields and malformed data
+are rejected before execution. Check a dataset without running any agent:
 
-```json
-{"id": "t1", "input": "Book a flight from NYC to London", "expected_output": "Flight booked",
- "expected_trajectory": ["search_flights", "select_cheapest", "confirm_booking"], "tags": ["tool-use"]}
+```sh
+agent-eval validate --dataset cases.jsonl
 ```
 
-The loader validates everything loudly: required fields, types, duplicate ids,
-unknown fields — with line numbers in every error.
+| Scorer flag | Contract | Extra dependency |
+| --- | --- | --- |
+| `exact` | String equality after trimming outer whitespace | None |
+| `json` | Parsed JSON equality; ignores object key order, preserves array order and boolean types | None |
+| `contains` | Case-sensitive substring present in answer | None |
+| `regex` | `expected_output` is a regex searched in the answer | None |
+| `embedding` | Cosine similarity of sentence embeddings | `pip install ".[embedding]"` |
+| `llm_judge` | Anthropic-backed rubric grade; backend can be replaced | `pip install ".[judge]"` |
 
-## Scorers
+Choose a scorer whose contract matches the reference format. Mixing `exact`
+and `regex` uses the same reference as both literal text and a pattern.
+By default a case passes at mean score ≥ 0.5 across selected scorers and its
+trajectory score, if present. Set `--pass-threshold 1.0` when every assertion
+must pass. LLM grades and similarity scores are imperfect proxies; calibrate
+judges against held-out human labels before relying on them.
 
-| Scorer | Measures | Cost | Use when |
-|---|---|---|---|
-| `exact` | strict string equality (after strip) | free | answers are canonical ("4", "Paris") |
-| `regex` | `expected_output` as a pattern vs output | free | asserting shape ("contains a YYYY-MM-DD date") |
-| `embedding` | cosine similarity of sentence embeddings | free, local model | paraphrases should count ("The capital is Paris") |
-| `llm_judge` | model-graded correctness (0.0–1.0 + reasoning) | ~$0.001/case (Haiku) | quality is subjective or nuanced |
+## Gate changes in CI
 
-Trajectory scoring runs automatically for any case with `expected_trajectory`.
+```sh
+# Establish a reviewed baseline.
+agent-eval eval --config agent-eval.toml --output results/baseline.json
+agent-eval baseline save --name production --result results/baseline.json
 
-Extras install per scorer: `pip install -e .[embedding]` (sentence-transformers),
-`pip install -e .[judge]` (anthropic — put `ANTHROPIC_API_KEY` in `.env`, see
-[.env.example](.env.example)).
+# Fail on errors, low pass rate, or more than a 2-point metric drop.
+agent-eval eval --config agent-eval.toml \
+  --compare-baseline production --threshold 0.02 --min-pass-rate 0.95
 
-## The regression gate in CI
-
-[.github/workflows/eval.yml](.github/workflows/eval.yml) runs on every push and PR:
-tests first, then the eval against the committed baseline in [baselines/](baselines/).
-A regression fails the check, posts a metric table to the job summary, and uploads
-the HTML report as an artifact.
-
-Update the baseline intentionally (after verifying an improvement):
-
-```bash
-agent-eval eval --dataset ... --agent ... --output results/new.json
-agent-eval baseline save --name ci --result results/new.json
-git add baselines/ci.json && git commit -m "Raise eval baseline"
+# Compare or render existing evidence without another model call.
+agent-eval compare --current results/new.json --baseline results/baseline.json
+agent-eval report --result results/new.json --html results/new.html
 ```
 
-## Trusting the judge (meta-eval)
+A threshold of `0.02` means two percentage points, not a 2% relative drop.
+Errors fail the CLI by default; `--allow-errors` disables that exit condition
+but keeps failed cases in all metrics. Repeated-run gates use mean quality
+metrics, not a claim of statistical significance. Confidence intervals are
+not used to auto-approve regressions. Legacy baselines without protocol
+metadata remain readable; regenerate them to get stricter checks.
 
-An LLM judge has biases; measure them before believing its scores.
-[datasets/examples/judge_calibration.jsonl](datasets/examples/judge_calibration.jsonl)
-holds human-graded `(expected, actual, human_score)` triples;
-[scripts/calibrate_judge.py](scripts/calibrate_judge.py) reports each judge's mean
-absolute error and agreement rate against the humans:
+Version 0.2 preserves the original Python factory contract and legacy baseline
+format. Two defaults change: concurrency is now 1 (previously 4), and case
+errors now exit with status 1 even without a baseline.
 
-```
-exact match as judge:   agreement 40%   MAE 0.53
-LLM judge (Haiku):      agreement 90%   MAE 0.05   (after rubric tuning)
-```
+The [CI workflow](.github/workflows/eval.yml) runs offline tests and first-use
+checks on Linux, macOS and Windows, builds the wheel, checks the original
+baseline, and exercises deterministic benchmark invariants. No API key is
+needed. Require the check in branch protection if merges must be blocked.
+The optional [real-agent workflow](.github/workflows/real-eval.yml) runs the
+Anthropic example manually with a repository secret.
 
-The loop: calibrate → find the bias pattern (e.g. penalizing extra correct info)
-→ tune the rubric in [harness/scorers/llm_judge.py](harness/scorers/llm_judge.py)
-→ re-calibrate. Grow the calibration set before chasing the last few percent, or
-you're overfitting to it.
+## Scope and practical limits
 
-## Project structure
+This release evaluates text/JSON responses and supplied tool trajectories.
+It does not yet provision per-case containers, reset repositories, verify
+patches with hidden tests, or run SWE-bench/Terminal-Bench. A prompt-only score
+cannot establish end-to-end coding ability or “best in the world.”
 
-```
-harness/
-├── dataset.py          # JSONL loading + validation, tags filter, content hash
-├── runner.py           # AgentRunner protocol + AgentOutput
-├── scorers/
-│   ├── base.py         # Scorer protocol (0.0–1.0 contract)
-│   ├── exact.py        # exact string match
-│   ├── regex_scorer.py # pattern assertions
-│   ├── embedding.py    # cosine similarity (pluggable embed_fn)
-│   └── llm_judge.py    # LLM-as-judge (pluggable backend, calibrated rubric)
-├── trajectory.py       # LCS-based step-sequence scoring
-├── eval_runner.py      # the loop: concurrency, failure isolation, latency
-├── results.py          # result models, aggregation, multi-run statistics
-├── baseline.py         # save/load/compare with dataset fingerprint check
-├── report.py           # self-contained HTML report
-├── meta_eval.py        # judge calibration against human grades
-└── cli.py              # agent-eval / python -m harness
-```
+The Codex preset starts read-only; Claude Code uses `dontAsk` and retains
+existing tool permissions. Command and Python integrations use your existing
+environment. Mutable agents need isolated workspaces or sequential execution.
+Subprocess timeouts include output draining; POSIX descendants are cleaned
+up, while Windows terminates only the direct child. HTTP uses a socket
+timeout. In-process Python functions have no enforced timeout.
 
-Design decisions worth knowing:
+Usage totals only include what agents report; missing usage is unknown.
+Optional model-based scorer costs are not included. Wilson intervals assume
+independent, representative cases and do not measure model variation across
+runs. Benchmark numbers vary with hardware, runtime and background load.
 
-- **Everything heavy is pluggable.** `EmbeddingScorer(embed_fn=...)` and
-  `LLMJudgeScorer(complete_fn=...)` accept plain functions, so the entire test
-  suite runs offline in seconds, and swapping providers (e.g. Ollama as judge)
-  is one function.
-- **Errored cases score 0.0 and count** against every mean — an agent that
-  crashes is a worse agent, and the gate should see that.
-- **A case "passes"** when the mean of its scores (including trajectory) is
-  ≥ 0.5 (tunable via `run_eval(pass_threshold=...)`).
+## Extend the harness
 
-## Roadmap
+A custom runner implements `run(input: str) -> AgentOutput`. A custom scorer
+implements `name` and `score(expected: str, actual: str) -> float` in `[0, 1]`.
+They can be supplied directly to `harness.eval_runner.run_eval`. Existing
+factory agents remain compatible.
 
-- Agent-output caching (re-score stored outputs without re-running the agent)
-- Confidence-interval gating (compare distributions, not point means)
-- Batch API backend for the judge (50% cheaper at scale)
-- Judge ensembles / median-of-3 for grading stability
-- `harness init` scaffolding command
-
-## How it was built
-
-This project was built as a learning exercise in nine phases — each one concept:
-dataset → eval loop → regex → embeddings → LLM-as-judge → trajectories →
-baselines → CI wiring → meta-eval. Learning resources for each concept:
-[RESOURCES.md](RESOURCES.md).
+See [integration examples](docs/integrations.md), [benchmark methodology](docs/benchmarking.md),
+[smoke-suite generation](benchmarks/README.md), and the original
+[learning resources](RESOURCES.md). Next priorities are reproducible sandboxed
+coding tasks, resumable runs and richer task-specific validators.
