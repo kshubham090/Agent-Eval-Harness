@@ -9,22 +9,22 @@ from pathlib import Path
 _SECTIONS = {
     "agent": {"type", "path", "command", "url", "model", "cwd", "timeout", "extra_args",
               "output_format", "output_key", "token_env"},
-    "eval": {"dataset", "scorers", "concurrency", "runs", "filter_tags", "pass_threshold",
-             "min_pass_rate", "allow_errors"},
+    "eval": {"dataset", "pack", "scorers", "concurrency", "runs", "filter_tags", "pass_threshold",
+             "min_pass_rate", "max_cost_usd", "max_p95_latency_ms", "allow_errors"},
     "output": {"json", "html"},
     "baseline": {"name", "directory", "threshold", "allow_dataset_change"},
 }
 
 _STRING_FIELDS = {
     "agent": {"type", "path", "url", "model", "cwd", "output_format", "output_key", "token_env"},
-    "eval": {"dataset"},
+    "eval": {"dataset", "pack"},
     "output": {"json", "html"},
     "baseline": {"name", "directory"},
 }
 _INTEGER_FIELDS = {"eval": {"concurrency", "runs"}}
 _NUMBER_FIELDS = {
     "agent": {"timeout"},
-    "eval": {"pass_threshold", "min_pass_rate"},
+    "eval": {"pass_threshold", "min_pass_rate", "max_cost_usd", "max_p95_latency_ms"},
     "baseline": {"threshold"},
 }
 _BOOLEAN_FIELDS = {"eval": {"allow_errors"}, "baseline": {"allow_dataset_change"}}
@@ -103,6 +103,10 @@ def load_config(path: str | Path) -> dict:
             options[key] = str(path.parent / options[key])
     if kind == "python" and "agent_path" in options:
         options["agent_path"] = str(path.parent / options["agent_path"])
+    if "pack" in options:
+        pack = options["pack"]
+        if "/" in pack or "\\" in pack or (path.parent / pack).exists():
+            options["pack"] = str(path.parent / pack)
     # Relative command arguments run beside the configuration by default.
     options.setdefault("cwd", str(path.parent))
     return options

@@ -17,6 +17,7 @@ import pytest
 import harness.adapters as adapters
 from harness.adapters import (
     AdapterError,
+    AdapterValidationError,
     ClaudeCodeRunner,
     CodexRunner,
     CommandRunner,
@@ -24,7 +25,10 @@ from harness.adapters import (
     HTTPRunner,
     agent_output_from_payload,
 )
-from harness.runner import AgentOutput
+from harness.dataset import EvalCase
+from harness.eval_runner import run_eval
+from harness.runner import AgentOutput, ResponseValidationError
+from harness.scorers.exact import ExactMatchScorer
 
 
 def command(source, **kwargs):
@@ -125,8 +129,68 @@ def test_async_function_runner_explains_active_event_loop():
     {"output": "x", "metadata": {"nested": {1: "bad-key", "str": "other"}}},
 ])
 def test_invalid_response_envelopes_are_rejected(payload):
-    with pytest.raises(AdapterError):
+    with pytest.raises(AdapterError) as error:
         agent_output_from_payload(payload)
+    assert isinstance(error.value, ResponseValidationError)
+
+
+@pytest.mark.parametrize("payload", [{"output": 7}, {"output": "yes", "events": [{"value": (1, 2)}]}])
+def test_function_response_validation_has_its_own_failure_stage(payload):
+    result = run_eval([EvalCase("one", "prompt", "yes")], FunctionRunner(lambda _: payload),
+                      [ExactMatchScorer()])
+    assert result.case_results[0].error_stage == "validation"
+
+
+@pytest.mark.parametrize("error", [ValueError("function failed"), AdapterError("execution failed")])
+def test_function_execution_errors_remain_agent_failures(error):
+    def fail(_):
+        raise error
+
+    result = run_eval([EvalCase("one", "prompt", "yes")], FunctionRunner(fail), [ExactMatchScorer()])
+    assert result.case_results[0].error_stage == "agent"
+
+
+@pytest.mark.parametrize("runner_type,response,stage", [
+    ("command", "not JSON", "validation"),
+    ("command", '{"output":7}', "validation"),
+    ("command", AdapterError("command exited with status 7"), "agent"),
+    ("command", AdapterError("command timed out"), "agent"),
+    ("codex", '[]', "validation"),
+    ("codex", '{"type":"item.completed","item":null}', "validation"),
+    ("codex", '{"type":"turn.completed"}', "validation"),
+    ("codex", '{"type":"turn.failed"}', "agent"),
+    ("codex", '{"type":"error"}', "agent"),
+    ("claude", '[]', "validation"),
+    ("claude", '{"type":"result"}', "validation"),
+    ("claude", '{"type":"result","is_error":false,"subtype":"success","result":"yes","usage":[]}', "validation"),
+    ("claude", '{"type":"result","is_error":true,"subtype":"error_max_turns"}', "agent"),
+])
+def test_command_and_native_protocol_failure_stages(monkeypatch, runner_type, response, stage):
+    def execute(*args, **kwargs):
+        if isinstance(response, Exception):
+            raise response
+        return response
+
+    monkeypatch.setattr(adapters, "_execute", execute)
+    runner = {"command": lambda: CommandRunner(["fixture"], output_format="json"),
+              "codex": CodexRunner, "claude": ClaudeCodeRunner}[runner_type]()
+    with pytest.raises(AdapterError) as error:
+        runner.run("prompt")
+    assert isinstance(error.value, AdapterValidationError) == (stage == "validation")
+    result = run_eval([EvalCase("one", "prompt", "yes")], runner, [ExactMatchScorer()])
+    assert result.case_results[0].error_stage == stage
+
+
+def test_response_validation_exception_from_scorer_remains_a_scorer_failure():
+    class BrokenScorer:
+        name = "broken"
+
+        def score(self, expected, actual):
+            raise ResponseValidationError("invalid judge response")
+
+    result = run_eval([EvalCase("one", "prompt", "yes")], FunctionRunner(lambda _: "yes"),
+                      [BrokenScorer()])
+    assert result.case_results[0].error_stage == "scorer"
 
 
 def test_command_stdin_unicode_and_whitespace_are_preserved():
@@ -168,6 +232,7 @@ def test_nonzero_exit_omits_sensitive_stdout_and_stderr():
     runner = command("import sys; print('secret-stdout'); print('secret-stderr',file=sys.stderr); sys.exit(7)")
     with pytest.raises(AdapterError, match="status 7") as error:
         runner.run("private prompt")
+    assert not isinstance(error.value, ResponseValidationError)
     assert "secret" not in str(error.value)
     assert "private" not in str(error.value)
 
@@ -179,12 +244,12 @@ def test_nonzero_exit_omits_sensitive_stdout_and_stderr():
     ("print('{\"output\":\"x\",\"cost_usd\":NaN}')", "invalid JSON"),
 ])
 def test_command_invalid_json_is_actionable(source, match):
-    with pytest.raises(AdapterError, match=match):
+    with pytest.raises(AdapterValidationError, match=match):
         command(source, output_format="json").run("hello")
 
 
 def test_command_rejects_invalid_utf8_output():
-    with pytest.raises(AdapterError, match="UTF-8"):
+    with pytest.raises(AdapterValidationError, match="UTF-8"):
         command("import sys; sys.stdout.buffer.write(b'\\xff')").run("hello")
 
 
@@ -378,6 +443,7 @@ def test_http_errors_omit_server_body_and_token(http_agent, monkeypatch, status)
     monkeypatch.setenv("ADAPTER_TEST_TOKEN", "secret-token")
     with pytest.raises(AdapterError, match=f"status {status}") as error:
         HTTPRunner(url, token_env="ADAPTER_TEST_TOKEN").run("hello")
+    assert not isinstance(error.value, ResponseValidationError)
     assert "secret" not in str(error.value)
 
 
@@ -399,8 +465,10 @@ def test_http_refuses_redirects_without_replaying_credentials(http_agent, monkey
 def test_http_validates_responses(http_agent, response, match):
     url, state = http_agent
     state["response"] = response
-    with pytest.raises(AdapterError, match=match):
+    with pytest.raises(AdapterValidationError, match=match):
         HTTPRunner(url).run("hello")
+    result = run_eval([EvalCase("one", "prompt", "hello")], HTTPRunner(url), [ExactMatchScorer()])
+    assert result.case_results[0].error_stage == "validation"
 
 
 def test_http_response_size_is_bounded(http_agent):

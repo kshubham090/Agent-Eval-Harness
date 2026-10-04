@@ -1,0 +1,88 @@
+name: Agent Eval Harness
+description: Evaluate your existing agent and gate quality, latency and reported cost.
+author: Agent Eval Harness contributors
+branding:
+  icon: check-circle
+  color: blue
+inputs:
+  mode:
+    description: output (TOML configuration) or coding (Docker pack and command)
+    default: output
+  config:
+    description: Output-evaluation TOML path relative to your repository
+    default: agent-eval.toml
+  pack:
+    description: Coding pack name@version or directory
+    default: coding-starter@1.0.0
+  command:
+    description: Coding agent command as a JSON argv array, executed inside the image
+  image:
+    description: Coding agent Docker image (must already be pulled or built)
+  network:
+    description: Coding agent network, none or bridge; grader always has no network
+    default: none
+  agent-env:
+    description: Newline-separated environment variable names to pass to the coding agent
+  min-pass-rate:
+    description: Required pass rate in every run
+    default: '1'
+  max-error-rate:
+    description: Maximum error fraction in every run
+    default: '0'
+  max-cost-usd:
+    description: Maximum total reported agent cost across all runs; requires complete coverage
+  max-p95-latency-ms:
+    description: Maximum agent p95 latency in every run; requires complete coverage
+  output-directory:
+    description: New output directory inside your repository
+    default: agent-eval-results
+  artifact-name:
+    description: Unique artifact name (override for matrix jobs)
+    default: agent-eval-results
+  upload-artifacts:
+    description: Upload result, report, gate evidence and coding artifacts
+    default: 'true'
+outputs:
+  result:
+    description: Result JSON path
+    value: ${{ steps.evaluate.outputs.result }}
+  report:
+    description: HTML report path
+    value: ${{ steps.evaluate.outputs.report }}
+  gates:
+    description: Gate evidence JSON path
+    value: ${{ steps.evaluate.outputs.gates }}
+runs:
+  using: composite
+  steps:
+    - name: Install harness from this action revision
+      shell: bash
+      run: python -m pip install "$GITHUB_ACTION_PATH"
+    - name: Evaluate and gate
+      id: evaluate
+      shell: bash
+      env:
+        AE_MODE: ${{ inputs.mode }}
+        AE_CONFIG: ${{ inputs.config }}
+        AE_PACK: ${{ inputs.pack }}
+        AE_COMMAND: ${{ inputs.command }}
+        AE_IMAGE: ${{ inputs.image }}
+        AE_NETWORK: ${{ inputs.network }}
+        AE_AGENT_ENV: ${{ inputs.agent-env }}
+        AE_MIN_PASS_RATE: ${{ inputs.min-pass-rate }}
+        AE_MAX_ERROR_RATE: ${{ inputs.max-error-rate }}
+        AE_MAX_COST_USD: ${{ inputs.max-cost-usd }}
+        AE_MAX_P95_LATENCY_MS: ${{ inputs.max-p95-latency-ms }}
+        AE_OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
+      run: python "$GITHUB_ACTION_PATH/scripts/action_runner.py"
+    - name: Upload evaluation evidence
+      if: always() && inputs.upload-artifacts == 'true' && steps.evaluate.outputs.result != ''
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: |
+          ${{ steps.evaluate.outputs.result }}
+          ${{ steps.evaluate.outputs.report }}
+          ${{ steps.evaluate.outputs.gates }}
+          ${{ steps.evaluate.outputs.artifacts }}
+        if-no-files-found: warn

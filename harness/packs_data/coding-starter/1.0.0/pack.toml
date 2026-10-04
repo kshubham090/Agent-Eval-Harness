@@ -1,0 +1,69 @@
+schema_version = 1
+id = "coding-starter"
+version = "1.0.0"
+name = "Python repository repair starter"
+description = "Three original Python editing tasks graded by independent tests withheld from the agent workspace. A small integration benchmark, not a production coding leaderboard."
+license = "Apache-2.0"
+kind = "coding"
+
+[coding]
+image = "python:3.12-slim"
+
+[[tasks]]
+id = "slug"
+input = """
+Fix slugify(text) in solution.py. The function accepts a Python string and returns
+a URL slug using this exact sequence: Unicode casefold, Unicode NFKD normalization,
+then ASCII encoding with non-ASCII characters ignored. Replace each run of
+characters outside ASCII a-z and 0-9 with one hyphen, and strip leading/trailing
+hyphens. Examples: '  Hello, WORLD!  ' -> 'hello-world', 'Café déjà vu' ->
+'cafe-deja-vu', and 'Straße 42' -> 'strasse-42'. Empty input and input with no
+remaining ASCII letters/digits produce ''. Raise TypeError for non-string input.
+Use only the Python standard library. Edit files in the working directory; a
+written explanation without a working implementation is not sufficient.
+"""
+workspace = "tasks/slug/workspace"
+grader = "tasks/slug/grader"
+command = ["python", "-I", "-B", "/grader/test_solution.py"]
+tags = ["python", "repository-edit", "text", "unicode"]
+timeout = 30
+
+[[tasks]]
+id = "dedup"
+input = """
+Fix stable_unique(values) in solution.py. Given a list of strings, return a new
+list containing each distinct value once, preserving the order of its FIRST
+occurrence. Equality is Python's case-sensitive string equality; do not trim,
+casefold, sort, or otherwise normalize strings. Preserve Unicode and empty
+strings. Never mutate the input list, and return a distinct new list even for an
+empty input or an input that already has no duplicates. Example:
+['red', 'blue', 'red', 'green', 'blue'] -> ['red', 'blue', 'green'].
+Use only the Python standard library. Edit files in the working directory; a
+written explanation without a working implementation is not sufficient.
+"""
+workspace = "tasks/dedup/workspace"
+grader = "tasks/dedup/grader"
+command = ["python", "-I", "-B", "/grader/test_solution.py"]
+tags = ["python", "repository-edit", "collections", "ordering"]
+timeout = 30
+
+[[tasks]]
+id = "intervals"
+input = """
+Fix merge_intervals(intervals) in solution.py. The input is a list of two-element
+lists [start, end] whose endpoints are Python integers. Return the union of the
+closed intervals as a list of two-element lists sorted by start. Merge overlaps
+and intervals touching at the SAME endpoint, but do not merge an integer gap:
+[[1, 2], [2, 5]] -> [[1, 5]], while [[1, 2], [3, 4]] stays separate. Handle
+unsorted, repeated, nested, negative, and zero-length intervals. Raise ValueError
+if any start exceeds its end. Return [] for empty input. Never mutate the input
+or its nested lists. Every returned interval must be a new list, even when no
+merging is needed. Use only the Python standard library. Edit files in the
+working directory; a written explanation without a working implementation is
+not sufficient.
+"""
+workspace = "tasks/intervals/workspace"
+grader = "tasks/intervals/grader"
+command = ["python", "-I", "-B", "/grader/test_solution.py"]
+tags = ["python", "repository-edit", "algorithms", "intervals"]
+timeout = 30

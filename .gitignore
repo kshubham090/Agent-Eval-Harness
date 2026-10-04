@@ -9,3 +9,4 @@ build/
 dist/
 smoke/
 test-results.xml
+agent-eval-results/

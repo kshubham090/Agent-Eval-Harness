@@ -1,0 +1,11 @@
+schema_version = 1
+id = "json-contracts"
+version = "1.0.0"
+name = "JSON output contracts"
+description = "Sixteen original prompt-only structured output smoke tasks across code tracing, data transformation, algorithms, and constraints."
+license = "Apache-2.0"
+kind = "output"
+
+[output]
+dataset = "dataset.jsonl"
+scorers = ["json"]

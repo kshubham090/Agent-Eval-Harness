@@ -13,8 +13,9 @@ from dataclasses import dataclass, field, replace
 from datetime import datetime, timezone
 from numbers import Real
 from pathlib import Path
+from harness.runner import validate_json_value
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 PASS_RULE = "mean_of_scorers_and_optional_trajectory"
 ERROR_CASE_POLICY = "fail_and_zero_scores"
 PROTOCOL_KEYS = ("pass_threshold", "pass_rule", "error_case_policy")
@@ -30,8 +31,12 @@ def validate_probability(value: float, name: str) -> float:
 
 
 def _nonnegative(value: float, name: str) -> float:
+    try:
+        finite = math.isfinite(value)
+    except (TypeError, OverflowError):
+        finite = False
     if (isinstance(value, bool) or not isinstance(value, Real)
-            or not math.isfinite(value) or value < 0):
+            or not finite or value < 0):
         raise ValueError(f"{name} must be a finite nonnegative number, got {value!r}")
     return float(value)
 
@@ -55,6 +60,9 @@ class CaseResult:
     cost_usd: float | None = None
     metadata: dict = field(default_factory=dict)
     expected_trajectory: list[str] | None = None
+    events: list[dict] = field(default_factory=list)
+    error_stage: str | None = None
+    rescore_latency_ms: float | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -66,6 +74,8 @@ class CaseResult:
             "tags": list(self.tags), "usage": self.usage,
             "cost_usd": self.cost_usd, "metadata": self.metadata,
             "expected_trajectory": self.expected_trajectory,
+            "events": self.events, "error_stage": self.error_stage,
+            "rescore_latency_ms": self.rescore_latency_ms,
         }
 
 
@@ -185,7 +195,7 @@ def _summarize_cases(cases: list[CaseResult], threshold: float) -> dict:
     errors = sum(c.error is not None for c in cases)
     usage_keys = sorted({key for c in cases for key in c.usage})
     tokens = [_total_tokens(c.usage) for c in cases]
-    return {
+    summary = {
         "case_count": count, "passed_count": passed, "failed_count": count - passed,
         "error_count": errors, "error_rate": errors / count, "pass_rate": passed / count,
         "pass_rate_ci95": _wilson_interval(passed, count),
@@ -201,6 +211,11 @@ def _summarize_cases(cases: list[CaseResult], threshold: float) -> dict:
             for key in usage_keys
         },
     }
+    if any(c.rescore_latency_ms is not None for c in cases):
+        summary["rescore_latency_ms"] = _latency_summary(
+            [c.rescore_latency_ms for c in cases if c.rescore_latency_ms is not None], count
+        )
+    return summary
 
 
 def _validate_cases(cases: list[CaseResult]) -> None:
@@ -221,7 +236,7 @@ def _validate_cases(cases: list[CaseResult]) -> None:
             validate_probability(value, f"scorer {name!r}")
         if case.trajectory_score is not None:
             validate_probability(case.trajectory_score, "trajectory score")
-        for name in ("latency_ms", "agent_latency_ms", "cost_usd"):
+        for name in ("latency_ms", "agent_latency_ms", "cost_usd", "rescore_latency_ms"):
             value = getattr(case, name)
             if value is not None:
                 _nonnegative(value, name)
@@ -233,6 +248,13 @@ def _validate_cases(cases: list[CaseResult]) -> None:
             _nonnegative(value, f"usage[{name!r}]")
         if any(not isinstance(tag, str) or not tag.strip() for tag in case.tags):
             raise ValueError("tags must be nonempty strings")
+        if not isinstance(case.events, list) or any(not isinstance(event, dict) for event in case.events):
+            raise ValueError("events must be a list of JSON objects")
+        validate_json_value(case.events, "events")
+        if case.error_stage not in (None, "agent", "validation", "scorer"):
+            raise ValueError("error_stage must be agent, validation, scorer, or null")
+        if case.error is None and case.error_stage is not None:
+            raise ValueError("error_stage requires an error")
 
 
 def aggregate(
@@ -327,6 +349,36 @@ def _validate_saved_multi_run(result: dict, metrics: dict[str, float]) -> None:
         raise ValueError("multi-run dataset fingerprint disagrees with constituent runs")
     if protocol_metadata(result) != protocol_metadata(rebuilt):
         raise ValueError("multi-run scoring protocol disagrees with constituent runs")
+    if grader_config_key(result) != grader_config_key(rebuilt):
+        raise ValueError("multi-run grader_config disagrees with constituent runs")
+
+
+def grader_config_key(result: dict) -> str | None:
+    """Canonical public grader settings, distinct from legacy absent settings."""
+    metadata = result.get("metadata", {})
+    if not isinstance(metadata, dict):
+        raise ValueError("result metadata must be an object")
+    if "grader_config" not in metadata:
+        return None
+    config = metadata["grader_config"]
+    if not isinstance(config, list) or not config:
+        raise ValueError("grader_config must be a nonempty list of grader descriptions")
+    names = []
+    for grader in config:
+        if not isinstance(grader, dict):
+            raise ValueError("grader_config entries must be objects")
+        for field in ("name", "type"):
+            if not isinstance(grader.get(field), str) or not grader[field].strip():
+                raise ValueError(f"grader_config {field} must be a nonempty string")
+        if not isinstance(grader.get("settings"), dict):
+            raise ValueError("grader_config settings must be a JSON object")
+        names.append(grader["name"])
+    if len(names) != len(set(names)):
+        raise ValueError("grader_config names must be unique")
+    if "scores" in result and set(names) != set(result["scores"]):
+        raise ValueError("grader_config names must match the recorded scorers")
+    validate_json_value(config, "grader_config")
+    return json.dumps(config, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
 
 
 def protocol_metadata(result: dict) -> dict:
@@ -398,6 +450,7 @@ def summarize_runs(run_dicts: list[dict]) -> dict:
     metrics = [flatten_metrics(run) for run in run_dicts]
     first = run_dicts[0]
     first_protocol = protocol_metadata(first)
+    first_graders = grader_config_key(first)
     first_cases = _case_identities(first)
     for run, current_metrics in zip(run_dicts[1:], metrics[1:]):
         if set(current_metrics) != set(metrics[0]):
@@ -406,6 +459,8 @@ def summarize_runs(run_dicts: list[dict]) -> dict:
             raise ValueError("cannot summarize runs with different dataset fingerprints")
         if protocol_metadata(run) != first_protocol:
             raise ValueError("cannot summarize runs with different scoring protocol or pass_threshold")
+        if grader_config_key(run) != first_graders:
+            raise ValueError("cannot summarize runs with different grader_config or missing grader settings")
         if _case_identities(run) != first_cases:
             raise ValueError("cannot summarize runs with different case identities or selections")
     metric_values = {name: [metric[name] for metric in metrics] for name in metrics[0]}

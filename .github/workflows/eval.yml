@@ -38,6 +38,8 @@ jobs:
           python -m harness eval --config smoke/agent-eval.toml --runs 2
       - name: Build distributable wheel
         run: python -m pip wheel . --no-deps --wheel-dir dist
+      - name: Verify clean wheel installation
+        run: python scripts/verify_distribution.py
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
@@ -73,3 +75,49 @@ jobs:
         with:
           name: eval-evidence
           path: results/
+
+  action-output:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install .
+      - run: python -m harness init action-demo
+      - uses: ./
+        with:
+          config: action-demo/agent-eval.toml
+          artifact-name: action-output-evidence
+
+  coding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[dev]'
+      - run: docker pull python:3.12-slim
+      - name: Docker isolation and grading tests
+        env:
+          AGENT_EVAL_DOCKER_TESTS: '1'
+        run: python -m pytest tests/test_coding.py -q --junitxml=coding-tests.xml
+      - run: docker build -f examples/Dockerfile.fixture -t agent-eval-fixture:ci .
+      - uses: ./
+        with:
+          mode: coding
+          image: agent-eval-fixture:ci
+          command: '["python", "/opt/fixture_agent.py"]'
+          artifact-name: action-coding-evidence
+      - name: Correct and degraded coding benchmark
+        run: |
+          python scripts/benchmark_coding.py --image agent-eval-fixture:ci --repetitions 1 \
+            --output results/coding-benchmark.json --markdown results/coding-benchmark.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coding-test-evidence
+          path: |
+            coding-tests.xml
+            results/

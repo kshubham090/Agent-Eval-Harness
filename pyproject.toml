@@ -1,9 +1,22 @@
 [project]
 name = "agent-eval-harness"
-version = "0.2.0"
+version = "0.3.0"
 description = "Evaluate existing agents through Python, Codex, Claude Code, commands, or HTTP with reproducible benchmarks and CI gates."
 readme = "README.md"
 requires-python = ">=3.12"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{name = "Agent Eval Harness contributors"}]
+keywords = ["agents", "evaluation", "benchmark", "codex", "claude-code"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Testing",
+]
 dependencies = [
     "click>=8.0",
     "python-dotenv>=1.0",
@@ -12,6 +25,12 @@ dependencies = [
 [project.scripts]
 agent-eval = "harness.cli:cli"
 
+[project.urls]
+Homepage = "https://github.com/kshubham090/Agent-Eval-Harness"
+Documentation = "https://github.com/kshubham090/Agent-Eval-Harness/tree/master/docs"
+Repository = "https://github.com/kshubham090/Agent-Eval-Harness"
+Issues = "https://github.com/kshubham090/Agent-Eval-Harness/issues"
+
 [project.optional-dependencies]
 # Keep the core lightweight; install semantic scorers only when needed.
 embedding = ["sentence-transformers>=3.0", "numpy>=1.26"]
@@ -19,14 +38,21 @@ judge = ["anthropic>=0.30"]
 dev = ["pytest>=8.0"]
 
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["harness", "harness.scorers"]
+packages = ["harness", "harness.scorers", "harness.packs_data"]
+
+[tool.setuptools.package-data]
+harness = ["packs_data/**/*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["**/__pycache__/*", "**/*.pyc"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
     "slow: tests that download/load a real embedding model",
+    "docker: integration tests requiring an operational Docker daemon and explicit opt-in",
 ]

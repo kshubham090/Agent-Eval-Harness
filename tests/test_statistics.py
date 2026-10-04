@@ -98,7 +98,7 @@ def test_scoring_protocol_is_recorded_without_mutating_supplied_metadata():
     assert result.metadata["pass_threshold"] == 0.7
     assert result.metadata["pass_rule"] == "mean_of_scorers_and_optional_trajectory"
     assert metadata == {"agent": "my-agent", "pass_threshold": 0.99}
-    assert result.to_dict()["schema_version"] == 2
+    assert result.to_dict()["schema_version"] == 3
 
 
 @pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf"), -0.1, 1.1, True, "0.5"])

@@ -2,10 +2,11 @@
 
 # Agent Eval Harness
 
-**Bring your agent. Measure quality, failures, latency and regressions.**
+**Bring your agent. Test its answers and code. Keep the evidence.**
 
 [![Eval](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml/badge.svg)](https://github.com/kshubham090/Agent-Eval-Harness/actions/workflows/eval.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](pyproject.toml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-green)](LICENSE)
 
 Codex · Claude Code · Python functions · any command · HTTP services
 
@@ -15,6 +16,15 @@ Evaluate the agent you already have, using your own tasks and existing login.
 Keep results locally, inspect every answer, and fail CI when quality drops.
 The core needs only Click and python-dotenv; model-based scorers are optional.
 There is no evaluation service account or framework migration.
+
+| Workflow | What you get |
+| --- | --- |
+| Existing-agent evaluation | Python, command, HTTP, Codex and Claude Code adapters |
+| Repository repair | Fresh Docker workspaces, separate test grading, candidate archives and patches |
+| Versioned task packs | Bundled starters, strict manifests, full content fingerprints and authoring tools |
+| Replay and rescore | Inspect saved attempts or apply new output graders without calling the agent again |
+| CI acceptance | Quality, error, latency and reported-cost gates; a reusable GitHub Action |
+| Open source | Apache-2.0, local artifacts, lightweight core and documented contribution/release paths |
 
 ## First result in three commands
 
@@ -42,6 +52,56 @@ python -m venv .venv
 python -m pip install -e ".[dev]"
 python -m pytest -q
 ```
+
+## Evaluate working code end to end
+
+The `coding` workflow gives each task a fresh workspace, runs your agent, freezes
+its edits, and copies the candidate into a **separate grading container**. Test
+files are withheld from the agent's runtime workspace. Every task produces
+bounded logs, a candidate archive, file hashes and a patch alongside its score.
+
+Try the entire pipeline without a provider account, from this checkout:
+
+```sh
+docker build -f examples/Dockerfile.fixture -t agent-eval-fixture:local .
+agent-eval coding --pack coding-starter@1.0.0 \
+  --image agent-eval-fixture:local --command '["python", "/opt/fixture_agent.py"]' \
+  --output results/coding.json --html results/coding.html --min-pass-rate 1
+agent-eval replay --result results/coding.json --html results/coding-replay.html
+```
+
+This fixture applies known solutions to three teaching tasks; it is **not an AI
+model benchmark**. Add `--noop` to its command array to leave the bugs intact and
+observe the quality gate fail. Replace the image and command with your own
+agent. Its command reads the prompt from stdin and edits `/workspace`.
+
+Containers use a read-only root filesystem, a non-root user and bounded
+resources. Agent networking defaults to off; graders always have no network.
+Provider access requires explicit networking and named credential variables.
+Docker and the selected image are trusted; these controls do not establish
+security against hostile code. [Coding guide and exact limits →](docs/coding.md)
+
+## Packs, replay and new graders
+
+```sh
+agent-eval pack list
+agent-eval pack inspect coding-starter@1.0.0
+agent-eval pack init my-pack --kind coding
+agent-eval eval --pack json-contracts@1.0.0 --agent my_agent.py::answer \
+  --output results/answers.json
+agent-eval rescore --result results/answers.json --scorers json,exact \
+  --output results/rescored.json --html results/rescored.html
+```
+
+Packs ship in the installed wheel and can also live in your repository. A pack's
+fingerprint covers its manifest, tasks, starter files and graders. Published
+versions should be immutable. [Pack format and contribution guide →](docs/packs.md)
+
+Replay validates and renders recorded evidence. Rescoring preserves the original
+answers, available tool events, agent timing, usage and cost while recording the
+new grader configuration and time separately. Agent failures remain failures;
+failed output graders can be retried. Coding results can be replayed, but cannot
+be regraded as text. [Recording and rescore semantics →](docs/replay.md)
 
 ## Connect your existing agent
 
@@ -80,8 +140,8 @@ choose a model explicitly; otherwise each CLI uses its own configuration.
 | --- | --- | --- |
 | Codex | Installed, authenticated `codex` | Final answer, reported tokens, supported completed tool events |
 | Claude Code | Installed, authenticated `claude` | Final answer, reported tokens and USD cost |
-| Command | An argv array | stdout; optional JSON answer, trace and usage |
-| HTTP | A JSON endpoint | Answer; optional trace, usage and cost |
+| Command | An argv array | stdout; optional JSON answer, events, trajectory, usage and cost |
+| HTTP | A JSON endpoint | Answer; optional events, trajectory, usage and cost |
 | Python | Function or original `get_agent()` factory | Text, `AgentOutput`, or JSON envelope |
 
 [Integration guide →](docs/integrations.md) Includes authentication, custom
@@ -108,11 +168,14 @@ arguments, framework bridges, request/response contracts and permissions.
 
 ```mermaid
 flowchart LR
-    D[Your JSONL tasks] --> E[Evaluation runner]
-    A[Codex / Claude Code / Python / Command / HTTP] --> E
-    E --> S[Output + trajectory scoring]
-    S --> R[JSON + HTML + dataset slices]
-    R --> G[Baseline and quality gates]
+    A[Your agent] --> O[Output tasks]
+    A --> C[Fresh coding workspace]
+    C --> T[Separate test container]
+    O --> S[Output and trajectory graders]
+    T --> R[Recorded attempts and artifacts]
+    S --> R
+    R --> P[Replay or rescore]
+    R --> G[Quality, latency and cost gates]
     G --> CI[CI pass or fail]
 ```
 
@@ -122,26 +185,60 @@ harness sends only task inputs to agents, not reference answers.
 
 ## Reproducible benchmarks
 
+The repository includes two different measurements: real Docker workflow
+validation using known patches, and controlled harness-throughput measurements.
+Neither ranks model intelligence.
+
+<!-- CODING_BENCHMARK_RESULTS_START -->
+**Real Docker workflow:** 3 interleaved repetitions of 3 tasks per fixture,
+with fresh agent/grader containers and no network.
+
+| Fixture | Passed task attempts | Execution errors | Median batch | Batch p95 |
+| --- | ---: | ---: | ---: | ---: |
+| Known reference patches | 9/9 | 0 | 3.04 s | 3.09 s |
+| Unchanged buggy starters | 0/9 | 0 | 3.05 s | 3.30 s |
+
+Timing includes provisioning, transfers, execution, grading and cleanup. No
+warmup is excluded; p95 is the maximum of three trials. These are known patches,
+not model-generated solutions. Token use and cost are unreported.
+
+Measured **2026-10-04** on macOS arm64 with Docker **29.7.2**, from clean source [`3ab5db2`](https://github.com/kshubham090/Agent-Eval-Harness/commit/3ab5db20f8cf35becca5892d10f2e9e1796dee20). All four workflow checks passed.
+
+[All raw task attempts and hashes](benchmarks/coding-latest.json) · [Full Docker tables](benchmarks/coding-latest.md)
+<!-- CODING_BENCHMARK_RESULTS_END -->
+
+Reproduce the coding measurement after building the fixture image above:
+
+```sh
+python scripts/benchmark_coding.py --image agent-eval-fixture:local \
+  --output benchmarks/coding-latest.json --markdown benchmarks/coding-latest.md
+```
+
+The raw evidence retains every task result and trial, Docker/image identity,
+pack/source hashes, and the known fixture command. The three tasks contain 85
+checks; each task receives one binary pass/fail score. Three authored tasks
+are too small to support a general coding-agent ranking.
+
 **These are measured harness operations, not model intelligence scores.**
 The benchmark uses a deterministic calculator and controlled waiting. It
 makes no model calls and does not compare against other evaluation frameworks.
 
 <!-- BENCHMARK_RESULTS_START -->
-Measured **2026-10-04**, macOS arm64, Python 3.14.7, 10 logical CPUs, from clean source revision [`348189a`](https://github.com/kshubham090/Agent-Eval-Harness/commit/348189aeb616104df8f59c2a922513962e14a4a3).
+Measured **2026-10-04**, macOS arm64, Python 3.14.7, 10 logical CPUs, from clean source revision [`3ab5db2`](https://github.com/kshubham090/Agent-Eval-Harness/commit/3ab5db20f8cf35becca5892d10f2e9e1796dee20).
 
 **Controlled waiting:** 128 arithmetic tasks per batch; 5 ms requested wait per task; 1 warmup excluded and 5 measured repetitions per level.
 
 | Concurrency | Median batch | P95 batch | Median cases/s | Speedup |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 875.88 ms | 888.64 ms | 146.1 | 1.00× |
-| 2 | 436.61 ms | 449.92 ms | 293.2 | 2.01× |
-| 4 | 222.24 ms | 225.65 ms | 576.0 | 3.94× |
-| 8 | 109.68 ms | 114.07 ms | 1167.0 | 7.99× |
+| 1 | 776.33 ms | 793.38 ms | 164.9 | 1.00× |
+| 2 | 391.79 ms | 394.10 ms | 326.7 | 1.98× |
+| 4 | 193.98 ms | 195.04 ms | 659.9 | 4.00× |
+| 8 | 98.76 ms | 100.21 ms | 1296.1 | 7.86× |
 
 P95 is the nearest-rank quantile of five batch samples (the maximum here).
 This demonstrates overlapping controlled waiting, not real provider throughput.
 
-**No-wait overhead:** 4,096 serial tasks took a median **23.02 ms** in the full harness versus **2.63 ms** in a direct calculator/scorer loop. The median paired difference was **4.97 µs per case**.
+**No-wait overhead:** 4,096 serial tasks took a median **27.09 ms** in the full harness versus **2.71 ms** in a direct calculator/scorer loop. The median paired difference was **5.97 µs per case**.
 
 **Functional checks: 9/9 passed.** The correct fixture scored 100%; a deliberately degraded fixture scored 75% and failed the regression gate. Injecting 32/128 crashes preserved all cases and scored the errors zero.
 
@@ -172,6 +269,26 @@ The older [Claude snapshot](baselines/claude-v1.json) is retained as historical
 example data. It lacks enough model, prompt and environment provenance for a
 reproducible comparison; its three scorer means are not three competing
 agents. [Provenance audit →](docs/benchmarking.md#historical-baseline-provenance)
+
+## Gate changes in your repository
+
+Use the included [GitHub Action](action.yml) with a reviewed commit pinned in
+your workflow, or enforce the same gates locally:
+
+```sh
+agent-eval gate --result results/answers.json --min-pass-rate 0.95 \
+  --max-p95-latency-ms 30000 --output results/gates.json
+# When every case reports agent cost, also add --max-cost-usd 2.00.
+```
+
+The action checks quality and latency in every run and total reported agent
+cost across all runs. Required but missing measurements fail the gate. These
+are checks after execution, not spending caps. Reports and failed-case evidence
+are retained when a gate fails. [Action setup and gate definitions →](docs/ci.md)
+
+Apache-2.0 licensed. [Contribute](CONTRIBUTING.md) · [Security](SECURITY.md) ·
+[Release procedure](docs/releases.md) · [Changelog](CHANGELOG.md).
+Release automation is included; this change does not publish a PyPI release.
 
 ## Configuration you can commit
 
@@ -268,10 +385,12 @@ Anthropic example manually with a repository secret.
 
 ## Scope and practical limits
 
-This release evaluates text/JSON responses and supplied tool trajectories.
-It does not yet provision per-case containers, reset repositories, verify
-patches with hidden tests, or run SWE-bench/Terminal-Bench. A prompt-only score
-cannot establish end-to-end coding ability or “best in the world.”
+This release evaluates text/JSON responses, supplied tool trajectories and
+repository edits in fresh Docker workspaces with separate test containers.
+The bundled coding tasks are public teaching examples, not representative
+coding benchmarks or adversarially tamper-proof graders. SWE-bench and
+Terminal-Bench are not integrated. A prompt-only score cannot establish
+end-to-end coding ability or “best in the world.”
 
 The Codex preset starts read-only; Claude Code uses `dontAsk` and retains
 existing tool permissions. Command and Python integrations use your existing
@@ -294,5 +413,5 @@ factory agents remain compatible.
 
 See [integration examples](docs/integrations.md), [benchmark methodology](docs/benchmarking.md),
 [smoke-suite generation](benchmarks/README.md), and the original
-[learning resources](RESOURCES.md). Next priorities are reproducible sandboxed
-coding tasks, resumable runs and richer task-specific validators.
+[learning resources](RESOURCES.md). Next priorities are broader coding-task
+coverage, resumable runs and richer task-specific validators.

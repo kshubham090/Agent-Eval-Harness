@@ -15,16 +15,72 @@ import time
 import hashlib
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
+from copy import deepcopy
 
 from harness.dataset import EvalCase
 from harness.results import CaseResult, EvalResult, _nonnegative, aggregate, validate_probability
-from harness.runner import AgentRunner
+from harness.runner import AgentRunner, ResponseValidationError, validate_json_value
 from harness.scorers.base import Scorer
 from harness.trajectory import score_trajectory
 
 
 def _validated(name: str, score: float) -> float:
     return validate_probability(score, f"scorer {name!r}")
+
+
+def describe_scorers(scorers: list[Scorer]) -> list[dict]:
+    """Record safe effective settings without inspecting arbitrary object state.
+
+    Custom scorers may expose ``evaluation_config()`` returning intentionally
+    public JSON settings. Closures, API clients, and private attributes are
+    never serialized; callable names identify custom backends, not their code.
+    """
+    descriptions = []
+    for scorer in scorers:
+        scorer_type = f"{type(scorer).__module__}.{type(scorer).__qualname__}"
+        settings = {}
+        reproducibility = "custom scorer; implementation and environment must be retained"
+        if scorer_type == "harness.scorers.exact.ExactMatchScorer":
+            settings = {"case_sensitive": scorer.case_sensitive}
+            reproducibility = "deterministic for fixed harness version and settings"
+        elif scorer_type == "harness.scorers.regex_scorer.RegexScorer":
+            settings = {"full_match": scorer.full_match}
+            reproducibility = "deterministic for fixed harness version and settings"
+        elif scorer_type in (
+            "harness.scorers.structured.ContainsScorer",
+            "harness.scorers.structured.JSONMatchScorer",
+        ):
+            reproducibility = "deterministic for fixed harness version"
+        elif scorer_type == "harness.scorers.embedding.EmbeddingScorer":
+            settings = {"model_name": scorer.model_name,
+                        "backend_callable": _callable_identity(
+                            scorer._embed, "harness.scorers.embedding._load_sentence_transformer.<locals>.<lambda>")}
+            reproducibility = "model weights, backend, package versions, and environment are not pinned"
+        elif scorer_type == "harness.scorers.llm_judge.LLMJudgeScorer":
+            from harness.scorers.llm_judge import JUDGE_PROMPT_TEMPLATE, JUDGE_SYSTEM_PROMPT
+            settings = {
+                "model": scorer.model, "backend_callable": _callable_identity(
+                    scorer._complete, "harness.scorers.llm_judge._make_anthropic_backend.<locals>.complete"),
+                "default_backend": {"max_tokens": 512, "system_prompt": JUDGE_SYSTEM_PROMPT},
+                "prompt_template": JUDGE_PROMPT_TEMPLATE,
+            }
+            reproducibility = "external judge output may vary; model aliases and custom backends are not pinned"
+        config = getattr(scorer, "evaluation_config", None)
+        if callable(config):
+            settings = config()
+            if not isinstance(settings, dict):
+                raise ValueError("scorer evaluation_config() must return a JSON object")
+        validate_json_value(settings, "scorer settings")
+        descriptions.append({"name": scorer.name, "type": scorer_type,
+                             "settings": deepcopy(settings), "reproducibility": reproducibility})
+    return descriptions
+
+
+def _callable_identity(function, default_identity: str) -> str:
+    if function is None:
+        return "default backend"
+    identity = f"{getattr(function, '__module__', type(function).__module__)}.{getattr(function, '__qualname__', type(function).__qualname__)}"
+    return "default backend" if identity == default_identity else identity
 
 
 def _run_case(case: EvalCase, runner: AgentRunner, scorers: list[Scorer]) -> CaseResult:
@@ -35,11 +91,17 @@ def _run_case(case: EvalCase, runner: AgentRunner, scorers: list[Scorer]) -> Cas
     usage = {}
     cost_usd = None
     metadata = {}
+    events = []
+    error_stage = "agent"
     try:
         try:
             agent_output = runner.run(case.input)
+        except ResponseValidationError:
+            error_stage = "validation"
+            raise
         finally:
             agent_latency_ms = (time.perf_counter() - start) * 1000
+        error_stage = "validation"
         output = agent_output.output
         if not isinstance(output, str):
             output = ""
@@ -68,8 +130,14 @@ def _run_case(case: EvalCase, runner: AgentRunner, scorers: list[Scorer]) -> Cas
         raw_metadata = getattr(agent_output, "metadata", {})
         if not isinstance(raw_metadata, dict):
             raise ValueError("agent metadata must be a dictionary")
-        json.dumps(raw_metadata, allow_nan=False)
-        metadata = dict(raw_metadata)
+        validate_json_value(raw_metadata, "agent metadata")
+        metadata = deepcopy(raw_metadata)
+        raw_events = getattr(agent_output, "events", [])
+        if not isinstance(raw_events, list) or any(not isinstance(event, dict) for event in raw_events):
+            raise ValueError("agent events must be a list of JSON objects")
+        validate_json_value(raw_events, "agent events")
+        events = deepcopy(raw_events)
+        error_stage = "scorer"
         scores = {
             s.name: _validated(s.name, s.score(case.expected_output, output))
             for s in scorers
@@ -94,6 +162,7 @@ def _run_case(case: EvalCase, runner: AgentRunner, scorers: list[Scorer]) -> Cas
             cost_usd=cost_usd,
             metadata=metadata,
             expected_trajectory=list(case.expected_trajectory) if case.expected_trajectory is not None else None,
+            events=events,
         )
     except Exception as e:  # isolate the failure to this case
         return CaseResult(
@@ -112,6 +181,8 @@ def _run_case(case: EvalCase, runner: AgentRunner, scorers: list[Scorer]) -> Cas
             cost_usd=cost_usd,
             metadata=metadata,
             expected_trajectory=list(case.expected_trajectory) if case.expected_trajectory is not None else None,
+            events=events,
+            error_stage=error_stage,
         )
 
 
@@ -146,7 +217,9 @@ def run_eval(
         raise ValueError(f"duplicate scorer names: {names}")
     if metadata is not None and not isinstance(metadata, dict):
         raise ValueError("metadata must be a dictionary")
-    json.dumps(metadata, allow_nan=False)
+    validate_json_value(metadata, "metadata")
+    run_metadata = deepcopy(metadata or {})
+    run_metadata["grader_config"] = describe_scorers(scorers)
     if dataset_sha is None:
         canonical = json.dumps([asdict(c) for c in cases], sort_keys=True, ensure_ascii=False)
         dataset_sha = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
@@ -162,5 +235,5 @@ def run_eval(
         case_results,
         pass_threshold=pass_threshold,
         dataset_sha=dataset_sha,
-        metadata=metadata,
+        metadata=run_metadata,
     )

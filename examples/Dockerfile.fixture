@@ -1,0 +1,5 @@
+FROM python:3.12-slim
+LABEL org.opencontainers.image.description="Deterministic test fixture for Agent Eval Harness; not an AI agent"
+COPY examples/coding_fixture_agent.py /opt/fixture_agent.py
+USER 65534:65534
+WORKDIR /workspace

@@ -1,0 +1,5 @@
+**
+!examples/
+!examples/coding_fixture_agent.py
+!examples/Dockerfile.fixture
+!examples/Dockerfile.cli
