@@ -128,7 +128,9 @@ def test_invalid_response_envelopes_are_rejected(payload):
 
 def test_command_stdin_unicode_and_whitespace_are_preserved():
     text = "  answer café 🙂\n"
-    runner = command("import sys; sys.stdout.write(sys.stdin.read())")
+    # Text-mode Python stdout translates LF to CRLF on Windows. Echo bytes so
+    # this verifies adapter preservation independently of the fixture's OS.
+    runner = command("import sys; sys.stdout.buffer.write(sys.stdin.buffer.read())")
     assert runner.run(text).output == text
 
 
