@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "workload_version": "docker-coding-fixtures-v1",
-  "started_at": "2026-10-04T09:27:46+00:00",
+  "started_at": "2026-10-04T10:08:28+00:00",
   "benchmark_type": "deterministic real-container workflow; not an AI model benchmark",
   "config": {
     "pack": "coding-starter@1.0.0",
@@ -46,12 +46,12 @@
   },
   "provenance": {
     "git": {
-      "revision": "9be8aafc68b5e9963c25b54ef5c0004274149089",
+      "revision": "3ab5db20f8cf35becca5892d10f2e9e1796dee20",
       "dirty": false,
       "status": []
     },
     "source": {
-      "sha256": "0e63e40b994bda9515bd0717e8b753b13396242d0d75176ddd1630a8d41c0335",
+      "sha256": "60c1e9695aa31abeca7127f429ca52fa0416c1048decd9afb1bed74ebbdd9537",
       "files": {
         "examples/Dockerfile.fixture": {
           "sha256": "21f582fd4b5287f78d377d967d5d92d03cab80d9692ade52fbe6035d4bc654c4",
@@ -82,7 +82,7 @@
           "executable": false
         },
         "harness/coding.py": {
-          "sha256": "1a5f921f3da30cff42a74c62c26ec8a210bc90be2d521be63280aa07156cec1a",
+          "sha256": "d2ad2fa874e099d916373ec77a82e7f4fb53b99b72e5fa96b33246e17c8f595a",
           "executable": false
         },
         "harness/config.py": {
@@ -263,21 +263,21 @@
       "repetition": 1,
       "variant": "correct",
       "sequence": 1,
-      "elapsed_ms": 2870.303832984064,
+      "elapsed_ms": 2845.148499996867,
       "agent_execution_ms": [
-        80.11625002836809,
-        89.34412495000288,
-        89.96420801850036
+        79.37187503557652,
+        80.66824998240918,
+        89.02670902898535
       ],
       "grader_execution_ms": [
-        167.23583301063627,
-        189.0353339840658,
-        184.86987496726215
+        193.83458298398182,
+        184.04200003715232,
+        190.31508301850408
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "994df1f4",
-        "timestamp": "2026-10-04T09:27:49+00:00",
+        "run_id": "71f62462",
+        "timestamp": "2026-10-04T10:08:30+00:00",
         "scores": {
           "tests": {
             "mean": 1.0,
@@ -302,8 +302,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 916.6620830073953,
-            "agent_latency_ms": 80.11625002836809,
+            "latency_ms": 955.8946670149453,
+            "agent_latency_ms": 79.37187503557652,
             "tags": [
               "python",
               "repository-edit",
@@ -314,7 +314,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0000-cd03861f0f",
+              "artifacts": "artifacts/8f00a383220c461bbfcf4a792885274a/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -371,13 +371,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 167.23583301063627
+              "grader_latency_ms": 193.83458298398182
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0000-cd03861f0f",
+                "artifacts": "artifacts/8f00a383220c461bbfcf4a792885274a/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -396,8 +396,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 963.4277910226956,
-            "agent_latency_ms": 89.34412495000288,
+            "latency_ms": 910.0793749676086,
+            "agent_latency_ms": 80.66824998240918,
             "tags": [
               "python",
               "repository-edit",
@@ -408,7 +408,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0001-8297e58c62",
+              "artifacts": "artifacts/8f00a383220c461bbfcf4a792885274a/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -465,13 +465,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 189.0353339840658
+              "grader_latency_ms": 184.04200003715232
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0001-8297e58c62",
+                "artifacts": "artifacts/8f00a383220c461bbfcf4a792885274a/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -490,8 +490,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 961.928375007119,
-            "agent_latency_ms": 89.96420801850036,
+            "latency_ms": 942.8162910044193,
+            "agent_latency_ms": 89.02670902898535,
             "tags": [
               "python",
               "repository-edit",
@@ -502,7 +502,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0002-ec3f30fe82",
+              "artifacts": "artifacts/8f00a383220c461bbfcf4a792885274a/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -559,13 +559,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 184.86987496726215
+              "grader_latency_ms": 190.31508301850408
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4/0002-ec3f30fe82",
+                "artifacts": "artifacts/8f00a383220c461bbfcf4a792885274a/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -594,23 +594,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 947.3394163457366,
-            "min": 916.6620830073953,
-            "max": 963.4277910226956,
-            "p50": 961.928375007119,
-            "p95": 963.277849421138,
-            "p99": 963.3978027023841,
+            "mean": 936.2634443289911,
+            "min": 910.0793749676086,
+            "max": 955.8946670149453,
+            "p50": 942.8162910044193,
+            "p95": 954.5868294138927,
+            "p99": 955.6330994947348,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 86.47486099895711,
-            "min": 80.11625002836809,
-            "max": 89.96420801850036,
-            "p50": 89.34412495000288,
-            "p95": 89.90219971165061,
-            "p99": 89.95180635713041,
+            "mean": 83.02227801565702,
+            "min": 79.37187503557652,
+            "max": 89.02670902898535,
+            "p50": 80.66824998240918,
+            "p95": 88.19086312432773,
+            "p99": 88.85953984805383,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -645,23 +645,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 961.928375007119,
-                "min": 961.928375007119,
-                "max": 961.928375007119,
-                "p50": 961.928375007119,
-                "p95": 961.928375007119,
-                "p99": 961.928375007119,
+                "mean": 942.8162910044193,
+                "min": 942.8162910044193,
+                "max": 942.8162910044193,
+                "p50": 942.8162910044193,
+                "p95": 942.8162910044193,
+                "p99": 942.8162910044193,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.96420801850036,
-                "min": 89.96420801850036,
-                "max": 89.96420801850036,
-                "p50": 89.96420801850036,
-                "p95": 89.96420801850036,
-                "p99": 89.96420801850036,
+                "mean": 89.02670902898535,
+                "min": 89.02670902898535,
+                "max": 89.02670902898535,
+                "p50": 89.02670902898535,
+                "p95": 89.02670902898535,
+                "p99": 89.02670902898535,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -696,23 +696,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 963.4277910226956,
-                "min": 963.4277910226956,
-                "max": 963.4277910226956,
-                "p50": 963.4277910226956,
-                "p95": 963.4277910226956,
-                "p99": 963.4277910226956,
+                "mean": 910.0793749676086,
+                "min": 910.0793749676086,
+                "max": 910.0793749676086,
+                "p50": 910.0793749676086,
+                "p95": 910.0793749676086,
+                "p99": 910.0793749676086,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.34412495000288,
-                "min": 89.34412495000288,
-                "max": 89.34412495000288,
-                "p50": 89.34412495000288,
-                "p95": 89.34412495000288,
-                "p99": 89.34412495000288,
+                "mean": 80.66824998240918,
+                "min": 80.66824998240918,
+                "max": 80.66824998240918,
+                "p50": 80.66824998240918,
+                "p95": 80.66824998240918,
+                "p99": 80.66824998240918,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -747,23 +747,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 961.928375007119,
-                "min": 961.928375007119,
-                "max": 961.928375007119,
-                "p50": 961.928375007119,
-                "p95": 961.928375007119,
-                "p99": 961.928375007119,
+                "mean": 942.8162910044193,
+                "min": 942.8162910044193,
+                "max": 942.8162910044193,
+                "p50": 942.8162910044193,
+                "p95": 942.8162910044193,
+                "p99": 942.8162910044193,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.96420801850036,
-                "min": 89.96420801850036,
-                "max": 89.96420801850036,
-                "p50": 89.96420801850036,
-                "p95": 89.96420801850036,
-                "p99": 89.96420801850036,
+                "mean": 89.02670902898535,
+                "min": 89.02670902898535,
+                "max": 89.02670902898535,
+                "p50": 89.02670902898535,
+                "p95": 89.02670902898535,
+                "p99": 89.02670902898535,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -798,23 +798,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 963.4277910226956,
-                "min": 963.4277910226956,
-                "max": 963.4277910226956,
-                "p50": 963.4277910226956,
-                "p95": 963.4277910226956,
-                "p99": 963.4277910226956,
+                "mean": 910.0793749676086,
+                "min": 910.0793749676086,
+                "max": 910.0793749676086,
+                "p50": 910.0793749676086,
+                "p95": 910.0793749676086,
+                "p99": 910.0793749676086,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.34412495000288,
-                "min": 89.34412495000288,
-                "max": 89.34412495000288,
-                "p50": 89.34412495000288,
-                "p95": 89.34412495000288,
-                "p99": 89.34412495000288,
+                "mean": 80.66824998240918,
+                "min": 80.66824998240918,
+                "max": 80.66824998240918,
+                "p50": 80.66824998240918,
+                "p95": 80.66824998240918,
+                "p99": 80.66824998240918,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -849,23 +849,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 947.3394163457366,
-                "min": 916.6620830073953,
-                "max": 963.4277910226956,
-                "p50": 961.928375007119,
-                "p95": 963.277849421138,
-                "p99": 963.3978027023841,
+                "mean": 936.2634443289911,
+                "min": 910.0793749676086,
+                "max": 955.8946670149453,
+                "p50": 942.8162910044193,
+                "p95": 954.5868294138927,
+                "p99": 955.6330994947348,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 86.47486099895711,
-                "min": 80.11625002836809,
-                "max": 89.96420801850036,
-                "p50": 89.34412495000288,
-                "p95": 89.90219971165061,
-                "p99": 89.95180635713041,
+                "mean": 83.02227801565702,
+                "min": 79.37187503557652,
+                "max": 89.02670902898535,
+                "p50": 80.66824998240918,
+                "p95": 88.19086312432773,
+                "p99": 88.85953984805383,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -900,23 +900,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 947.3394163457366,
-                "min": 916.6620830073953,
-                "max": 963.4277910226956,
-                "p50": 961.928375007119,
-                "p95": 963.277849421138,
-                "p99": 963.3978027023841,
+                "mean": 936.2634443289911,
+                "min": 910.0793749676086,
+                "max": 955.8946670149453,
+                "p50": 942.8162910044193,
+                "p95": 954.5868294138927,
+                "p99": 955.6330994947348,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 86.47486099895711,
-                "min": 80.11625002836809,
-                "max": 89.96420801850036,
-                "p50": 89.34412495000288,
-                "p95": 89.90219971165061,
-                "p99": 89.95180635713041,
+                "mean": 83.02227801565702,
+                "min": 79.37187503557652,
+                "max": 89.02670902898535,
+                "p50": 80.66824998240918,
+                "p95": 88.19086312432773,
+                "p99": 88.85953984805383,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -951,23 +951,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 916.6620830073953,
-                "min": 916.6620830073953,
-                "max": 916.6620830073953,
-                "p50": 916.6620830073953,
-                "p95": 916.6620830073953,
-                "p99": 916.6620830073953,
+                "mean": 955.8946670149453,
+                "min": 955.8946670149453,
+                "max": 955.8946670149453,
+                "p50": 955.8946670149453,
+                "p95": 955.8946670149453,
+                "p99": 955.8946670149453,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 80.11625002836809,
-                "min": 80.11625002836809,
-                "max": 80.11625002836809,
-                "p50": 80.11625002836809,
-                "p95": 80.11625002836809,
-                "p99": 80.11625002836809,
+                "mean": 79.37187503557652,
+                "min": 79.37187503557652,
+                "max": 79.37187503557652,
+                "p50": 79.37187503557652,
+                "p95": 79.37187503557652,
+                "p99": 79.37187503557652,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1002,23 +1002,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 916.6620830073953,
-                "min": 916.6620830073953,
-                "max": 916.6620830073953,
-                "p50": 916.6620830073953,
-                "p95": 916.6620830073953,
-                "p99": 916.6620830073953,
+                "mean": 955.8946670149453,
+                "min": 955.8946670149453,
+                "max": 955.8946670149453,
+                "p50": 955.8946670149453,
+                "p95": 955.8946670149453,
+                "p99": 955.8946670149453,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 80.11625002836809,
-                "min": 80.11625002836809,
-                "max": 80.11625002836809,
-                "p50": 80.11625002836809,
-                "p95": 80.11625002836809,
-                "p99": 80.11625002836809,
+                "mean": 79.37187503557652,
+                "min": 79.37187503557652,
+                "max": 79.37187503557652,
+                "p50": 79.37187503557652,
+                "p95": 79.37187503557652,
+                "p99": 79.37187503557652,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1055,8 +1055,8 @@
           "environment_names": [],
           "command_sha256": "88582f4023b913e2c4738b5c7262d48e09abc55b0b166d4b3140f92dcfdc9a7f",
           "command_argument_count": 4,
-          "artifacts": "artifacts/b93e5187e6af4527a3d214aeee2ccab4",
-          "container_run_label": "b93e5187e6af4527a3d214aeee2ccab4",
+          "artifacts": "artifacts/8f00a383220c461bbfcf4a792885274a",
+          "container_run_label": "8f00a383220c461bbfcf4a792885274a",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -1107,21 +1107,21 @@
       "repetition": 1,
       "variant": "noop",
       "sequence": 2,
-      "elapsed_ms": 3071.834166010376,
+      "elapsed_ms": 3052.77983302949,
       "agent_execution_ms": [
-        112.28537501301616,
-        88.08616601163521,
-        107.1489579626359
+        110.1035830215551,
+        106.97100003017113,
+        97.75820799404755
       ],
       "grader_execution_ms": [
-        174.45054202107713,
-        209.48658301495016,
-        189.21512499218807
+        197.9528749943711,
+        194.8505420004949,
+        201.10325003042817
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "54021947",
-        "timestamp": "2026-10-04T09:27:52+00:00",
+        "run_id": "dc42d18d",
+        "timestamp": "2026-10-04T10:08:33+00:00",
         "scores": {
           "tests": {
             "mean": 0.0,
@@ -1146,8 +1146,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 965.6855000066571,
-            "agent_latency_ms": 112.28537501301616,
+            "latency_ms": 1040.026124974247,
+            "agent_latency_ms": 110.1035830215551,
             "tags": [
               "python",
               "repository-edit",
@@ -1158,7 +1158,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0000-cd03861f0f",
+              "artifacts": "artifacts/88910b113cc44da3a3d77da65d5ea8a6/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -1215,13 +1215,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 174.45054202107713
+              "grader_latency_ms": 197.9528749943711
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0000-cd03861f0f",
+                "artifacts": "artifacts/88910b113cc44da3a3d77da65d5ea8a6/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -1240,8 +1240,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1082.5670409831218,
-            "agent_latency_ms": 88.08616601163521,
+            "latency_ms": 998.7114579998888,
+            "agent_latency_ms": 106.97100003017113,
             "tags": [
               "python",
               "repository-edit",
@@ -1252,7 +1252,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0001-8297e58c62",
+              "artifacts": "artifacts/88910b113cc44da3a3d77da65d5ea8a6/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -1309,13 +1309,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 209.48658301495016
+              "grader_latency_ms": 194.8505420004949
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0001-8297e58c62",
+                "artifacts": "artifacts/88910b113cc44da3a3d77da65d5ea8a6/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -1334,8 +1334,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 976.1061670142226,
-            "agent_latency_ms": 107.1489579626359,
+            "latency_ms": 977.1699169650674,
+            "agent_latency_ms": 97.75820799404755,
             "tags": [
               "python",
               "repository-edit",
@@ -1346,7 +1346,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0002-ec3f30fe82",
+              "artifacts": "artifacts/88910b113cc44da3a3d77da65d5ea8a6/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -1403,13 +1403,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 189.21512499218807
+              "grader_latency_ms": 201.10325003042817
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1/0002-ec3f30fe82",
+                "artifacts": "artifacts/88910b113cc44da3a3d77da65d5ea8a6/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -1438,23 +1438,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1008.1195693346672,
-            "min": 965.6855000066571,
-            "max": 1082.5670409831218,
-            "p50": 976.1061670142226,
-            "p95": 1071.920953586232,
-            "p99": 1080.4378235037439,
+            "mean": 1005.3024999797344,
+            "min": 977.1699169650674,
+            "max": 1040.026124974247,
+            "p50": 998.7114579998888,
+            "p95": 1035.8946582768112,
+            "p99": 1039.19983163476,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 102.50683299576242,
-            "min": 88.08616601163521,
-            "max": 112.28537501301616,
-            "p50": 107.1489579626359,
-            "p95": 111.77173330797814,
-            "p99": 112.18264667200856,
+            "mean": 104.9442636819246,
+            "min": 97.75820799404755,
+            "max": 110.1035830215551,
+            "p50": 106.97100003017113,
+            "p95": 109.7903247224167,
+            "p99": 110.04093136172742,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -1489,23 +1489,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 976.1061670142226,
-                "min": 976.1061670142226,
-                "max": 976.1061670142226,
-                "p50": 976.1061670142226,
-                "p95": 976.1061670142226,
-                "p99": 976.1061670142226,
+                "mean": 977.1699169650674,
+                "min": 977.1699169650674,
+                "max": 977.1699169650674,
+                "p50": 977.1699169650674,
+                "p95": 977.1699169650674,
+                "p99": 977.1699169650674,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 107.1489579626359,
-                "min": 107.1489579626359,
-                "max": 107.1489579626359,
-                "p50": 107.1489579626359,
-                "p95": 107.1489579626359,
-                "p99": 107.1489579626359,
+                "mean": 97.75820799404755,
+                "min": 97.75820799404755,
+                "max": 97.75820799404755,
+                "p50": 97.75820799404755,
+                "p95": 97.75820799404755,
+                "p99": 97.75820799404755,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1540,23 +1540,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1082.5670409831218,
-                "min": 1082.5670409831218,
-                "max": 1082.5670409831218,
-                "p50": 1082.5670409831218,
-                "p95": 1082.5670409831218,
-                "p99": 1082.5670409831218,
+                "mean": 998.7114579998888,
+                "min": 998.7114579998888,
+                "max": 998.7114579998888,
+                "p50": 998.7114579998888,
+                "p95": 998.7114579998888,
+                "p99": 998.7114579998888,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 88.08616601163521,
-                "min": 88.08616601163521,
-                "max": 88.08616601163521,
-                "p50": 88.08616601163521,
-                "p95": 88.08616601163521,
-                "p99": 88.08616601163521,
+                "mean": 106.97100003017113,
+                "min": 106.97100003017113,
+                "max": 106.97100003017113,
+                "p50": 106.97100003017113,
+                "p95": 106.97100003017113,
+                "p99": 106.97100003017113,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1591,23 +1591,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 976.1061670142226,
-                "min": 976.1061670142226,
-                "max": 976.1061670142226,
-                "p50": 976.1061670142226,
-                "p95": 976.1061670142226,
-                "p99": 976.1061670142226,
+                "mean": 977.1699169650674,
+                "min": 977.1699169650674,
+                "max": 977.1699169650674,
+                "p50": 977.1699169650674,
+                "p95": 977.1699169650674,
+                "p99": 977.1699169650674,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 107.1489579626359,
-                "min": 107.1489579626359,
-                "max": 107.1489579626359,
-                "p50": 107.1489579626359,
-                "p95": 107.1489579626359,
-                "p99": 107.1489579626359,
+                "mean": 97.75820799404755,
+                "min": 97.75820799404755,
+                "max": 97.75820799404755,
+                "p50": 97.75820799404755,
+                "p95": 97.75820799404755,
+                "p99": 97.75820799404755,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1642,23 +1642,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1082.5670409831218,
-                "min": 1082.5670409831218,
-                "max": 1082.5670409831218,
-                "p50": 1082.5670409831218,
-                "p95": 1082.5670409831218,
-                "p99": 1082.5670409831218,
+                "mean": 998.7114579998888,
+                "min": 998.7114579998888,
+                "max": 998.7114579998888,
+                "p50": 998.7114579998888,
+                "p95": 998.7114579998888,
+                "p99": 998.7114579998888,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 88.08616601163521,
-                "min": 88.08616601163521,
-                "max": 88.08616601163521,
-                "p50": 88.08616601163521,
-                "p95": 88.08616601163521,
-                "p99": 88.08616601163521,
+                "mean": 106.97100003017113,
+                "min": 106.97100003017113,
+                "max": 106.97100003017113,
+                "p50": 106.97100003017113,
+                "p95": 106.97100003017113,
+                "p99": 106.97100003017113,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1693,23 +1693,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1008.1195693346672,
-                "min": 965.6855000066571,
-                "max": 1082.5670409831218,
-                "p50": 976.1061670142226,
-                "p95": 1071.920953586232,
-                "p99": 1080.4378235037439,
+                "mean": 1005.3024999797344,
+                "min": 977.1699169650674,
+                "max": 1040.026124974247,
+                "p50": 998.7114579998888,
+                "p95": 1035.8946582768112,
+                "p99": 1039.19983163476,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 102.50683299576242,
-                "min": 88.08616601163521,
-                "max": 112.28537501301616,
-                "p50": 107.1489579626359,
-                "p95": 111.77173330797814,
-                "p99": 112.18264667200856,
+                "mean": 104.9442636819246,
+                "min": 97.75820799404755,
+                "max": 110.1035830215551,
+                "p50": 106.97100003017113,
+                "p95": 109.7903247224167,
+                "p99": 110.04093136172742,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1744,23 +1744,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1008.1195693346672,
-                "min": 965.6855000066571,
-                "max": 1082.5670409831218,
-                "p50": 976.1061670142226,
-                "p95": 1071.920953586232,
-                "p99": 1080.4378235037439,
+                "mean": 1005.3024999797344,
+                "min": 977.1699169650674,
+                "max": 1040.026124974247,
+                "p50": 998.7114579998888,
+                "p95": 1035.8946582768112,
+                "p99": 1039.19983163476,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 102.50683299576242,
-                "min": 88.08616601163521,
-                "max": 112.28537501301616,
-                "p50": 107.1489579626359,
-                "p95": 111.77173330797814,
-                "p99": 112.18264667200856,
+                "mean": 104.9442636819246,
+                "min": 97.75820799404755,
+                "max": 110.1035830215551,
+                "p50": 106.97100003017113,
+                "p95": 109.7903247224167,
+                "p99": 110.04093136172742,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1795,23 +1795,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 965.6855000066571,
-                "min": 965.6855000066571,
-                "max": 965.6855000066571,
-                "p50": 965.6855000066571,
-                "p95": 965.6855000066571,
-                "p99": 965.6855000066571,
+                "mean": 1040.026124974247,
+                "min": 1040.026124974247,
+                "max": 1040.026124974247,
+                "p50": 1040.026124974247,
+                "p95": 1040.026124974247,
+                "p99": 1040.026124974247,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 112.28537501301616,
-                "min": 112.28537501301616,
-                "max": 112.28537501301616,
-                "p50": 112.28537501301616,
-                "p95": 112.28537501301616,
-                "p99": 112.28537501301616,
+                "mean": 110.1035830215551,
+                "min": 110.1035830215551,
+                "max": 110.1035830215551,
+                "p50": 110.1035830215551,
+                "p95": 110.1035830215551,
+                "p99": 110.1035830215551,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1846,23 +1846,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 965.6855000066571,
-                "min": 965.6855000066571,
-                "max": 965.6855000066571,
-                "p50": 965.6855000066571,
-                "p95": 965.6855000066571,
-                "p99": 965.6855000066571,
+                "mean": 1040.026124974247,
+                "min": 1040.026124974247,
+                "max": 1040.026124974247,
+                "p50": 1040.026124974247,
+                "p95": 1040.026124974247,
+                "p99": 1040.026124974247,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 112.28537501301616,
-                "min": 112.28537501301616,
-                "max": 112.28537501301616,
-                "p50": 112.28537501301616,
-                "p95": 112.28537501301616,
-                "p99": 112.28537501301616,
+                "mean": 110.1035830215551,
+                "min": 110.1035830215551,
+                "max": 110.1035830215551,
+                "p50": 110.1035830215551,
+                "p95": 110.1035830215551,
+                "p99": 110.1035830215551,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -1899,8 +1899,8 @@
           "environment_names": [],
           "command_sha256": "0752f0a37e125544c729cbce17ad562c2dfff118225b19ba6091922e427bfcb0",
           "command_argument_count": 5,
-          "artifacts": "artifacts/c07ef865c24b4dbfbd9cecfd8389bae1",
-          "container_run_label": "c07ef865c24b4dbfbd9cecfd8389bae1",
+          "artifacts": "artifacts/88910b113cc44da3a3d77da65d5ea8a6",
+          "container_run_label": "88910b113cc44da3a3d77da65d5ea8a6",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -1951,21 +1951,21 @@
       "repetition": 2,
       "variant": "noop",
       "sequence": 3,
-      "elapsed_ms": 3082.5772079988383,
+      "elapsed_ms": 3052.98475001473,
       "agent_execution_ms": [
-        89.23595800297335,
-        89.65679199900478,
-        116.11404101131484
+        108.33695798646659,
+        101.99912497773767,
+        90.40729101980105
       ],
       "grader_execution_ms": [
-        198.0008750106208,
-        172.01854201266542,
-        196.5719169820659
+        189.52262500533834,
+        209.69233295181766,
+        205.88650001445785
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "b6fc0d76",
-        "timestamp": "2026-10-04T09:27:55+00:00",
+        "run_id": "d802ddd7",
+        "timestamp": "2026-10-04T10:08:37+00:00",
         "scores": {
           "tests": {
             "mean": 0.0,
@@ -1990,8 +1990,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 995.3614170080982,
-            "agent_latency_ms": 89.23595800297335,
+            "latency_ms": 980.8475830359384,
+            "agent_latency_ms": 108.33695798646659,
             "tags": [
               "python",
               "repository-edit",
@@ -2002,7 +2002,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0000-cd03861f0f",
+              "artifacts": "artifacts/55025d109dfb4991a545d8ba70b93f21/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -2059,13 +2059,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 198.0008750106208
+              "grader_latency_ms": 189.52262500533834
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0000-cd03861f0f",
+                "artifacts": "artifacts/55025d109dfb4991a545d8ba70b93f21/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -2084,8 +2084,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1000.9926249622367,
-            "agent_latency_ms": 89.65679199900478,
+            "latency_ms": 1030.5909590097144,
+            "agent_latency_ms": 101.99912497773767,
             "tags": [
               "python",
               "repository-edit",
@@ -2096,7 +2096,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0001-8297e58c62",
+              "artifacts": "artifacts/55025d109dfb4991a545d8ba70b93f21/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -2153,13 +2153,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 172.01854201266542
+              "grader_latency_ms": 209.69233295181766
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0001-8297e58c62",
+                "artifacts": "artifacts/55025d109dfb4991a545d8ba70b93f21/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -2178,8 +2178,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1051.678667019587,
-            "agent_latency_ms": 116.11404101131484,
+            "latency_ms": 1006.6889169975184,
+            "agent_latency_ms": 90.40729101980105,
             "tags": [
               "python",
               "repository-edit",
@@ -2190,7 +2190,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0002-ec3f30fe82",
+              "artifacts": "artifacts/55025d109dfb4991a545d8ba70b93f21/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -2247,13 +2247,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 196.5719169820659
+              "grader_latency_ms": 205.88650001445785
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7/0002-ec3f30fe82",
+                "artifacts": "artifacts/55025d109dfb4991a545d8ba70b93f21/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -2282,23 +2282,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1016.0109029966407,
-            "min": 995.3614170080982,
-            "max": 1051.678667019587,
-            "p50": 1000.9926249622367,
-            "p95": 1046.610062813852,
-            "p99": 1050.66494617844,
+            "mean": 1006.0424863477238,
+            "min": 980.8475830359384,
+            "max": 1030.5909590097144,
+            "p50": 1006.6889169975184,
+            "p95": 1028.2007548084948,
+            "p99": 1030.1129181694705,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 98.335597004431,
-            "min": 89.23595800297335,
-            "max": 116.11404101131484,
-            "p50": 89.65679199900478,
-            "p95": 113.46831611008383,
-            "p99": 115.58489603106864,
+            "mean": 100.24779132800177,
+            "min": 90.40729101980105,
+            "max": 108.33695798646659,
+            "p50": 101.99912497773767,
+            "p95": 107.7031746855937,
+            "p99": 108.21020132629201,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -2333,23 +2333,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1051.678667019587,
-                "min": 1051.678667019587,
-                "max": 1051.678667019587,
-                "p50": 1051.678667019587,
-                "p95": 1051.678667019587,
-                "p99": 1051.678667019587,
+                "mean": 1006.6889169975184,
+                "min": 1006.6889169975184,
+                "max": 1006.6889169975184,
+                "p50": 1006.6889169975184,
+                "p95": 1006.6889169975184,
+                "p99": 1006.6889169975184,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 116.11404101131484,
-                "min": 116.11404101131484,
-                "max": 116.11404101131484,
-                "p50": 116.11404101131484,
-                "p95": 116.11404101131484,
-                "p99": 116.11404101131484,
+                "mean": 90.40729101980105,
+                "min": 90.40729101980105,
+                "max": 90.40729101980105,
+                "p50": 90.40729101980105,
+                "p95": 90.40729101980105,
+                "p99": 90.40729101980105,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2384,23 +2384,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1000.9926249622367,
-                "min": 1000.9926249622367,
-                "max": 1000.9926249622367,
-                "p50": 1000.9926249622367,
-                "p95": 1000.9926249622367,
-                "p99": 1000.9926249622367,
+                "mean": 1030.5909590097144,
+                "min": 1030.5909590097144,
+                "max": 1030.5909590097144,
+                "p50": 1030.5909590097144,
+                "p95": 1030.5909590097144,
+                "p99": 1030.5909590097144,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.65679199900478,
-                "min": 89.65679199900478,
-                "max": 89.65679199900478,
-                "p50": 89.65679199900478,
-                "p95": 89.65679199900478,
-                "p99": 89.65679199900478,
+                "mean": 101.99912497773767,
+                "min": 101.99912497773767,
+                "max": 101.99912497773767,
+                "p50": 101.99912497773767,
+                "p95": 101.99912497773767,
+                "p99": 101.99912497773767,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2435,23 +2435,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1051.678667019587,
-                "min": 1051.678667019587,
-                "max": 1051.678667019587,
-                "p50": 1051.678667019587,
-                "p95": 1051.678667019587,
-                "p99": 1051.678667019587,
+                "mean": 1006.6889169975184,
+                "min": 1006.6889169975184,
+                "max": 1006.6889169975184,
+                "p50": 1006.6889169975184,
+                "p95": 1006.6889169975184,
+                "p99": 1006.6889169975184,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 116.11404101131484,
-                "min": 116.11404101131484,
-                "max": 116.11404101131484,
-                "p50": 116.11404101131484,
-                "p95": 116.11404101131484,
-                "p99": 116.11404101131484,
+                "mean": 90.40729101980105,
+                "min": 90.40729101980105,
+                "max": 90.40729101980105,
+                "p50": 90.40729101980105,
+                "p95": 90.40729101980105,
+                "p99": 90.40729101980105,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2486,23 +2486,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1000.9926249622367,
-                "min": 1000.9926249622367,
-                "max": 1000.9926249622367,
-                "p50": 1000.9926249622367,
-                "p95": 1000.9926249622367,
-                "p99": 1000.9926249622367,
+                "mean": 1030.5909590097144,
+                "min": 1030.5909590097144,
+                "max": 1030.5909590097144,
+                "p50": 1030.5909590097144,
+                "p95": 1030.5909590097144,
+                "p99": 1030.5909590097144,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.65679199900478,
-                "min": 89.65679199900478,
-                "max": 89.65679199900478,
-                "p50": 89.65679199900478,
-                "p95": 89.65679199900478,
-                "p99": 89.65679199900478,
+                "mean": 101.99912497773767,
+                "min": 101.99912497773767,
+                "max": 101.99912497773767,
+                "p50": 101.99912497773767,
+                "p95": 101.99912497773767,
+                "p99": 101.99912497773767,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2537,23 +2537,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1016.0109029966407,
-                "min": 995.3614170080982,
-                "max": 1051.678667019587,
-                "p50": 1000.9926249622367,
-                "p95": 1046.610062813852,
-                "p99": 1050.66494617844,
+                "mean": 1006.0424863477238,
+                "min": 980.8475830359384,
+                "max": 1030.5909590097144,
+                "p50": 1006.6889169975184,
+                "p95": 1028.2007548084948,
+                "p99": 1030.1129181694705,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 98.335597004431,
-                "min": 89.23595800297335,
-                "max": 116.11404101131484,
-                "p50": 89.65679199900478,
-                "p95": 113.46831611008383,
-                "p99": 115.58489603106864,
+                "mean": 100.24779132800177,
+                "min": 90.40729101980105,
+                "max": 108.33695798646659,
+                "p50": 101.99912497773767,
+                "p95": 107.7031746855937,
+                "p99": 108.21020132629201,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2588,23 +2588,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1016.0109029966407,
-                "min": 995.3614170080982,
-                "max": 1051.678667019587,
-                "p50": 1000.9926249622367,
-                "p95": 1046.610062813852,
-                "p99": 1050.66494617844,
+                "mean": 1006.0424863477238,
+                "min": 980.8475830359384,
+                "max": 1030.5909590097144,
+                "p50": 1006.6889169975184,
+                "p95": 1028.2007548084948,
+                "p99": 1030.1129181694705,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 98.335597004431,
-                "min": 89.23595800297335,
-                "max": 116.11404101131484,
-                "p50": 89.65679199900478,
-                "p95": 113.46831611008383,
-                "p99": 115.58489603106864,
+                "mean": 100.24779132800177,
+                "min": 90.40729101980105,
+                "max": 108.33695798646659,
+                "p50": 101.99912497773767,
+                "p95": 107.7031746855937,
+                "p99": 108.21020132629201,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2639,23 +2639,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 995.3614170080982,
-                "min": 995.3614170080982,
-                "max": 995.3614170080982,
-                "p50": 995.3614170080982,
-                "p95": 995.3614170080982,
-                "p99": 995.3614170080982,
+                "mean": 980.8475830359384,
+                "min": 980.8475830359384,
+                "max": 980.8475830359384,
+                "p50": 980.8475830359384,
+                "p95": 980.8475830359384,
+                "p99": 980.8475830359384,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.23595800297335,
-                "min": 89.23595800297335,
-                "max": 89.23595800297335,
-                "p50": 89.23595800297335,
-                "p95": 89.23595800297335,
-                "p99": 89.23595800297335,
+                "mean": 108.33695798646659,
+                "min": 108.33695798646659,
+                "max": 108.33695798646659,
+                "p50": 108.33695798646659,
+                "p95": 108.33695798646659,
+                "p99": 108.33695798646659,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2690,23 +2690,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 995.3614170080982,
-                "min": 995.3614170080982,
-                "max": 995.3614170080982,
-                "p50": 995.3614170080982,
-                "p95": 995.3614170080982,
-                "p99": 995.3614170080982,
+                "mean": 980.8475830359384,
+                "min": 980.8475830359384,
+                "max": 980.8475830359384,
+                "p50": 980.8475830359384,
+                "p95": 980.8475830359384,
+                "p99": 980.8475830359384,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 89.23595800297335,
-                "min": 89.23595800297335,
-                "max": 89.23595800297335,
-                "p50": 89.23595800297335,
-                "p95": 89.23595800297335,
-                "p99": 89.23595800297335,
+                "mean": 108.33695798646659,
+                "min": 108.33695798646659,
+                "max": 108.33695798646659,
+                "p50": 108.33695798646659,
+                "p95": 108.33695798646659,
+                "p99": 108.33695798646659,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -2743,8 +2743,8 @@
           "environment_names": [],
           "command_sha256": "0752f0a37e125544c729cbce17ad562c2dfff118225b19ba6091922e427bfcb0",
           "command_argument_count": 5,
-          "artifacts": "artifacts/51dc5add2a174396845a4f611ba18ff7",
-          "container_run_label": "51dc5add2a174396845a4f611ba18ff7",
+          "artifacts": "artifacts/55025d109dfb4991a545d8ba70b93f21",
+          "container_run_label": "55025d109dfb4991a545d8ba70b93f21",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -2795,21 +2795,21 @@
       "repetition": 2,
       "variant": "correct",
       "sequence": 4,
-      "elapsed_ms": 3178.647291031666,
+      "elapsed_ms": 3091.0962079651654,
       "agent_execution_ms": [
-        98.39333296986297,
-        98.50024996558204,
-        87.47570804553106
+        103.86095801368356,
+        102.08112502004951,
+        108.81837498163804
       ],
       "grader_execution_ms": [
-        220.90570797445253,
-        203.68958305334672,
-        209.62466701166704
+        199.44108399795368,
+        212.274375022389,
+        199.88108304096386
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "cf06c24b",
-        "timestamp": "2026-10-04T09:27:58+00:00",
+        "run_id": "da9a50bb",
+        "timestamp": "2026-10-04T10:08:40+00:00",
         "scores": {
           "tests": {
             "mean": 1.0,
@@ -2834,8 +2834,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1027.3255839711055,
-            "agent_latency_ms": 98.39333296986297,
+            "latency_ms": 1004.7364159836434,
+            "agent_latency_ms": 103.86095801368356,
             "tags": [
               "python",
               "repository-edit",
@@ -2846,7 +2846,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0000-cd03861f0f",
+              "artifacts": "artifacts/7228c1003fbe440a93552e63eab30704/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -2903,13 +2903,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 220.90570797445253
+              "grader_latency_ms": 199.44108399795368
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0000-cd03861f0f",
+                "artifacts": "artifacts/7228c1003fbe440a93552e63eab30704/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -2928,8 +2928,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1100.6577920052223,
-            "agent_latency_ms": 98.50024996558204,
+            "latency_ms": 1032.593000039924,
+            "agent_latency_ms": 102.08112502004951,
             "tags": [
               "python",
               "repository-edit",
@@ -2940,7 +2940,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0001-8297e58c62",
+              "artifacts": "artifacts/7228c1003fbe440a93552e63eab30704/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -2997,13 +2997,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 203.68958305334672
+              "grader_latency_ms": 212.274375022389
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0001-8297e58c62",
+                "artifacts": "artifacts/7228c1003fbe440a93552e63eab30704/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3022,8 +3022,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1001.9366669584997,
-            "agent_latency_ms": 87.47570804553106,
+            "latency_ms": 1017.5368339987472,
+            "agent_latency_ms": 108.81837498163804,
             "tags": [
               "python",
               "repository-edit",
@@ -3034,7 +3034,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0002-ec3f30fe82",
+              "artifacts": "artifacts/7228c1003fbe440a93552e63eab30704/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -3091,13 +3091,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 209.62466701166704
+              "grader_latency_ms": 199.88108304096386
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0/0002-ec3f30fe82",
+                "artifacts": "artifacts/7228c1003fbe440a93552e63eab30704/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3126,23 +3126,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1043.3066809782758,
-            "min": 1001.9366669584997,
-            "max": 1100.6577920052223,
-            "p50": 1027.3255839711055,
-            "p95": 1093.3245712018106,
-            "p99": 1099.19114784454,
+            "mean": 1018.2887500074381,
+            "min": 1004.7364159836434,
+            "max": 1032.593000039924,
+            "p50": 1017.5368339987472,
+            "p95": 1031.0873834358063,
+            "p99": 1032.2918767191004,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 94.78976366032536,
-            "min": 87.47570804553106,
-            "max": 98.50024996558204,
-            "p50": 98.39333296986297,
-            "p95": 98.48955826601014,
-            "p99": 98.49811162566766,
+            "mean": 104.92015267179038,
+            "min": 102.08112502004951,
+            "max": 108.81837498163804,
+            "p50": 103.86095801368356,
+            "p95": 108.3226332848426,
+            "p99": 108.71922664227895,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -3177,23 +3177,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1001.9366669584997,
-                "min": 1001.9366669584997,
-                "max": 1001.9366669584997,
-                "p50": 1001.9366669584997,
-                "p95": 1001.9366669584997,
-                "p99": 1001.9366669584997,
+                "mean": 1017.5368339987472,
+                "min": 1017.5368339987472,
+                "max": 1017.5368339987472,
+                "p50": 1017.5368339987472,
+                "p95": 1017.5368339987472,
+                "p99": 1017.5368339987472,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 87.47570804553106,
-                "min": 87.47570804553106,
-                "max": 87.47570804553106,
-                "p50": 87.47570804553106,
-                "p95": 87.47570804553106,
-                "p99": 87.47570804553106,
+                "mean": 108.81837498163804,
+                "min": 108.81837498163804,
+                "max": 108.81837498163804,
+                "p50": 108.81837498163804,
+                "p95": 108.81837498163804,
+                "p99": 108.81837498163804,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3228,23 +3228,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1100.6577920052223,
-                "min": 1100.6577920052223,
-                "max": 1100.6577920052223,
-                "p50": 1100.6577920052223,
-                "p95": 1100.6577920052223,
-                "p99": 1100.6577920052223,
+                "mean": 1032.593000039924,
+                "min": 1032.593000039924,
+                "max": 1032.593000039924,
+                "p50": 1032.593000039924,
+                "p95": 1032.593000039924,
+                "p99": 1032.593000039924,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 98.50024996558204,
-                "min": 98.50024996558204,
-                "max": 98.50024996558204,
-                "p50": 98.50024996558204,
-                "p95": 98.50024996558204,
-                "p99": 98.50024996558204,
+                "mean": 102.08112502004951,
+                "min": 102.08112502004951,
+                "max": 102.08112502004951,
+                "p50": 102.08112502004951,
+                "p95": 102.08112502004951,
+                "p99": 102.08112502004951,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3279,23 +3279,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1001.9366669584997,
-                "min": 1001.9366669584997,
-                "max": 1001.9366669584997,
-                "p50": 1001.9366669584997,
-                "p95": 1001.9366669584997,
-                "p99": 1001.9366669584997,
+                "mean": 1017.5368339987472,
+                "min": 1017.5368339987472,
+                "max": 1017.5368339987472,
+                "p50": 1017.5368339987472,
+                "p95": 1017.5368339987472,
+                "p99": 1017.5368339987472,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 87.47570804553106,
-                "min": 87.47570804553106,
-                "max": 87.47570804553106,
-                "p50": 87.47570804553106,
-                "p95": 87.47570804553106,
-                "p99": 87.47570804553106,
+                "mean": 108.81837498163804,
+                "min": 108.81837498163804,
+                "max": 108.81837498163804,
+                "p50": 108.81837498163804,
+                "p95": 108.81837498163804,
+                "p99": 108.81837498163804,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3330,23 +3330,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1100.6577920052223,
-                "min": 1100.6577920052223,
-                "max": 1100.6577920052223,
-                "p50": 1100.6577920052223,
-                "p95": 1100.6577920052223,
-                "p99": 1100.6577920052223,
+                "mean": 1032.593000039924,
+                "min": 1032.593000039924,
+                "max": 1032.593000039924,
+                "p50": 1032.593000039924,
+                "p95": 1032.593000039924,
+                "p99": 1032.593000039924,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 98.50024996558204,
-                "min": 98.50024996558204,
-                "max": 98.50024996558204,
-                "p50": 98.50024996558204,
-                "p95": 98.50024996558204,
-                "p99": 98.50024996558204,
+                "mean": 102.08112502004951,
+                "min": 102.08112502004951,
+                "max": 102.08112502004951,
+                "p50": 102.08112502004951,
+                "p95": 102.08112502004951,
+                "p99": 102.08112502004951,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3381,23 +3381,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1043.3066809782758,
-                "min": 1001.9366669584997,
-                "max": 1100.6577920052223,
-                "p50": 1027.3255839711055,
-                "p95": 1093.3245712018106,
-                "p99": 1099.19114784454,
+                "mean": 1018.2887500074381,
+                "min": 1004.7364159836434,
+                "max": 1032.593000039924,
+                "p50": 1017.5368339987472,
+                "p95": 1031.0873834358063,
+                "p99": 1032.2918767191004,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 94.78976366032536,
-                "min": 87.47570804553106,
-                "max": 98.50024996558204,
-                "p50": 98.39333296986297,
-                "p95": 98.48955826601014,
-                "p99": 98.49811162566766,
+                "mean": 104.92015267179038,
+                "min": 102.08112502004951,
+                "max": 108.81837498163804,
+                "p50": 103.86095801368356,
+                "p95": 108.3226332848426,
+                "p99": 108.71922664227895,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3432,23 +3432,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1043.3066809782758,
-                "min": 1001.9366669584997,
-                "max": 1100.6577920052223,
-                "p50": 1027.3255839711055,
-                "p95": 1093.3245712018106,
-                "p99": 1099.19114784454,
+                "mean": 1018.2887500074381,
+                "min": 1004.7364159836434,
+                "max": 1032.593000039924,
+                "p50": 1017.5368339987472,
+                "p95": 1031.0873834358063,
+                "p99": 1032.2918767191004,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 94.78976366032536,
-                "min": 87.47570804553106,
-                "max": 98.50024996558204,
-                "p50": 98.39333296986297,
-                "p95": 98.48955826601014,
-                "p99": 98.49811162566766,
+                "mean": 104.92015267179038,
+                "min": 102.08112502004951,
+                "max": 108.81837498163804,
+                "p50": 103.86095801368356,
+                "p95": 108.3226332848426,
+                "p99": 108.71922664227895,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3483,23 +3483,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1027.3255839711055,
-                "min": 1027.3255839711055,
-                "max": 1027.3255839711055,
-                "p50": 1027.3255839711055,
-                "p95": 1027.3255839711055,
-                "p99": 1027.3255839711055,
+                "mean": 1004.7364159836434,
+                "min": 1004.7364159836434,
+                "max": 1004.7364159836434,
+                "p50": 1004.7364159836434,
+                "p95": 1004.7364159836434,
+                "p99": 1004.7364159836434,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 98.39333296986297,
-                "min": 98.39333296986297,
-                "max": 98.39333296986297,
-                "p50": 98.39333296986297,
-                "p95": 98.39333296986297,
-                "p99": 98.39333296986297,
+                "mean": 103.86095801368356,
+                "min": 103.86095801368356,
+                "max": 103.86095801368356,
+                "p50": 103.86095801368356,
+                "p95": 103.86095801368356,
+                "p99": 103.86095801368356,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3534,23 +3534,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1027.3255839711055,
-                "min": 1027.3255839711055,
-                "max": 1027.3255839711055,
-                "p50": 1027.3255839711055,
-                "p95": 1027.3255839711055,
-                "p99": 1027.3255839711055,
+                "mean": 1004.7364159836434,
+                "min": 1004.7364159836434,
+                "max": 1004.7364159836434,
+                "p50": 1004.7364159836434,
+                "p95": 1004.7364159836434,
+                "p99": 1004.7364159836434,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 98.39333296986297,
-                "min": 98.39333296986297,
-                "max": 98.39333296986297,
-                "p50": 98.39333296986297,
-                "p95": 98.39333296986297,
-                "p99": 98.39333296986297,
+                "mean": 103.86095801368356,
+                "min": 103.86095801368356,
+                "max": 103.86095801368356,
+                "p50": 103.86095801368356,
+                "p95": 103.86095801368356,
+                "p99": 103.86095801368356,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -3587,8 +3587,8 @@
           "environment_names": [],
           "command_sha256": "88582f4023b913e2c4738b5c7262d48e09abc55b0b166d4b3140f92dcfdc9a7f",
           "command_argument_count": 4,
-          "artifacts": "artifacts/b100ef564c234eb7bb65c7b68138e9e0",
-          "container_run_label": "b100ef564c234eb7bb65c7b68138e9e0",
+          "artifacts": "artifacts/7228c1003fbe440a93552e63eab30704",
+          "container_run_label": "7228c1003fbe440a93552e63eab30704",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -3639,21 +3639,21 @@
       "repetition": 3,
       "variant": "correct",
       "sequence": 5,
-      "elapsed_ms": 3260.29429101618,
+      "elapsed_ms": 3037.750582967419,
       "agent_execution_ms": [
-        95.66108300350606,
-        131.3277090084739,
-        98.4680830151774
+        101.24287498183548,
+        99.78837496601045,
+        103.49245800171047
       ],
       "grader_execution_ms": [
-        212.37908297916874,
-        252.91512499097735,
-        184.45245799375698
+        218.28754199668765,
+        203.52724997792393,
+        205.92362497700378
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "11c8e6d0",
-        "timestamp": "2026-10-04T09:28:01+00:00",
+        "run_id": "6929a25d",
+        "timestamp": "2026-10-04T10:08:43+00:00",
         "scores": {
           "tests": {
             "mean": 1.0,
@@ -3678,8 +3678,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1020.649540994782,
-            "agent_latency_ms": 95.66108300350606,
+            "latency_ms": 1017.8370840149,
+            "agent_latency_ms": 101.24287498183548,
             "tags": [
               "python",
               "repository-edit",
@@ -3690,7 +3690,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0000-cd03861f0f",
+              "artifacts": "artifacts/f3448c85d0304583a13a3aba8e30419f/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -3747,13 +3747,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 212.37908297916874
+              "grader_latency_ms": 218.28754199668765
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0000-cd03861f0f",
+                "artifacts": "artifacts/f3448c85d0304583a13a3aba8e30419f/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3772,8 +3772,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1158.8473749579862,
-            "agent_latency_ms": 131.3277090084739,
+            "latency_ms": 995.0142499874346,
+            "agent_latency_ms": 99.78837496601045,
             "tags": [
               "python",
               "repository-edit",
@@ -3784,7 +3784,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0001-8297e58c62",
+              "artifacts": "artifacts/f3448c85d0304583a13a3aba8e30419f/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -3841,13 +3841,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 252.91512499097735
+              "grader_latency_ms": 203.52724997792393
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0001-8297e58c62",
+                "artifacts": "artifacts/f3448c85d0304583a13a3aba8e30419f/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3866,8 +3866,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1043.188875017222,
-            "agent_latency_ms": 98.4680830151774,
+            "latency_ms": 990.1811249437742,
+            "agent_latency_ms": 103.49245800171047,
             "tags": [
               "python",
               "repository-edit",
@@ -3878,7 +3878,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0002-ec3f30fe82",
+              "artifacts": "artifacts/f3448c85d0304583a13a3aba8e30419f/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -3935,13 +3935,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 0,
-              "grader_latency_ms": 184.45245799375698
+              "grader_latency_ms": 205.92362497700378
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709/0002-ec3f30fe82",
+                "artifacts": "artifacts/f3448c85d0304583a13a3aba8e30419f/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 0
               }
@@ -3970,23 +3970,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1074.2285969899967,
-            "min": 1020.649540994782,
-            "max": 1158.8473749579862,
-            "p50": 1043.188875017222,
-            "p95": 1147.2815249639098,
-            "p99": 1156.534204959171,
+            "mean": 1001.010819648703,
+            "min": 990.1811249437742,
+            "max": 1017.8370840149,
+            "p50": 995.0142499874346,
+            "p95": 1015.5548006121535,
+            "p99": 1017.3806273343507,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 108.48562500905246,
-            "min": 95.66108300350606,
-            "max": 131.3277090084739,
-            "p50": 98.4680830151774,
-            "p95": 128.04174640914425,
-            "p99": 130.67051648860797,
+            "mean": 101.50790264985214,
+            "min": 99.78837496601045,
+            "max": 103.49245800171047,
+            "p50": 101.24287498183548,
+            "p95": 103.26749969972298,
+            "p99": 103.44746634131297,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -4021,23 +4021,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1043.188875017222,
-                "min": 1043.188875017222,
-                "max": 1043.188875017222,
-                "p50": 1043.188875017222,
-                "p95": 1043.188875017222,
-                "p99": 1043.188875017222,
+                "mean": 990.1811249437742,
+                "min": 990.1811249437742,
+                "max": 990.1811249437742,
+                "p50": 990.1811249437742,
+                "p95": 990.1811249437742,
+                "p99": 990.1811249437742,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 98.4680830151774,
-                "min": 98.4680830151774,
-                "max": 98.4680830151774,
-                "p50": 98.4680830151774,
-                "p95": 98.4680830151774,
-                "p99": 98.4680830151774,
+                "mean": 103.49245800171047,
+                "min": 103.49245800171047,
+                "max": 103.49245800171047,
+                "p50": 103.49245800171047,
+                "p95": 103.49245800171047,
+                "p99": 103.49245800171047,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4072,23 +4072,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1158.8473749579862,
-                "min": 1158.8473749579862,
-                "max": 1158.8473749579862,
-                "p50": 1158.8473749579862,
-                "p95": 1158.8473749579862,
-                "p99": 1158.8473749579862,
+                "mean": 995.0142499874346,
+                "min": 995.0142499874346,
+                "max": 995.0142499874346,
+                "p50": 995.0142499874346,
+                "p95": 995.0142499874346,
+                "p99": 995.0142499874346,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 131.3277090084739,
-                "min": 131.3277090084739,
-                "max": 131.3277090084739,
-                "p50": 131.3277090084739,
-                "p95": 131.3277090084739,
-                "p99": 131.3277090084739,
+                "mean": 99.78837496601045,
+                "min": 99.78837496601045,
+                "max": 99.78837496601045,
+                "p50": 99.78837496601045,
+                "p95": 99.78837496601045,
+                "p99": 99.78837496601045,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4123,23 +4123,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1043.188875017222,
-                "min": 1043.188875017222,
-                "max": 1043.188875017222,
-                "p50": 1043.188875017222,
-                "p95": 1043.188875017222,
-                "p99": 1043.188875017222,
+                "mean": 990.1811249437742,
+                "min": 990.1811249437742,
+                "max": 990.1811249437742,
+                "p50": 990.1811249437742,
+                "p95": 990.1811249437742,
+                "p99": 990.1811249437742,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 98.4680830151774,
-                "min": 98.4680830151774,
-                "max": 98.4680830151774,
-                "p50": 98.4680830151774,
-                "p95": 98.4680830151774,
-                "p99": 98.4680830151774,
+                "mean": 103.49245800171047,
+                "min": 103.49245800171047,
+                "max": 103.49245800171047,
+                "p50": 103.49245800171047,
+                "p95": 103.49245800171047,
+                "p99": 103.49245800171047,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4174,23 +4174,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1158.8473749579862,
-                "min": 1158.8473749579862,
-                "max": 1158.8473749579862,
-                "p50": 1158.8473749579862,
-                "p95": 1158.8473749579862,
-                "p99": 1158.8473749579862,
+                "mean": 995.0142499874346,
+                "min": 995.0142499874346,
+                "max": 995.0142499874346,
+                "p50": 995.0142499874346,
+                "p95": 995.0142499874346,
+                "p99": 995.0142499874346,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 131.3277090084739,
-                "min": 131.3277090084739,
-                "max": 131.3277090084739,
-                "p50": 131.3277090084739,
-                "p95": 131.3277090084739,
-                "p99": 131.3277090084739,
+                "mean": 99.78837496601045,
+                "min": 99.78837496601045,
+                "max": 99.78837496601045,
+                "p50": 99.78837496601045,
+                "p95": 99.78837496601045,
+                "p99": 99.78837496601045,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4225,23 +4225,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1074.2285969899967,
-                "min": 1020.649540994782,
-                "max": 1158.8473749579862,
-                "p50": 1043.188875017222,
-                "p95": 1147.2815249639098,
-                "p99": 1156.534204959171,
+                "mean": 1001.010819648703,
+                "min": 990.1811249437742,
+                "max": 1017.8370840149,
+                "p50": 995.0142499874346,
+                "p95": 1015.5548006121535,
+                "p99": 1017.3806273343507,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 108.48562500905246,
-                "min": 95.66108300350606,
-                "max": 131.3277090084739,
-                "p50": 98.4680830151774,
-                "p95": 128.04174640914425,
-                "p99": 130.67051648860797,
+                "mean": 101.50790264985214,
+                "min": 99.78837496601045,
+                "max": 103.49245800171047,
+                "p50": 101.24287498183548,
+                "p95": 103.26749969972298,
+                "p99": 103.44746634131297,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4276,23 +4276,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1074.2285969899967,
-                "min": 1020.649540994782,
-                "max": 1158.8473749579862,
-                "p50": 1043.188875017222,
-                "p95": 1147.2815249639098,
-                "p99": 1156.534204959171,
+                "mean": 1001.010819648703,
+                "min": 990.1811249437742,
+                "max": 1017.8370840149,
+                "p50": 995.0142499874346,
+                "p95": 1015.5548006121535,
+                "p99": 1017.3806273343507,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 108.48562500905246,
-                "min": 95.66108300350606,
-                "max": 131.3277090084739,
-                "p50": 98.4680830151774,
-                "p95": 128.04174640914425,
-                "p99": 130.67051648860797,
+                "mean": 101.50790264985214,
+                "min": 99.78837496601045,
+                "max": 103.49245800171047,
+                "p50": 101.24287498183548,
+                "p95": 103.26749969972298,
+                "p99": 103.44746634131297,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4327,23 +4327,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1020.649540994782,
-                "min": 1020.649540994782,
-                "max": 1020.649540994782,
-                "p50": 1020.649540994782,
-                "p95": 1020.649540994782,
-                "p99": 1020.649540994782,
+                "mean": 1017.8370840149,
+                "min": 1017.8370840149,
+                "max": 1017.8370840149,
+                "p50": 1017.8370840149,
+                "p95": 1017.8370840149,
+                "p99": 1017.8370840149,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 95.66108300350606,
-                "min": 95.66108300350606,
-                "max": 95.66108300350606,
-                "p50": 95.66108300350606,
-                "p95": 95.66108300350606,
-                "p99": 95.66108300350606,
+                "mean": 101.24287498183548,
+                "min": 101.24287498183548,
+                "max": 101.24287498183548,
+                "p50": 101.24287498183548,
+                "p95": 101.24287498183548,
+                "p99": 101.24287498183548,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4378,23 +4378,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1020.649540994782,
-                "min": 1020.649540994782,
-                "max": 1020.649540994782,
-                "p50": 1020.649540994782,
-                "p95": 1020.649540994782,
-                "p99": 1020.649540994782,
+                "mean": 1017.8370840149,
+                "min": 1017.8370840149,
+                "max": 1017.8370840149,
+                "p50": 1017.8370840149,
+                "p95": 1017.8370840149,
+                "p99": 1017.8370840149,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 95.66108300350606,
-                "min": 95.66108300350606,
-                "max": 95.66108300350606,
-                "p50": 95.66108300350606,
-                "p95": 95.66108300350606,
-                "p99": 95.66108300350606,
+                "mean": 101.24287498183548,
+                "min": 101.24287498183548,
+                "max": 101.24287498183548,
+                "p50": 101.24287498183548,
+                "p95": 101.24287498183548,
+                "p99": 101.24287498183548,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4431,8 +4431,8 @@
           "environment_names": [],
           "command_sha256": "88582f4023b913e2c4738b5c7262d48e09abc55b0b166d4b3140f92dcfdc9a7f",
           "command_argument_count": 4,
-          "artifacts": "artifacts/fc3b12000af14529bc1c4e5e732d2709",
-          "container_run_label": "fc3b12000af14529bc1c4e5e732d2709",
+          "artifacts": "artifacts/f3448c85d0304583a13a3aba8e30419f",
+          "container_run_label": "f3448c85d0304583a13a3aba8e30419f",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -4483,21 +4483,21 @@
       "repetition": 3,
       "variant": "noop",
       "sequence": 6,
-      "elapsed_ms": 3170.7710420014337,
+      "elapsed_ms": 3303.990291955415,
       "agent_execution_ms": [
-        102.66845801379532,
-        105.31245899619535,
-        113.20783401606604
+        101.91633400972933,
+        111.61708302097395,
+        102.55399998277426
       ],
       "grader_execution_ms": [
-        191.78020901745185,
-        184.88833302399144,
-        242.7778749843128
+        225.62170797027647,
+        240.5522089684382,
+        232.36229101894423
       ],
       "result": {
         "schema_version": 3,
-        "run_id": "a8789993",
-        "timestamp": "2026-10-04T09:28:04+00:00",
+        "run_id": "a07e4f76",
+        "timestamp": "2026-10-04T10:08:46+00:00",
         "scores": {
           "tests": {
             "mean": 0.0,
@@ -4522,8 +4522,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1001.0709580383264,
-            "agent_latency_ms": 102.66845801379532,
+            "latency_ms": 1072.0388329937123,
+            "agent_latency_ms": 101.91633400972933,
             "tags": [
               "python",
               "repository-edit",
@@ -4534,7 +4534,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0000-cd03861f0f",
+              "artifacts": "artifacts/84e30ef5032a449b8e72601559033d13/0000-cd03861f0f",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -4591,13 +4591,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 191.78020901745185
+              "grader_latency_ms": 225.62170797027647
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0000-cd03861f0f",
+                "artifacts": "artifacts/84e30ef5032a449b8e72601559033d13/0000-cd03861f0f",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -4616,8 +4616,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1073.7818329944275,
-            "agent_latency_ms": 105.31245899619535,
+            "latency_ms": 1064.1585409757681,
+            "agent_latency_ms": 111.61708302097395,
             "tags": [
               "python",
               "repository-edit",
@@ -4628,7 +4628,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0001-8297e58c62",
+              "artifacts": "artifacts/84e30ef5032a449b8e72601559033d13/0001-8297e58c62",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -4685,13 +4685,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 184.88833302399144
+              "grader_latency_ms": 240.5522089684382
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0001-8297e58c62",
+                "artifacts": "artifacts/84e30ef5032a449b8e72601559033d13/0001-8297e58c62",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -4710,8 +4710,8 @@
             "trajectory": null,
             "trajectory_score": null,
             "error": null,
-            "latency_ms": 1049.1126659908332,
-            "agent_latency_ms": 113.20783401606604,
+            "latency_ms": 1130.3703330340795,
+            "agent_latency_ms": 102.55399998277426,
             "tags": [
               "python",
               "repository-edit",
@@ -4722,7 +4722,7 @@
             "cost_usd": null,
             "metadata": {
               "evaluation_kind": "coding",
-              "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0002-ec3f30fe82",
+              "artifacts": "artifacts/84e30ef5032a449b8e72601559033d13/0002-ec3f30fe82",
               "image_id": "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e",
               "workspace_manifest": [
                 {
@@ -4779,13 +4779,13 @@
               ],
               "patch_truncated": false,
               "grader_exit_code": 1,
-              "grader_latency_ms": 242.7778749843128
+              "grader_latency_ms": 232.36229101894423
             },
             "expected_trajectory": null,
             "events": [
               {
                 "type": "coding_evaluation",
-                "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996/0002-ec3f30fe82",
+                "artifacts": "artifacts/84e30ef5032a449b8e72601559033d13/0002-ec3f30fe82",
                 "agent_exit_code": 0,
                 "grader_exit_code": 1
               }
@@ -4814,23 +4814,23 @@
           "latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 1041.3218190078624,
-            "min": 1001.0709580383264,
-            "max": 1073.7818329944275,
-            "p50": 1049.1126659908332,
-            "p95": 1071.314916294068,
-            "p99": 1073.2884496543556,
+            "mean": 1088.85590233452,
+            "min": 1064.1585409757681,
+            "max": 1130.3703330340795,
+            "p50": 1072.0388329937123,
+            "p95": 1124.5371830300428,
+            "p99": 1129.2037030332722,
             "percentile_method": "linear_interpolation"
           },
           "agent_latency_ms": {
             "count": 3,
             "missing_count": 0,
-            "mean": 107.06291700868557,
-            "min": 102.66845801379532,
-            "max": 113.20783401606604,
-            "p50": 105.31245899619535,
-            "p95": 112.41829651407897,
-            "p99": 113.04992651566863,
+            "mean": 105.36247233782585,
+            "min": 101.91633400972933,
+            "max": 111.61708302097395,
+            "p50": 102.55399998277426,
+            "p95": 110.71077471715398,
+            "p99": 111.43582136020996,
             "percentile_method": "linear_interpolation"
           },
           "cost_usd": {
@@ -4865,23 +4865,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1049.1126659908332,
-                "min": 1049.1126659908332,
-                "max": 1049.1126659908332,
-                "p50": 1049.1126659908332,
-                "p95": 1049.1126659908332,
-                "p99": 1049.1126659908332,
+                "mean": 1130.3703330340795,
+                "min": 1130.3703330340795,
+                "max": 1130.3703330340795,
+                "p50": 1130.3703330340795,
+                "p95": 1130.3703330340795,
+                "p99": 1130.3703330340795,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 113.20783401606604,
-                "min": 113.20783401606604,
-                "max": 113.20783401606604,
-                "p50": 113.20783401606604,
-                "p95": 113.20783401606604,
-                "p99": 113.20783401606604,
+                "mean": 102.55399998277426,
+                "min": 102.55399998277426,
+                "max": 102.55399998277426,
+                "p50": 102.55399998277426,
+                "p95": 102.55399998277426,
+                "p99": 102.55399998277426,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4916,23 +4916,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1073.7818329944275,
-                "min": 1073.7818329944275,
-                "max": 1073.7818329944275,
-                "p50": 1073.7818329944275,
-                "p95": 1073.7818329944275,
-                "p99": 1073.7818329944275,
+                "mean": 1064.1585409757681,
+                "min": 1064.1585409757681,
+                "max": 1064.1585409757681,
+                "p50": 1064.1585409757681,
+                "p95": 1064.1585409757681,
+                "p99": 1064.1585409757681,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 105.31245899619535,
-                "min": 105.31245899619535,
-                "max": 105.31245899619535,
-                "p50": 105.31245899619535,
-                "p95": 105.31245899619535,
-                "p99": 105.31245899619535,
+                "mean": 111.61708302097395,
+                "min": 111.61708302097395,
+                "max": 111.61708302097395,
+                "p50": 111.61708302097395,
+                "p95": 111.61708302097395,
+                "p99": 111.61708302097395,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -4967,23 +4967,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1049.1126659908332,
-                "min": 1049.1126659908332,
-                "max": 1049.1126659908332,
-                "p50": 1049.1126659908332,
-                "p95": 1049.1126659908332,
-                "p99": 1049.1126659908332,
+                "mean": 1130.3703330340795,
+                "min": 1130.3703330340795,
+                "max": 1130.3703330340795,
+                "p50": 1130.3703330340795,
+                "p95": 1130.3703330340795,
+                "p99": 1130.3703330340795,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 113.20783401606604,
-                "min": 113.20783401606604,
-                "max": 113.20783401606604,
-                "p50": 113.20783401606604,
-                "p95": 113.20783401606604,
-                "p99": 113.20783401606604,
+                "mean": 102.55399998277426,
+                "min": 102.55399998277426,
+                "max": 102.55399998277426,
+                "p50": 102.55399998277426,
+                "p95": 102.55399998277426,
+                "p99": 102.55399998277426,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5018,23 +5018,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1073.7818329944275,
-                "min": 1073.7818329944275,
-                "max": 1073.7818329944275,
-                "p50": 1073.7818329944275,
-                "p95": 1073.7818329944275,
-                "p99": 1073.7818329944275,
+                "mean": 1064.1585409757681,
+                "min": 1064.1585409757681,
+                "max": 1064.1585409757681,
+                "p50": 1064.1585409757681,
+                "p95": 1064.1585409757681,
+                "p99": 1064.1585409757681,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 105.31245899619535,
-                "min": 105.31245899619535,
-                "max": 105.31245899619535,
-                "p50": 105.31245899619535,
-                "p95": 105.31245899619535,
-                "p99": 105.31245899619535,
+                "mean": 111.61708302097395,
+                "min": 111.61708302097395,
+                "max": 111.61708302097395,
+                "p50": 111.61708302097395,
+                "p95": 111.61708302097395,
+                "p99": 111.61708302097395,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5069,23 +5069,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1041.3218190078624,
-                "min": 1001.0709580383264,
-                "max": 1073.7818329944275,
-                "p50": 1049.1126659908332,
-                "p95": 1071.314916294068,
-                "p99": 1073.2884496543556,
+                "mean": 1088.85590233452,
+                "min": 1064.1585409757681,
+                "max": 1130.3703330340795,
+                "p50": 1072.0388329937123,
+                "p95": 1124.5371830300428,
+                "p99": 1129.2037030332722,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 107.06291700868557,
-                "min": 102.66845801379532,
-                "max": 113.20783401606604,
-                "p50": 105.31245899619535,
-                "p95": 112.41829651407897,
-                "p99": 113.04992651566863,
+                "mean": 105.36247233782585,
+                "min": 101.91633400972933,
+                "max": 111.61708302097395,
+                "p50": 102.55399998277426,
+                "p95": 110.71077471715398,
+                "p99": 111.43582136020996,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5120,23 +5120,23 @@
               "latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 1041.3218190078624,
-                "min": 1001.0709580383264,
-                "max": 1073.7818329944275,
-                "p50": 1049.1126659908332,
-                "p95": 1071.314916294068,
-                "p99": 1073.2884496543556,
+                "mean": 1088.85590233452,
+                "min": 1064.1585409757681,
+                "max": 1130.3703330340795,
+                "p50": 1072.0388329937123,
+                "p95": 1124.5371830300428,
+                "p99": 1129.2037030332722,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 3,
                 "missing_count": 0,
-                "mean": 107.06291700868557,
-                "min": 102.66845801379532,
-                "max": 113.20783401606604,
-                "p50": 105.31245899619535,
-                "p95": 112.41829651407897,
-                "p99": 113.04992651566863,
+                "mean": 105.36247233782585,
+                "min": 101.91633400972933,
+                "max": 111.61708302097395,
+                "p50": 102.55399998277426,
+                "p95": 110.71077471715398,
+                "p99": 111.43582136020996,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5171,23 +5171,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1001.0709580383264,
-                "min": 1001.0709580383264,
-                "max": 1001.0709580383264,
-                "p50": 1001.0709580383264,
-                "p95": 1001.0709580383264,
-                "p99": 1001.0709580383264,
+                "mean": 1072.0388329937123,
+                "min": 1072.0388329937123,
+                "max": 1072.0388329937123,
+                "p50": 1072.0388329937123,
+                "p95": 1072.0388329937123,
+                "p99": 1072.0388329937123,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 102.66845801379532,
-                "min": 102.66845801379532,
-                "max": 102.66845801379532,
-                "p50": 102.66845801379532,
-                "p95": 102.66845801379532,
-                "p99": 102.66845801379532,
+                "mean": 101.91633400972933,
+                "min": 101.91633400972933,
+                "max": 101.91633400972933,
+                "p50": 101.91633400972933,
+                "p95": 101.91633400972933,
+                "p99": 101.91633400972933,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5222,23 +5222,23 @@
               "latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 1001.0709580383264,
-                "min": 1001.0709580383264,
-                "max": 1001.0709580383264,
-                "p50": 1001.0709580383264,
-                "p95": 1001.0709580383264,
-                "p99": 1001.0709580383264,
+                "mean": 1072.0388329937123,
+                "min": 1072.0388329937123,
+                "max": 1072.0388329937123,
+                "p50": 1072.0388329937123,
+                "p95": 1072.0388329937123,
+                "p99": 1072.0388329937123,
                 "percentile_method": "linear_interpolation"
               },
               "agent_latency_ms": {
                 "count": 1,
                 "missing_count": 0,
-                "mean": 102.66845801379532,
-                "min": 102.66845801379532,
-                "max": 102.66845801379532,
-                "p50": 102.66845801379532,
-                "p95": 102.66845801379532,
-                "p99": 102.66845801379532,
+                "mean": 101.91633400972933,
+                "min": 101.91633400972933,
+                "max": 101.91633400972933,
+                "p50": 101.91633400972933,
+                "p95": 101.91633400972933,
+                "p99": 101.91633400972933,
                 "percentile_method": "linear_interpolation"
               },
               "cost_usd": {
@@ -5275,8 +5275,8 @@
           "environment_names": [],
           "command_sha256": "0752f0a37e125544c729cbce17ad562c2dfff118225b19ba6091922e427bfcb0",
           "command_argument_count": 5,
-          "artifacts": "artifacts/7259fd658e3e4f1987692b49d3c53996",
-          "container_run_label": "7259fd658e3e4f1987692b49d3c53996",
+          "artifacts": "artifacts/84e30ef5032a449b8e72601559033d13",
+          "container_run_label": "84e30ef5032a449b8e72601559033d13",
           "limits": {
             "memory_bytes": 536870912,
             "cpus": 1,
@@ -5333,29 +5333,29 @@
       "error_count": 0,
       "batch_elapsed_ms": {
         "sample_count": 3,
-        "median": 3178.647291031666,
-        "p95": 3260.29429101618,
-        "min": 2870.303832984064,
-        "max": 3260.29429101618,
-        "stdev": 205.68360738576317,
+        "median": 3037.750582967419,
+        "p95": 3091.0962079651654,
+        "min": 2845.148499996867,
+        "max": 3091.0962079651654,
+        "stdev": 129.37773708914978,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "agent_execution_ms": {
         "sample_count": 9,
-        "median": 95.66108300350606,
-        "p95": 131.3277090084739,
-        "min": 80.11625002836809,
-        "max": 131.3277090084739,
-        "stdev": 14.44324134756763,
+        "median": 101.24287498183548,
+        "p95": 108.81837498163804,
+        "min": 79.37187503557652,
+        "max": 108.81837498163804,
+        "stdev": 10.718805600727105,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "grader_execution_ms": {
         "sample_count": 9,
-        "median": 203.68958305334672,
-        "p95": 252.91512499097735,
-        "min": 167.23583301063627,
-        "max": 252.91512499097735,
-        "stdev": 25.226140759438923,
+        "median": 199.88108304096386,
+        "p95": 218.28754199668765,
+        "min": 184.04200003715232,
+        "max": 218.28754199668765,
+        "stdev": 10.683662299083608,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "missing_agent_timing_count": 0,
@@ -5369,29 +5369,29 @@
       "error_count": 0,
       "batch_elapsed_ms": {
         "sample_count": 3,
-        "median": 3082.5772079988383,
-        "p95": 3170.7710420014337,
-        "min": 3071.834166010376,
-        "max": 3170.7710420014337,
-        "stdev": 54.28638678053201,
+        "median": 3052.98475001473,
+        "p95": 3303.990291955415,
+        "min": 3052.77983302949,
+        "max": 3303.990291955415,
+        "stdev": 144.97730785062075,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "agent_execution_ms": {
         "sample_count": 9,
-        "median": 105.31245899619535,
-        "p95": 116.11404101131484,
-        "min": 88.08616601163521,
-        "max": 116.11404101131484,
-        "stdev": 11.032801128153263,
+        "median": 102.55399998277426,
+        "p95": 111.61708302097395,
+        "min": 90.40729101980105,
+        "max": 111.61708302097395,
+        "stdev": 6.661251006250403,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "grader_execution_ms": {
         "sample_count": 9,
-        "median": 191.78020901745185,
-        "p95": 242.7778749843128,
-        "min": 172.01854201266542,
-        "max": 242.7778749843128,
-        "stdev": 21.20912892141484,
+        "median": 205.88650001445785,
+        "p95": 240.5522089684382,
+        "min": 189.52262500533834,
+        "max": 240.5522089684382,
+        "stdev": 17.89327063505913,
         "percentile_method": "nearest_rank; p95 is maximum for fewer than 20 samples"
       },
       "missing_agent_timing_count": 0,
@@ -5420,5 +5420,5 @@
   "image_ids": [
     "sha256:bb7d0f2b1bbe6a5d8498d7cd3aa38eca9efad4b512e91b7c0b6ab236041a268e"
   ],
-  "completed_at": "2026-10-04T09:28:04+00:00"
+  "completed_at": "2026-10-04T10:08:46+00:00"
 }

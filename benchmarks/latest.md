@@ -2,16 +2,16 @@
 
 **Scope: deterministic harness operations, not a model leaderboard.** No API credentials or model calls.
 
-Measured 2026-10-04T09:27:29+00:00 on macOS-26.6.2-arm64-arm-64bit-Mach-O (arm64; Python 3.14.7; 10 logical CPUs).
+Measured 2026-10-04T10:08:09+00:00 on macOS-26.6.2-arm64-arm-64bit-Mach-O (arm64; Python 3.14.7; 10 logical CPUs).
 
-Git revision: `9be8aafc68b5e9963c25b54ef5c0004274149089`; working tree dirty: `False`. Source file hashes and Git status are recorded in the JSON result.
+Git revision: `3ab5db20f8cf35becca5892d10f2e9e1796dee20`; working tree dirty: `False`. Source file hashes and Git status are recorded in the JSON result.
 
-Suite SHA-256: `b64951de893dd80e2920981159d1bc70dce8619c45c7a377e973f3d0655387af`
+Suite SHA-256: `a32d00815c822815b80a1b5e918b6cef4dfa8bff66c1a268ed6f93573207a9dc`
 
 Reproduction command (local interpreter path normalized to `python`):
 
 ```sh
-python scripts/benchmark.py --output results/review-benchmarks/latest.json --markdown results/review-benchmarks/latest.md
+python scripts/benchmark.py --output results/final-review-benchmarks/latest.json --markdown results/final-review-benchmarks/latest.md
 ```
 
 ## Controlled waiting and concurrency
@@ -20,10 +20,10 @@ python scripts/benchmark.py --output results/review-benchmarks/latest.json --mar
 
 | Concurrency | Median batch ms | P95 batch ms | Min–max ms | Median cases/s | Speedup vs serial |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 790.65 | 792.70 | 775.91–792.70 | 161.9 | 1.00× |
-| 2 | 392.29 | 397.20 | 385.71–397.20 | 326.3 | 2.02× |
-| 4 | 197.82 | 199.61 | 194.80–199.61 | 647.1 | 4.00× |
-| 8 | 100.22 | 101.24 | 99.60–101.24 | 1277.2 | 7.89× |
+| 1 | 776.33 | 793.38 | 767.81–793.38 | 164.9 | 1.00× |
+| 2 | 391.79 | 394.10 | 390.20–394.10 | 326.7 | 1.98× |
+| 4 | 193.98 | 195.04 | 191.48–195.04 | 659.9 | 4.00× |
+| 8 | 98.76 | 100.21 | 97.50–100.21 | 1296.1 | 7.86× |
 
 P95 uses the nearest-rank method over batch repetitions. With five samples it is the maximum. This small sample describes this run; it is not a stable service latency estimate. Actual sleep can exceed the requested duration. Concurrency levels are interleaved and their execution order alternates.
 
@@ -33,9 +33,9 @@ P95 uses the nearest-rank method over batch repetitions. With five samples it is
 
 | Measurement | Median | P95 | Min–max |
 | --- | ---: | ---: | ---: |
-| Direct loop | 2.665 ms | 2.756 ms | 2.621–2.756 ms |
-| Full harness | 26.737 ms | 26.912 ms | 26.590–26.912 ms |
-| Paired incremental work per case | 5.885 µs | 5.897 µs | 5.841–5.897 µs |
+| Direct loop | 2.709 ms | 2.770 ms | 2.636–2.770 ms |
+| Full harness | 27.087 ms | 27.142 ms | 26.953–27.142 ms |
+| Paired incremental work per case | 5.965 µs | 5.970 µs | 5.904–5.970 µs |
 
 Incremental work includes result objects, validation, per-case timing and aggregation. It is a measured difference from a minimal loop, not a claim about every integration or a pure profiler attribution.
 

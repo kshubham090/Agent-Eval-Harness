@@ -195,14 +195,14 @@ with fresh agent/grader containers and no network.
 
 | Fixture | Passed task attempts | Execution errors | Median batch | Batch p95 |
 | --- | ---: | ---: | ---: | ---: |
-| Known reference patches | 9/9 | 0 | 3.18 s | 3.26 s |
-| Unchanged buggy starters | 0/9 | 0 | 3.08 s | 3.17 s |
+| Known reference patches | 9/9 | 0 | 3.04 s | 3.09 s |
+| Unchanged buggy starters | 0/9 | 0 | 3.05 s | 3.30 s |
 
 Timing includes provisioning, transfers, execution, grading and cleanup. No
 warmup is excluded; p95 is the maximum of three trials. These are known patches,
 not model-generated solutions. Token use and cost are unreported.
 
-Measured **2026-10-04** on macOS arm64 with Docker **29.7.2**, from clean source [`9be8aaf`](https://github.com/kshubham090/Agent-Eval-Harness/commit/9be8aafc68b5e9963c25b54ef5c0004274149089). All four workflow checks passed.
+Measured **2026-10-04** on macOS arm64 with Docker **29.7.2**, from clean source [`3ab5db2`](https://github.com/kshubham090/Agent-Eval-Harness/commit/3ab5db20f8cf35becca5892d10f2e9e1796dee20). All four workflow checks passed.
 
 [All raw task attempts and hashes](benchmarks/coding-latest.json) · [Full Docker tables](benchmarks/coding-latest.md)
 <!-- CODING_BENCHMARK_RESULTS_END -->
@@ -224,21 +224,21 @@ The benchmark uses a deterministic calculator and controlled waiting. It
 makes no model calls and does not compare against other evaluation frameworks.
 
 <!-- BENCHMARK_RESULTS_START -->
-Measured **2026-10-04**, macOS arm64, Python 3.14.7, 10 logical CPUs, from clean source revision [`9be8aaf`](https://github.com/kshubham090/Agent-Eval-Harness/commit/9be8aafc68b5e9963c25b54ef5c0004274149089).
+Measured **2026-10-04**, macOS arm64, Python 3.14.7, 10 logical CPUs, from clean source revision [`3ab5db2`](https://github.com/kshubham090/Agent-Eval-Harness/commit/3ab5db20f8cf35becca5892d10f2e9e1796dee20).
 
 **Controlled waiting:** 128 arithmetic tasks per batch; 5 ms requested wait per task; 1 warmup excluded and 5 measured repetitions per level.
 
 | Concurrency | Median batch | P95 batch | Median cases/s | Speedup |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 790.65 ms | 792.70 ms | 161.9 | 1.00× |
-| 2 | 392.29 ms | 397.20 ms | 326.3 | 2.02× |
-| 4 | 197.82 ms | 199.61 ms | 647.1 | 4.00× |
-| 8 | 100.22 ms | 101.24 ms | 1277.2 | 7.89× |
+| 1 | 776.33 ms | 793.38 ms | 164.9 | 1.00× |
+| 2 | 391.79 ms | 394.10 ms | 326.7 | 1.98× |
+| 4 | 193.98 ms | 195.04 ms | 659.9 | 4.00× |
+| 8 | 98.76 ms | 100.21 ms | 1296.1 | 7.86× |
 
 P95 is the nearest-rank quantile of five batch samples (the maximum here).
 This demonstrates overlapping controlled waiting, not real provider throughput.
 
-**No-wait overhead:** 4,096 serial tasks took a median **26.74 ms** in the full harness versus **2.67 ms** in a direct calculator/scorer loop. The median paired difference was **5.89 µs per case**.
+**No-wait overhead:** 4,096 serial tasks took a median **27.09 ms** in the full harness versus **2.71 ms** in a direct calculator/scorer loop. The median paired difference was **5.97 µs per case**.
 
 **Functional checks: 9/9 passed.** The correct fixture scored 100%; a deliberately degraded fixture scored 75% and failed the regression gate. Injecting 32/128 crashes preserved all cases and scored the errors zero.
 
