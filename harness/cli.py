@@ -31,28 +31,53 @@ from harness.baseline import (
 from harness.dataset import dataset_sha, filter_by_tags, load_dataset
 from harness.eval_runner import run_eval
 from harness.report import write_report
-from harness.results import flatten_metrics, summarize_runs
+from harness.results import ERROR_CASE_POLICY, PASS_RULE, flatten_metrics, summarize_runs
 from harness.runner import AgentRunner
-from harness.scorers import EmbeddingScorer, ExactMatchScorer, LLMJudgeScorer, RegexScorer
+from harness.scorers import (EmbeddingScorer, ExactMatchScorer, LLMJudgeScorer, RegexScorer,
+                             ContainsScorer, JSONMatchScorer)
 
 SCORER_FACTORIES = {
     "exact": ExactMatchScorer,
     "regex": RegexScorer,
+    "contains": ContainsScorer,
+    "json": JSONMatchScorer,
     "embedding": EmbeddingScorer,
     "llm_judge": LLMJudgeScorer,
 }
 
 
 def load_agent(path: str) -> AgentRunner:
-    agent_path = Path(path)
-    spec = importlib.util.spec_from_file_location(agent_path.stem, agent_path)
+    """Load a factory or an existing sync/async function without framework dependencies."""
+    import hashlib
+    from harness.adapters import FunctionRunner
+
+    filename, separator, symbol = path.partition("::")
+    agent_path = Path(filename).resolve()
+    module_name = "_agent_eval_" + hashlib.sha256(str(agent_path).encode()).hexdigest()[:16]
+    spec = importlib.util.spec_from_file_location(module_name, agent_path)
     if spec is None or spec.loader is None:
-        raise click.ClickException(f"cannot import agent module {path!r}")
+        raise click.ClickException(f"cannot import agent module {filename!r}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    if not hasattr(module, "get_agent"):
-        raise click.ClickException(f"{path!r} must define get_agent() -> AgentRunner")
-    return module.get_agent()
+    sys.modules[module_name] = module
+    # Like executing a script, allow its top-level imports to find siblings.
+    # Restore the process import path before evaluating concurrent cases.
+    previous_path = sys.path[:]
+    try:
+        sys.path.insert(0, str(agent_path.parent))
+        spec.loader.exec_module(module)
+    finally:
+        sys.path[:] = previous_path
+    if separator:
+        function = getattr(module, symbol, None)
+        if not callable(function):
+            raise click.ClickException(f"{filename!r} has no callable {symbol!r}")
+        return FunctionRunner(function)
+    if not callable(getattr(module, "get_agent", None)):
+        raise click.ClickException(f"{filename!r} must define get_agent(), or use file.py::function")
+    agent = module.get_agent()
+    if not callable(getattr(agent, "run", None)):
+        raise click.ClickException("get_agent() must return an object with run(input)")
+    return agent
 
 
 def _print_comparison(comparison: BaselineComparison, baseline_name: str, threshold: float) -> None:
@@ -82,103 +107,208 @@ def _write_github_summary(comparison: BaselineComparison, baseline_name: str) ->
 
 
 @click.group()
+@click.version_option(package_name="agent-eval-harness")
 def cli() -> None:
     """Agent eval harness."""
     load_dotenv()  # pick up ANTHROPIC_API_KEY etc. from a local .env file
 
 
 @cli.command("eval")
-@click.option("--dataset", required=True, help="Path to a JSONL golden dataset.")
-@click.option("--agent", "agent_path", required=True, help="Python file exposing get_agent().")
+@click.option("--config", type=click.Path(exists=True, dir_okay=False), help="TOML configuration. CLI flags override it.")
+@click.option("--dataset", type=click.Path(exists=True, dir_okay=False), help="JSONL golden dataset.")
+@click.option("--agent", "agent_path", help="codex, claude-code, or a Python file[::callable].")
+@click.option("--command", help='Command as a JSON argv array, e.g. ["python", "agent.py"].')
+@click.option("--url", help="HTTP endpoint accepting POST {input: ...}.")
+@click.option("--model", help="Model passed to Codex or Claude Code; otherwise their configured default.")
+@click.option("--cwd", type=click.Path(exists=True, file_okay=False),
+              help="Command/CLI subprocess working directory. Python functions use the current process directory.")
+@click.option("--timeout", default=120.0, type=click.FloatRange(min=0, min_open=True), show_default=True,
+              help="Per-request timeout in seconds for command/CLI/HTTP adapters.")
+@click.option("--agent-arg", "agent_args", multiple=True, help="Additional Codex/Claude CLI argument; repeat as needed.")
+@click.option("--output-format", type=click.Choice(["text", "json"]), default="text", help="Generic command response format.")
+@click.option("--output-key", default="output", help="JSON response field containing the answer.")
+@click.option("--token-env", help="Name of environment variable containing the HTTP bearer token.")
 @click.option("--scorers", "scorer_names", default="exact", show_default=True,
-              help=f"Comma-separated scorer names: {', '.join(SCORER_FACTORIES)}.")
-@click.option("--concurrency", default=4, show_default=True,
-              help="Cases run in parallel (agents/LLM scorers are I/O-bound).")
-@click.option("--runs", default=1, show_default=True,
-              help="Repeat the eval N times and report mean +/- std per metric.")
-@click.option("--filter-tags", default=None,
-              help="Comma-separated tags; only cases carrying at least one are run.")
-@click.option("--output", type=click.Path(), help="Write the result JSON here.")
-@click.option("--html", "html_path", type=click.Path(), help="Write a self-contained HTML report here.")
-@click.option("--compare-baseline", "baseline_name", help="Gate against this saved baseline.")
-@click.option("--threshold", default=0.05, show_default=True,
-              help="Max allowed absolute drop in any metric vs the baseline.")
-@click.option("--allow-dataset-change", is_flag=True,
-              help="Compare against the baseline even if the dataset changed.")
+              help=f"Comma-separated scorers: {', '.join(SCORER_FACTORIES)}.")
+@click.option("--concurrency", default=1, type=click.IntRange(min=1), show_default=True,
+              help="Parallel cases. Agent implementations must support concurrent calls.")
+@click.option("--runs", default=1, type=click.IntRange(min=1), show_default=True)
+@click.option("--filter-tags", help="Comma-separated tags; match any.")
+@click.option("--pass-threshold", default=0.5, type=click.FloatRange(0, 1), show_default=True,
+              help="Minimum mean score for a case to pass.")
+@click.option("--min-pass-rate", type=click.FloatRange(0, 1), help="Fail if the measured pass rate is below this floor.")
+@click.option("--allow-errors/--no-allow-errors", default=False, help="Do not fail solely because cases raised errors.")
+@click.option("--output", type=click.Path(), help="Write result JSON.")
+@click.option("--html", "html_path", type=click.Path(), help="Write self-contained HTML.")
+@click.option("--compare-baseline", "baseline_name", help="Gate against a named baseline.")
+@click.option("--threshold", default=0.05, type=click.FloatRange(0, 1), show_default=True,
+              help="Maximum allowed absolute metric drop.")
+@click.option("--allow-dataset-change/--no-allow-dataset-change", default=False)
 @click.option("--baselines-dir", default=DEFAULT_BASELINES_DIR, show_default=True)
-def eval_command(dataset, agent_path, scorer_names, concurrency, runs, filter_tags,
-                 output, html_path, baseline_name, threshold, allow_dataset_change, baselines_dir):
-    """Run an eval: dataset x agent x scorers."""
-    names = [n.strip() for n in scorer_names.split(",") if n.strip()]
-    unknown = [n for n in names if n not in SCORER_FACTORIES]
-    if unknown:
-        raise click.ClickException(f"unknown scorers {unknown}; available: {list(SCORER_FACTORIES)}")
+@click.pass_context
+def eval_command(ctx, **options):
+    """Evaluate your existing agent and optionally enforce a quality gate."""
+    from click.core import ParameterSource
+    from harness.config import load_config
 
-    cases = load_dataset(dataset)
-    sha = dataset_sha(dataset)
-    if filter_tags:
-        tags = sorted(t.strip() for t in filter_tags.split(",") if t.strip())
+    if options["config"]:
+        try:
+            configured = load_config(options["config"])
+            params = {p.name: p for p in ctx.command.params}
+            for key, value in configured.items():
+                if ctx.get_parameter_source(key) != ParameterSource.COMMANDLINE:
+                    options[key] = params[key].process_value(ctx, value)
+            # Selecting a different adapter on the command line overrides the configured target.
+            selected = [key for key in ("agent_path", "command", "url")
+                        if ctx.get_parameter_source(key) == ParameterSource.COMMANDLINE]
+            if selected:
+                changed_target = any(options[key] != configured.get(key) for key in selected)
+                for key in {"agent_path", "command", "url"} - set(selected):
+                    options[key] = None
+                if changed_target:
+                    for key, default in (("model", None), ("agent_args", ())):
+                        if ctx.get_parameter_source(key) != ParameterSource.COMMANDLINE:
+                            options[key] = default
+        except (OSError, ValueError) as exc:
+            raise click.ClickException(str(exc)) from exc
+    try:
+        _evaluate(options)
+    except (OSError, ValueError, ImportError) as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+def _make_runner(o):
+    from harness.adapters import ClaudeCodeRunner, CodexRunner, CommandRunner, HTTPRunner
+    targets = [bool(o[k]) for k in ("agent_path", "command", "url")]
+    if sum(targets) != 1:
+        raise click.UsageError("choose exactly one of --agent, --command, or --url (or configure [agent])")
+    if o["agent_path"] in {"codex", "claude-code"}:
+        factory = CodexRunner if o["agent_path"] == "codex" else ClaudeCodeRunner
+        return factory(cwd=o["cwd"], timeout=o["timeout"], model=o["model"], extra_args=o["agent_args"])
+    if o["model"] or o["agent_args"]:
+        raise click.UsageError("--model and --agent-arg require --agent codex or claude-code")
+    if o["agent_path"]:
+        return load_agent(o["agent_path"])
+    if o["command"]:
+        command = json.loads(o["command"])
+        if not isinstance(command, list) or not command or not all(isinstance(x, str) for x in command):
+            raise ValueError("--command must be a nonempty JSON array of strings")
+        return CommandRunner(command, cwd=o["cwd"], timeout=o["timeout"],
+                             output_format=o["output_format"], output_key=o["output_key"])
+    return HTTPRunner(o["url"], timeout=o["timeout"], output_key=o["output_key"], token_env=o["token_env"])
+
+
+def _evaluate(o):
+    import math
+    import platform
+    from importlib.metadata import version
+
+    if not o["dataset"]:
+        raise click.UsageError("provide --dataset or eval.dataset in --config")
+    for name in ("timeout", "pass_threshold", "min_pass_rate", "threshold"):
+        if o[name] is not None and not math.isfinite(o[name]):
+            raise ValueError(f"{name} must be finite")
+    names = [n.strip() for n in o["scorer_names"].split(",") if n.strip()]
+    if not names or len(names) != len(set(names)):
+        raise ValueError("choose at least one scorer without duplicates")
+    unknown = set(names) - set(SCORER_FACTORIES)
+    if unknown:
+        raise ValueError(f"unknown scorers {sorted(unknown)}; available: {list(SCORER_FACTORIES)}")
+    cases = load_dataset(o["dataset"])
+    sha = dataset_sha(o["dataset"])
+    if o["filter_tags"]:
+        tags = sorted(set(t.strip() for t in o["filter_tags"].split(",") if t.strip()))
         cases = filter_by_tags(cases, tags)
         if not cases:
-            raise click.ClickException(f"no cases match tags {tags}")
-        # a filtered run is a different effective dataset -- fingerprint it as such
+            raise ValueError(f"no cases match tags {tags}")
         sha = f"{sha}+tags:{','.join(tags)}"
-
-    agent = load_agent(agent_path)
+    # Validate known scorer prerequisites before any potentially paid agent call.
+    if "json" in names:
+        from harness.scorers.structured import strict_json
+        for case in cases:
+            try:
+                strict_json(case.expected_output)
+            except (ValueError, RecursionError) as exc:
+                raise ValueError(f"case {case.id!r}: expected_output is not valid JSON") from exc
+    if "regex" in names:
+        import re
+        for case in cases:
+            try:
+                re.compile(case.expected_output)
+            except re.error as exc:
+                raise ValueError(f"case {case.id!r}: invalid regex reference: {exc}") from exc
+    for scorer, module, extra in (("embedding", "sentence_transformers", "embedding"),
+                                  ("llm_judge", "anthropic", "judge")):
+        if scorer in names and importlib.util.find_spec(module) is None:
+            raise ValueError(f"{scorer} requires optional dependencies; run pip install '.[{extra}]' in the checkout")
+    saved_baseline = None
+    if o["baseline_name"]:
+        # Reject unusable gates before starting agent calls or loading model scorers.
+        saved_baseline = load_baseline(o["baseline_name"], o["baselines_dir"])
+        probe = {
+            "dataset_sha": sha,
+            "scores": {SCORER_FACTORIES[n].name: {"mean": 0.0} for n in names},
+            "pass_rate": 0.0,
+            "metadata": {"pass_threshold": o["pass_threshold"], "pass_rule": PASS_RULE,
+                         "error_case_policy": ERROR_CASE_POLICY},
+        }
+        if any(c.expected_trajectory is not None for c in cases):
+            probe["trajectory_score"] = {"mean": 0.0}
+        compare_to_baseline(probe, saved_baseline, o["threshold"],
+                            ignore_dataset_mismatch=o["allow_dataset_change"])
+    agent = _make_runner(o)
     scorers = [SCORER_FACTORIES[n]() for n in names]
-    metadata = {"dataset": dataset, "agent": agent_path, "scorers": ",".join(names)}
-
+    # Keep prompts, command arguments, auth headers, and URL query strings out of metadata.
+    label = o["agent_path"] or ("command" if o["command"] else "http")
+    metadata = {"dataset": str(o["dataset"]), "agent": label, "scorers": ",".join(names),
+                "concurrency": o["concurrency"], "harness_version": version("agent-eval-harness"),
+                "python": platform.python_version(), "model": o["model"] or "agent-configured",
+                "timeout_seconds": o["timeout"] if not o["agent_path"] or o["agent_path"] in {"codex", "claude-code"} else None}
     results = []
-    for i in range(runs):
-        result = run_eval(cases, agent, scorers, concurrency=concurrency,
-                          dataset_sha=sha, metadata=metadata)
+    for i in range(o["runs"]):
+        result = run_eval(cases, agent, scorers, concurrency=o["concurrency"],
+                          pass_threshold=o["pass_threshold"], dataset_sha=sha, metadata=metadata)
         results.append(result)
-        prefix = f"run {i + 1}/{runs}  " if runs > 1 else ""
-        click.echo(f"{prefix}run_id: {result.run_id}  cases: {len(cases)}")
+        click.echo(f"run {i + 1}/{o['runs']}  id: {result.run_id}  cases: {len(cases)}")
         for name, summary in result.scores.items():
-            click.echo(f"  {name:<12} mean={summary.mean:.3f}")
+            click.echo(f"  {name:<16} {summary.mean:.3f}")
         if result.trajectory_score is not None:
-            click.echo(f"  {'trajectory':<12} mean={result.trajectory_score.mean:.3f}")
-        click.echo(f"  {'pass_rate':<12} {result.pass_rate:.3f}")
+            click.echo(f"  {'trajectory':<16} {result.trajectory_score.mean:.3f}")
+        click.echo(f"  {'pass_rate':<16} {result.pass_rate:.3f}")
         if result.error_count:
-            click.secho(f"  {'errors':<12} {result.error_count} case(s) raised -- see result JSON/report",
-                        fg="red")
-
-    if runs == 1:
-        result_dict = results[0].to_dict()
-    else:
-        result_dict = summarize_runs([r.to_dict() for r in results])
-        click.echo(f"\nacross {runs} runs (mean +/- std):")
+            click.secho(f"  errors: {result.error_count} (details in JSON/HTML)", fg="red")
+    result_dict = results[0].to_dict() if len(results) == 1 else summarize_runs([r.to_dict() for r in results])
+    if o["runs"] > 1:
+        click.echo("Across runs (mean +/- sample standard deviation):")
         for metric, mean in result_dict["mean"].items():
             click.echo(f"  {metric:<20} {mean:.3f} +/- {result_dict['std'][metric]:.3f}")
-
-    if output:
-        Path(output).parent.mkdir(parents=True, exist_ok=True)
-        Path(output).write_text(json.dumps(result_dict, indent=2), encoding="utf-8")
-        click.echo(f"result written to {output}")
-
+    if o["output"]:
+        target = Path(o["output"])
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(result_dict, indent=2, allow_nan=False), encoding="utf-8")
+        click.echo(f"Result: {target}")
     comparison = None
-    if baseline_name:
-        baseline = load_baseline(baseline_name, baselines_dir)
-        try:
-            comparison = compare_to_baseline(result_dict, baseline, threshold,
-                                             ignore_dataset_mismatch=allow_dataset_change)
-        except ValueError as e:
-            raise click.ClickException(str(e))
-        _print_comparison(comparison, baseline_name, threshold)
-        _write_github_summary(comparison, baseline_name)
-
-    if html_path:
-        # per-case detail lives on individual runs; report the last one
-        write_report(html_path, results[-1].to_dict(), comparison,
-                     title=f"Eval report — {Path(agent_path).stem}")
-        click.echo(f"HTML report written to {html_path}")
-
-    if comparison is not None:
-        if not comparison.passed:
-            click.echo(f"\nFAIL: {len(comparison.regressions)} metric(s) regressed more than {threshold}")
-            sys.exit(1)
-        click.echo("\nPASS: no regressions")
+    if o["baseline_name"]:
+        comparison = compare_to_baseline(result_dict, saved_baseline,
+                                         o["threshold"], ignore_dataset_mismatch=o["allow_dataset_change"])
+        _print_comparison(comparison, o["baseline_name"], o["threshold"])
+        _write_github_summary(comparison, o["baseline_name"])
+    if o["html_path"]:
+        write_report(o["html_path"], result_dict, comparison, title=f"Eval report — {Path(label).name}")
+        click.echo(f"HTML: {o['html_path']}")
+    failures = []
+    if any(r.error_count for r in results) and not o["allow_errors"]:
+        failures.append("agent/scorer errors occurred")
+    rate = flatten_metrics(result_dict)["pass_rate"]
+    if o["min_pass_rate"] is not None and rate < o["min_pass_rate"]:
+        failures.append(f"pass rate {rate:.3f} is below {o['min_pass_rate']:.3f}")
+    if comparison is not None and not comparison.passed:
+        failures.append(f"{len(comparison.regressions)} metric(s) regressed")
+    if failures:
+        click.echo("FAIL: " + "; ".join(failures))
+        raise click.exceptions.Exit(1)
+    if comparison is not None or o["min_pass_rate"] is not None:
+        click.echo("PASS: quality gates satisfied")
 
 
 @cli.group()
@@ -193,8 +323,11 @@ def baseline() -> None:
 @click.option("--baselines-dir", default=DEFAULT_BASELINES_DIR, show_default=True)
 def baseline_save(name, result_path, baselines_dir):
     """Save an eval result as a named baseline."""
-    result = json.loads(Path(result_path).read_text(encoding="utf-8"))
-    path = save_baseline(name, result, baselines_dir)
+    try:
+        result = json.loads(Path(result_path).read_text(encoding="utf-8"))
+        path = save_baseline(name, result, baselines_dir)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        raise click.ClickException(str(exc)) from exc
     click.echo(f"baseline {name!r} saved to {path}")
 
 
@@ -213,6 +346,10 @@ def baseline_list(baselines_dir):
         headline = "  ".join(f"{k}={v:.3f}" for k, v in sorted(metrics.items()))
         click.echo(f"{f.stem:<16} {headline}")
 
+
+from harness.onboarding import register_commands
+
+register_commands(cli)
 
 if __name__ == "__main__":
     cli()

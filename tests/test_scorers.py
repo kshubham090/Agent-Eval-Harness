@@ -116,3 +116,43 @@ def test_embedding_with_real_model():
 )
 def test_scorers_satisfy_protocol(scorer):
     assert isinstance(scorer, Scorer)
+
+
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), -float("inf"), "1.0", True])
+@pytest.mark.parametrize("other", [0.0, 1.0])
+def test_nonfinite_or_nonnumeric_embeddings_never_become_perfect_scores(bad, other):
+    scorer = EmbeddingScorer(embed_fn=lambda texts: [[bad], [other]])
+    with pytest.raises(ValueError, match="finite real numbers"):
+        scorer.score("expected", "actual")
+
+
+@pytest.mark.parametrize("left,right", [([], []), ([1.0], [1.0, 2.0]), ([1.0, 2.0], [1.0])])
+def test_embedding_vectors_require_matching_nonempty_dimensions(left, right):
+    with pytest.raises(ValueError, match="same nonzero dimension"):
+        cosine_similarity(left, right)
+
+
+@pytest.mark.parametrize("scale", [1e-300, 1.0, 1e308])
+def test_cosine_is_stable_under_extreme_finite_rescaling(scale):
+    assert cosine_similarity([scale, scale], [scale, scale]) == pytest.approx(1.0)
+    assert cosine_similarity([scale, scale], [scale, -scale]) == pytest.approx(0.0)
+    assert cosine_similarity([scale, scale], [-scale, -scale]) == pytest.approx(-1.0)
+    assert cosine_similarity([scale, scale], [0.0, 0.0]) == 0.0
+
+
+def test_invalid_embeddings_are_isolated_as_failed_eval_cases():
+    from harness.dataset import EvalCase
+    from harness.eval_runner import run_eval
+    from harness.runner import AgentOutput
+
+    class Agent:
+        def run(self, prompt):
+            return AgentOutput("answer")
+
+    scorer = EmbeddingScorer(embed_fn=lambda texts: [[float("nan")], [1.0]])
+    result = run_eval([EvalCase("a", "prompt", "answer")], Agent(), [scorer], pass_threshold=0)
+    assert result.pass_rate == 0.0
+    assert result.error_count == 1
+    assert result.scores["embedding"].mean == 0.0
+    assert result.case_results[0].output == "answer"
+    assert "finite real numbers" in result.case_results[0].error

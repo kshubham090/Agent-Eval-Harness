@@ -157,3 +157,101 @@ def test_filter_by_tags():
     both = filter_by_tags(cases, ["math", "geography"])
     assert len(both) == len(math_only) + len(filter_by_tags(cases, ["geography"]))
     assert all({"math", "geography"} & set(c.tags) for c in both)
+
+
+@pytest.mark.parametrize("threshold", [-0.1, 1.1, float("nan"), float("inf"), True])
+def test_invalid_pass_threshold_rejected_before_agent_runs(threshold):
+    from harness.dataset import EvalCase
+
+    with pytest.raises(ValueError, match="pass_threshold"):
+        run_eval([EvalCase("a", "prompt", "answer")], StubAgent(), [ExactMatchScorer()], pass_threshold=threshold)
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf"), "1.0", True])
+def test_nonfinite_and_nonnumeric_scores_are_case_errors(value):
+    from harness.dataset import EvalCase
+
+    class InvalidScorer:
+        name = "invalid"
+
+        def score(self, expected, actual):
+            return value
+
+    result = run_eval([EvalCase("a", "prompt", "Paris")], StubAgent(), [InvalidScorer()], pass_threshold=0)
+    assert result.error_count == 1
+    assert result.pass_rate == 0
+    assert result.case_results[0].output == "Paris"
+    assert result.case_results[0].scores == {"invalid": 0}
+
+
+def test_scorer_failure_keeps_valid_agent_output_and_telemetry():
+    from harness.dataset import EvalCase
+
+    class MeteredAgent:
+        def run(self, input):
+            return AgentOutput("Paris", ["search"], {"input_tokens": 3, "output_tokens": 2},
+                               0.01, {"model": "example"})
+
+    class ExplodingScorer:
+        name = "exploding"
+
+        def score(self, expected, actual):
+            raise RuntimeError("judge unavailable")
+
+    result = run_eval([EvalCase("a", "prompt", "Paris", ("search",), ("geography",))],
+                      MeteredAgent(), [ExactMatchScorer(), ExplodingScorer()], pass_threshold=0)
+    outcome = result.case_results[0]
+    assert outcome.output == "Paris"
+    assert outcome.trajectory == ["search"]
+    assert outcome.expected_trajectory == ["search"]
+    assert outcome.tags == ["geography"]
+    assert outcome.usage == {"input_tokens": 3, "output_tokens": 2}
+    assert outcome.cost_usd == 0.01
+    assert outcome.metadata == {"model": "example"}
+    assert outcome.scores == {"exact_match": 0.0, "exploding": 0.0}
+    assert outcome.agent_latency_ms <= outcome.latency_ms
+    assert "judge unavailable" in outcome.error
+    assert result.pass_rate == 0
+
+
+def test_bad_agent_telemetry_is_isolated_without_losing_output():
+    from harness.dataset import EvalCase
+
+    class BadUsageAgent:
+        def run(self, input):
+            return AgentOutput("Paris", usage={"total_tokens": float("nan")})
+
+    result = run_eval([EvalCase("a", "prompt", "Paris")], BadUsageAgent(), [ExactMatchScorer()])
+    assert result.error_count == 1
+    assert result.case_results[0].output == "Paris"
+    assert result.case_results[0].usage == {}
+
+
+@pytest.mark.parametrize("concurrency", [1.5, True])
+def test_noninteger_concurrency_rejected(concurrency):
+    from harness.dataset import EvalCase
+
+    with pytest.raises(ValueError, match="concurrency"):
+        run_eval([EvalCase("a", "prompt", "Paris")], StubAgent(), [ExactMatchScorer()], concurrency=concurrency)
+
+
+def test_empty_and_duplicate_cases_rejected_before_agent_runs():
+    from harness.dataset import EvalCase
+
+    with pytest.raises(ValueError, match="at least one evaluation case"):
+        run_eval([], StubAgent(), [ExactMatchScorer()])
+    with pytest.raises(ValueError, match="duplicate case"):
+        run_eval([EvalCase("a", "prompt", "Paris")] * 2, StubAgent(), [ExactMatchScorer()])
+    with pytest.raises(ValueError, match="nonempty"):
+        run_eval([EvalCase(" ", "prompt", "Paris")], StubAgent(), [ExactMatchScorer()])
+
+
+def test_programmatic_dataset_fingerprints_cover_expected_trajectory():
+    from harness.dataset import EvalCase
+
+    def evaluate(expected_trajectory):
+        return run_eval([EvalCase("a", "prompt", "Paris", expected_trajectory)],
+                        StubAgent(), [ExactMatchScorer()]).dataset_sha
+
+    assert evaluate(("search",)) == evaluate(("search",))
+    assert evaluate(("search",)) != evaluate(("different",))

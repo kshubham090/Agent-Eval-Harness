@@ -5,47 +5,71 @@ on:
     branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  eval:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.12'
+          - os: ubuntu-latest
+            python: '3.14'
+          - os: macos-latest
+            python: '3.12'
+          - os: windows-latest
+            python: '3.12'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Offline tests
+        run: python -m pytest -q --junitxml=test-results.xml
+      - name: First-run workflow
+        run: |
+          python -m harness init smoke
+          python -m harness eval --config smoke/agent-eval.toml --runs 2
+      - name: Build distributable wheel
+        run: python -m pip wheel . --no-deps --wheel-dir dist
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-${{ matrix.os }}-${{ matrix.python }}
+          path: |
+            test-results.xml
+            smoke/results/
+
+  regression:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-
-      - name: Install
-        run: pip install -e .[dev]
-
-      - name: Unit tests
-        run: |
-          set -o pipefail
-          pytest -q | tee pytest-output.txt
-          {
-            echo "## Unit tests"
-            echo '```'
-            tail -n 3 pytest-output.txt
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      # The gate: re-run the eval and exit 1 if any metric drops more than
-      # the threshold below the committed baseline. Also writes an HTML
-      # report and a job summary (the CLI detects GITHUB_STEP_SUMMARY).
-      - name: Regression gate
+          python-version: '3.12'
+      - run: python -m pip install -e ".[dev]"
+      - name: Existing baseline remains compatible
         run: |
           python -m harness eval \
             --dataset datasets/examples/simple_qa.jsonl \
             --agent examples/stub_agent.py \
-            --scorers exact \
-            --compare-baseline ci \
-            --threshold 0.01 \
-            --html eval-report.html
-
-      - name: Upload eval report
+            --compare-baseline ci --threshold 0.01 \
+            --output results/ci.json --html results/ci.html
+      - name: Benchmark functional checks (no timing gate)
+        run: |
+          python scripts/benchmark.py --cases 32 --overhead-cases 128 \
+            --repetitions 2 --latency-ms 1 \
+            --output results/benchmark.json --markdown results/benchmark.md
+      - name: Upload evaluation evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eval-report
-          path: eval-report.html
-          if-no-files-found: ignore
+          name: eval-evidence
+          path: results/

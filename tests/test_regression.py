@@ -194,3 +194,64 @@ def test_cli_gate_blocks_degraded_agent(tmp_path):
     ])
     assert run3.exit_code == 1, run3.output
     assert "REGRESSION" in run3.output
+
+
+@pytest.mark.parametrize("name", ["../outside", "nested/name", "nested\\name", "/tmp/baseline", "..", "", ".hidden"])
+def test_baseline_names_cannot_escape_directory(tmp_path, name):
+    with pytest.raises(ValueError, match="baseline name"):
+        save_baseline(name, result_dict(), tmp_path)
+    with pytest.raises(ValueError, match="baseline name"):
+        load_baseline(name, tmp_path)
+
+
+def test_baseline_symlink_cannot_overwrite_or_read_outside_directory(tmp_path):
+    directory = tmp_path / "baselines"
+    directory.mkdir()
+    outside = tmp_path / "outside.json"
+    outside.write_text(json.dumps(result_dict()), encoding="utf-8")
+    (directory / "escape.json").symlink_to(outside)
+    with pytest.raises(ValueError, match="inside"):
+        save_baseline("escape", result_dict(exact_mean=0), directory)
+    with pytest.raises(ValueError, match="inside"):
+        load_baseline("escape", directory)
+    assert json.loads(outside.read_text())["scores"]["exact_match"]["mean"] == 0.8
+
+
+@pytest.mark.parametrize("threshold", [-0.1, 1.1, float("nan"), float("inf"), True])
+def test_regression_threshold_must_be_finite_and_in_range(threshold):
+    with pytest.raises(ValueError, match="threshold"):
+        compare_to_baseline(result_dict(), result_dict(), threshold=threshold)
+
+
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, 2])
+def test_invalid_baseline_metrics_cannot_silently_pass(tmp_path, bad):
+    with pytest.raises(ValueError):
+        compare_to_baseline(result_dict(exact_mean=bad), result_dict())
+    with pytest.raises(ValueError):
+        compare_to_baseline(result_dict(), result_dict(exact_mean=bad))
+    with pytest.raises(ValueError):
+        save_baseline("invalid", result_dict(exact_mean=bad), tmp_path)
+
+
+def test_drop_exactly_at_decimal_threshold_does_not_regress():
+    assert compare_to_baseline(result_dict(exact_mean=0.75), result_dict(exact_mean=0.8), threshold=0.05).passed
+    assert not compare_to_baseline(result_dict(exact_mean=0.749999), result_dict(exact_mean=0.8), threshold=0.05).passed
+
+
+@pytest.mark.parametrize("key,current_value,baseline_value", [
+    ("pass_threshold", 0.8, 0.5),
+    ("pass_rule", "all_scorers", "mean_of_scorers_and_optional_trajectory"),
+    ("error_case_policy", "ignore", "fail_and_zero_scores"),
+])
+def test_known_scoring_protocol_changes_block_comparison(key, current_value, baseline_value):
+    current, baseline = result_dict(), result_dict()
+    current["metadata"] = {key: current_value}
+    baseline["metadata"] = {key: baseline_value}
+    with pytest.raises(ValueError, match="scoring protocol changed"):
+        compare_to_baseline(current, baseline, ignore_dataset_mismatch=True)
+
+
+def test_legacy_baseline_without_protocol_stays_compatible():
+    current = result_dict()
+    current["metadata"] = {"pass_threshold": 0.5, "pass_rule": "mean_of_scorers_and_optional_trajectory"}
+    assert compare_to_baseline(current, result_dict()).passed

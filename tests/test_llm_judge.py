@@ -37,6 +37,40 @@ def test_judge_rejects_json_without_numeric_score():
         parse_judge_response('{"score": "high", "reasoning": "..."}')
 
 
+@pytest.mark.parametrize("raw", [
+    '{"score": true}', '{"score": false}', '{"score": null}',
+    '{"score": NaN}', '{"score": Infinity}', '{"score": -Infinity}',
+    '{"score": 1e309}', '{"score": -1e309}',
+    '{"score": 0.1, "score": 1.0}',
+    '[]', 'null', None, 1,
+    '{"score": ' + '9' * 400 + '}',
+])
+def test_judge_rejects_invalid_scores_instead_of_awarding_a_pass(raw):
+    with pytest.raises(JudgeError):
+        parse_judge_response(raw)
+
+
+def test_invalid_judge_response_is_isolated_as_failed_case():
+    from harness.dataset import EvalCase
+    from harness.eval_runner import run_eval
+    from harness.runner import AgentOutput
+
+    class Agent:
+        def run(self, input):
+            return AgentOutput("wrong answer")
+
+    result = run_eval([EvalCase("q1", "question", "correct answer")], Agent(), [make_judge('{"score": NaN}')])
+    assert result.error_count == 1
+    assert result.pass_rate == 0.0
+    assert result.case_results[0].scores["llm_judge"] == 0.0
+
+
+def test_judge_errors_do_not_echo_provider_response():
+    with pytest.raises(JudgeError) as error:
+        parse_judge_response("private-provider-response")
+    assert "private-provider-response" not in str(error.value)
+
+
 def test_judge_prompt_contains_expected_and_actual():
     seen = {}
 

@@ -15,6 +15,7 @@ is Haiku (cheapest -- ~$0.001/case); pass model= to trade up.
 from __future__ import annotations
 
 import json
+import math
 import re
 import threading
 from collections.abc import Callable
@@ -82,17 +83,39 @@ def _make_anthropic_backend(model: str) -> CompleteFn:
 
 def parse_judge_response(raw: str) -> float:
     """Extract the score from the judge's response, tolerating extra prose."""
+    if not isinstance(raw, str):
+        raise JudgeError("judge response must be text containing a JSON object")
     match = re.search(r"\{.*\}", raw, re.DOTALL)
     if not match:
-        raise JudgeError(f"no JSON object in judge response: {raw!r}")
-    try:
-        data = json.loads(match.group())
-    except json.JSONDecodeError as e:
-        raise JudgeError(f"invalid JSON in judge response: {raw!r}") from e
+        raise JudgeError("no JSON object in judge response")
 
+    def reject_constant(value):
+        raise ValueError("nonfinite JSON constant")
+
+    def unique_fields(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("duplicate JSON field")
+            result[key] = value
+        return result
+
+    try:
+        data = json.loads(match.group(), parse_constant=reject_constant, object_pairs_hook=unique_fields)
+    except (ValueError, RecursionError):
+        raise JudgeError("invalid JSON in judge response") from None
+
+    if not isinstance(data, dict):
+        raise JudgeError("judge response must contain a JSON object")
     score = data.get("score")
-    if not isinstance(score, (int, float)):
-        raise JudgeError(f"judge response missing numeric 'score': {raw!r}")
+    if isinstance(score, bool) or not isinstance(score, (int, float)):
+        raise JudgeError("judge response missing numeric 'score'")
+    try:
+        finite = math.isfinite(score)
+    except OverflowError:
+        finite = False
+    if not finite:
+        raise JudgeError("judge response 'score' must be finite")
     return max(0.0, min(1.0, float(score)))
 
 
