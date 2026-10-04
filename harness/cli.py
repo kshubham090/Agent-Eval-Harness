@@ -300,7 +300,10 @@ def _evaluate(o):
     if any(r.error_count for r in results) and not o["allow_errors"]:
         failures.append("agent/scorer errors occurred")
     rate = flatten_metrics(result_dict)["pass_rate"]
-    if o["min_pass_rate"] is not None and rate < o["min_pass_rate"]:
+    floor = o["min_pass_rate"]
+    if floor is not None and rate < floor and not math.isclose(
+        rate, floor, rel_tol=0.0, abs_tol=4 * math.ulp(max(rate, floor)),
+    ):
         failures.append(f"pass rate {rate:.3f} is below {o['min_pass_rate']:.3f}")
     if comparison is not None and not comparison.passed:
         failures.append(f"{len(comparison.regressions)} metric(s) regressed")

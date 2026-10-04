@@ -57,8 +57,10 @@ def _run_case(case: EvalCase, runner: AgentRunner, scorers: list[Scorer]) -> Cas
         for name, value in raw_usage.items():
             if not isinstance(name, str) or not name.strip():
                 raise ValueError("usage counter names must be nonempty strings")
-            _nonnegative(value, f"usage[{name!r}]")
-            validated_usage[name] = value
+            numeric_value = _nonnegative(value, f"usage[{name!r}]")
+            # Real implementations such as Fraction are valid counters but
+            # cannot be encoded as JSON. Keep built-in integers exact.
+            validated_usage[name] = value if type(value) in (int, float) else numeric_value
         usage = validated_usage
         raw_cost = getattr(agent_output, "cost_usd", None)
         if raw_cost is not None:

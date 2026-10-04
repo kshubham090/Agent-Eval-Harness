@@ -1,7 +1,9 @@
 """Offline adapter contracts: real child processes and a local HTTP server."""
 
 import asyncio
+import io
 import json
+import ntpath
 import os
 from pathlib import Path
 import signal
@@ -12,6 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import pytest
 
+import harness.adapters as adapters
 from harness.adapters import (
     AdapterError,
     ClaudeCodeRunner,
@@ -425,3 +428,252 @@ def test_http_invalid_request_does_not_expose_url_secrets():
     with pytest.raises(AdapterError, match="request failed") as error:
         HTTPRunner("http://127.0.0.1/secret-value has-space").run("hello")
     assert "secret-value" not in str(error.value)
+
+
+@pytest.mark.parametrize("failure,match", [("overflow", "output limit"), ("read_error", "could not read")])
+def test_reader_failure_at_process_completion_cannot_be_accepted(monkeypatch, failure, match):
+    """Finish readers during poll(), after the loop's initial flag checks."""
+    pending_threads = []
+
+    class DelayedThread:
+        def __init__(self, target, args=(), daemon=False):
+            self.target, self.args, self.alive = target, args, False
+            pending_threads.append(self)
+
+        def start(self):
+            self.alive = True
+
+        def finish(self):
+            self.target(*self.args)
+            self.alive = False
+
+        def is_alive(self):
+            return self.alive
+
+        def join(self, timeout=None):
+            pass
+
+    class BadReader(io.BytesIO):
+        def read(self, size=-1):
+            raise OSError("read failed")
+
+    class Process:
+        stdin = io.BytesIO()
+        stdout = io.BytesIO(b"too long") if failure == "overflow" else BadReader()
+        stderr = io.BytesIO()
+        returncode = None
+
+        def poll(self):
+            if self.returncode is None:
+                for thread in pending_threads:
+                    thread.finish()
+                self.returncode = 0
+            return self.returncode
+
+        def wait(self, timeout=None):
+            return self.returncode
+
+    monkeypatch.setattr(adapters, "_IS_WINDOWS", False)
+    monkeypatch.setattr(adapters.subprocess, "Popen", lambda *args, **kwargs: Process())
+    monkeypatch.setattr(adapters.threading, "Thread", DelayedThread)
+    monkeypatch.setattr(adapters, "_kill", lambda process: None)
+    with pytest.raises(AdapterError, match=match):
+        CommandRunner(["fake-agent"], max_output_bytes=1).run("")
+
+
+def test_cleanup_failure_preserves_primary_error_and_remains_visible(monkeypatch):
+    def cannot_kill(process):
+        raise PermissionError("sensitive cleanup detail")
+
+    monkeypatch.setattr(adapters, "_kill", cannot_kill)
+    with pytest.raises(AdapterError, match="output limit.*cleanup failed") as error:
+        command("print('xx')", max_output_bytes=1).run("")
+    assert "sensitive cleanup detail" not in str(error.value)
+
+
+def test_windows_environment_overrides_are_case_insensitive(monkeypatch):
+    monkeypatch.setattr(adapters, "_IS_WINDOWS", True)
+    monkeypatch.setenv("PATH", r"C:\inherited")
+    environment = adapters._environment({"Path": r"C:\new tools", "pathext": ".EXE;.CMD"})
+    assert environment["PATH"] == r"C:\new tools"
+    assert environment["PATHEXT"] == ".EXE;.CMD"
+    assert sum(key.upper() == "PATH" for key in environment) == 1
+
+
+def test_windows_resolution_uses_effective_path_pathext_and_cwd(monkeypatch):
+    files = {ntpath.normcase(path) for path in [r"C:\project\bin\codex.CMD", r"C:\project\bin\codex"]}
+    monkeypatch.setattr(adapters.os.path, "isfile", lambda path: ntpath.normcase(path) in files)
+    environment = {"PATH": "bin", "PATHEXT": ".EXE;.CMD"}
+    assert adapters._resolve_windows_executable("codex", r"C:\project", environment) == r"C:\project\bin\codex.CMD"
+    assert adapters._resolve_windows_executable(r"bin\codex.CMD", r"C:\project", {"PATH": "absent"}) == r"C:\project\bin\codex.CMD"
+
+
+def test_windows_resolution_respects_disabled_implicit_current_directory(monkeypatch):
+    files = {ntpath.normcase(r"C:\project\agent.EXE")}
+    monkeypatch.setattr(adapters.os.path, "isfile", lambda path: ntpath.normcase(path) in files)
+    with pytest.raises(AdapterError, match="PATH/PATHEXT"):
+        adapters._resolve_windows_executable("agent", r"C:\project", {
+            "PATH": r"C:\other", "PATHEXT": ".EXE", "NODEFAULTCURRENTDIRECTORYINEXEPATH": "1",
+        })
+
+
+def test_windows_batch_construction_uses_raw_cmd_line_and_system_interpreter(monkeypatch):
+    wrapper = r"C:\Program Files\npm\codex.cmd"
+    interpreter = r"C:\Windows\System32\cmd.exe"
+    monkeypatch.setattr(adapters, "_resolve_windows_executable", lambda *args: wrapper)
+    monkeypatch.setattr(adapters, "_windows_cmd_executable", lambda: interpreter)
+    argv, executable_path = adapters._windows_command(
+        ["codex", "exec", "--model", "a model", "-"], cwd=None, environment={},
+    )
+    assert isinstance(argv, str)  # Do not run the complete cmd line through list2cmdline.
+    assert argv == '"C:\\Windows\\System32\\cmd.exe" /d /v:off /s /c ""C:\\Program Files\\npm\\codex.cmd" exec --model "a model" -"'
+    assert executable_path == interpreter
+
+
+@pytest.mark.parametrize("argument", ['bad"quote', "%TOKEN%", "a&b", "a|b", "a>b", "a<b", "a^b", "!TOKEN!", "(x)", "x\ny", "x\ty"])
+def test_windows_batch_rejects_unsafe_configured_arguments(monkeypatch, argument):
+    monkeypatch.setattr(adapters, "_resolve_windows_executable", lambda *args: r"C:\tools\agent.cmd")
+    with pytest.raises(AdapterError, match="shell metacharacters") as error:
+        adapters._windows_command(["agent", argument], cwd=None, environment={})
+    assert argument not in str(error.value)
+
+
+@pytest.mark.parametrize("wrapper", [r"C:\tools\agent.cmd", r"C:\tools\agent.CMD. "])
+def test_windows_batch_rejects_input_placeholder_even_for_safe_prompt(monkeypatch, wrapper):
+    monkeypatch.setattr(adapters, "_resolve_windows_executable", lambda *args: wrapper)
+    with pytest.raises(AdapterError, match="do not support \\{input\\}.*stdin"):
+        adapters._windows_command(["agent", "perfectly safe prompt"], cwd=None, environment={}, has_input_placeholder=True)
+
+
+def test_windows_native_arguments_remain_literal(monkeypatch):
+    native = r"C:\Program Files\Agent\agent.exe"
+    monkeypatch.setattr(adapters, "_resolve_windows_executable", lambda *args: native)
+    argv, executable_path = adapters._windows_command(
+        ["agent", 'a&b|%TOKEN%"!^'], cwd=None, environment={}, has_input_placeholder=True,
+    )
+    assert argv == [native, 'a&b|%TOKEN%"!^']
+    assert executable_path == native
+
+
+@pytest.fixture
+def windows_batch(tmp_path):
+    if os.name != "nt":
+        pytest.skip("real .cmd integration requires Windows")
+    directory = tmp_path / "CLI tools"
+    directory.mkdir()
+
+    def make(name, source):
+        script = directory / f"{name}.py"
+        script.write_text(source, encoding="utf-8")
+        wrapper = directory / f"{name}.cmd"
+        wrapper.write_text(
+            f'@echo off\n"{sys.executable}" -X utf8 "%~dp0{name}.py" %*\n', encoding="utf-8",
+        )
+        return wrapper
+
+    return make
+
+
+def test_real_windows_batch_stdin_is_unicode_and_never_shell_code(windows_batch, tmp_path):
+    wrapper = windows_batch("my-agent", "import json,sys\nprint(json.dumps({'output':sys.stdin.buffer.read().decode('utf-8'),'metadata':{'argv':sys.argv[1:]}}))")
+    marker = tmp_path / "must-not-exist"
+    prompt = f'café 🙂\n& echo bad > "{marker}" %PATH% !TOKEN! ^ | ( )'
+    arguments = ["two words", "", "C:\\a path\\"]
+    result = CommandRunner(
+        ["my-agent", *arguments], cwd=tmp_path,
+        env={"Path": str(wrapper.parent), "PATHEXT": ".EXE;.CMD"}, output_format="json",
+    ).run(prompt)
+    assert result.output == prompt
+    assert result.metadata["argv"] == arguments
+    assert not marker.exists()
+
+
+@pytest.mark.parametrize("adapter", ["codex", "claude"])
+def test_real_windows_batch_cli_json_parsing(windows_batch, monkeypatch, tmp_path, adapter):
+    record = tmp_path / "request.json"
+    source = (
+        "import json,sys,pathlib\n"
+        "prompt = sys.stdin.buffer.read().decode('utf-8')\n"
+        f"pathlib.Path({str(record)!r}).write_text(json.dumps({{'argv':sys.argv[1:],'prompt':prompt}}))\n"
+    )
+    if adapter == "codex":
+        source += "print(json.dumps({'type':'item.completed','item':{'type':'agent_message','text':prompt}}))\nprint(json.dumps({'type':'turn.completed','usage':{'input_tokens':2,'output_tokens':3}}))"
+        runner_class = CodexRunner
+    else:
+        source += "print(json.dumps({'type':'result','subtype':'success','is_error':False,'result':prompt,'usage':{'input_tokens':2,'output_tokens':3},'total_cost_usd':0.01}))"
+        runner_class = ClaudeCodeRunner
+    wrapper = windows_batch(adapter, source)
+    monkeypatch.setenv("PATH", str(wrapper.parent))
+    monkeypatch.setenv("PATHEXT", ".EXE;.CMD")
+    result = runner_class(cwd=tmp_path, model="example model").run("café 🙂 & %PATH%")
+    assert result.output == "café 🙂 & %PATH%"
+    assert result.usage["input_tokens"] == 2
+    request = json.loads(record.read_text())
+    assert request["prompt"] == result.output
+    assert request["argv"][request["argv"].index("--model") + 1] == "example model"
+
+
+@pytest.mark.parametrize("mode", ["placeholder", "unsafe_argument"])
+def test_real_windows_batch_unsafe_argv_is_rejected_before_launch(windows_batch, tmp_path, mode):
+    marker = tmp_path / "must-not-exist"
+    wrapper = windows_batch("agent", f"from pathlib import Path\nPath({str(marker)!r}).write_text('ran')")
+    argument = "{input}" if mode == "placeholder" else "unsafe & echo hello"
+    with pytest.raises(AdapterError, match="stdin|shell metacharacters"):
+        CommandRunner([str(wrapper), argument]).run("safe prompt")
+    assert not marker.exists()
+
+
+def test_codex_retryable_stream_error_can_recover(executable):
+    events = [
+        {"type": "error", "message": "private-provider-error"},
+        {"type": "item.completed", "item": {"type": "agent_message", "text": "42"}},
+        {"type": "turn.completed", "usage": {"input_tokens": 2, "output_tokens": 1}},
+    ]
+    result = CodexRunner(executable=executable(emit_events(events))).run("prompt")
+    assert result.output == "42"
+    assert result.metadata["provider_error_events"] == 1
+    assert "private-provider-error" not in json.dumps(result.metadata)
+
+
+def test_codex_retry_can_complete_an_already_received_answer(executable):
+    events = [
+        {"type": "turn.started"},
+        {"type": "item.completed", "item": {"type": "agent_message", "text": "42"}},
+        {"type": "error"},
+        {"type": "turn.completed", "usage": {"input_tokens": 2, "output_tokens": 1}},
+    ]
+    result = CodexRunner(executable=executable(emit_events(events))).run("prompt")
+    assert result.output == "42"
+    assert result.metadata["provider_error_events"] == 1
+
+
+def test_codex_new_turn_cannot_reuse_an_earlier_answer(executable):
+    events = [
+        {"type": "item.completed", "item": {"type": "agent_message", "text": "old"}},
+        {"type": "turn.completed"},
+        {"type": "turn.started"},
+        {"type": "turn.completed"},
+    ]
+    with pytest.raises(AdapterError, match="incomplete"):
+        CodexRunner(executable=executable(emit_events(events))).run("prompt")
+
+
+@pytest.mark.parametrize("events", [
+    [{"type": "error"}, {"type": "turn.completed"}],
+    [{"type": "error"}, {"type": "item.completed", "item": {"type": "agent_message", "text": "42"}}],
+    [{"type": "item.completed", "item": {"type": "agent_message", "text": "old"}}, {"type": "turn.completed"}, {"type": "error"}],
+    [{"type": "error"}, {"type": "item.completed", "item": {"type": "agent_message", "text": "42"}}, {"type": "turn.failed"}],
+])
+def test_codex_error_requires_fresh_successful_answer_and_completion(executable, events):
+    with pytest.raises(AdapterError, match="failed turn"):
+        CodexRunner(executable=executable(emit_events(events))).run("prompt")
+
+
+def test_codex_nonzero_exit_cannot_be_recovered_by_json_events(executable):
+    events = [
+        {"type": "error"},
+        {"type": "item.completed", "item": {"type": "agent_message", "text": "42"}},
+        {"type": "turn.completed"},
+    ]
+    with pytest.raises(AdapterError, match="status 7"):
+        CodexRunner(executable=executable(emit_events(events) + "\nraise SystemExit(7)")).run("prompt")

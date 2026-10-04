@@ -19,7 +19,10 @@ agent-eval eval --agent codex --cwd /path/to/your/repository \
 The adapter invokes `codex exec --json --ephemeral --sandbox read-only -`.
 The input arrives on stdin. It collects the final agent message, completion
 usage and supported completed tool events; failed or incomplete turns count
-as errors. Each case starts a fresh conversation. MCP calls retain their tool
+as errors. A retryable stream error can recover when the current turn has a
+final answer and subsequently completes successfully. An earlier completed
+turn cannot supply a replacement answer. The number of recovered error events
+is recorded without provider error text. Each case starts a fresh conversation. MCP calls retain their tool
 name; shell, web and file events use `command_execution`, `web_search` and
 `file_change`. These event names are not an exhaustive tool trace.
 
@@ -63,11 +66,17 @@ change their flags or output format. `agent-eval doctor` checks executable
 availability without invoking a model and prints authentication diagnostics
 commands.
 
+On Windows, npm-installed `codex.cmd` and `claude.cmd` launch through the
+restricted batch support described below. Native `.exe` installations also
+work. Executables resolve against the invocation's working directory, `PATH`
+and `PATHEXT`.
+
 ## Any command, any language
 
 Your existing program reads the prompt from stdin and prints its final answer
-to stdout. Put progress logs on stderr. Arguments are a JSON array, executed
-directly without a shell:
+to stdout. Put progress logs on stderr. Arguments are a JSON array. Native
+executables run directly without a shell; Windows batch shims have the
+additional restrictions below:
 
 ```sh
 agent-eval eval --dataset cases.jsonl \
@@ -75,8 +84,9 @@ agent-eval eval --dataset cases.jsonl \
 ```
 
 For programs that accept a positional prompt, use the literal `{input}`
-placeholder in one argument. Its content is substituted without shell
-interpretation. In this mode, stdin is empty:
+placeholder in one argument. Its content is substituted into native
+executable arguments without shell interpretation. In this mode, stdin is
+empty. Windows `.bat`/`.cmd` agents require stdin and reject this placeholder:
 
 ```toml
 [agent]
@@ -92,6 +102,16 @@ scorers = ["exact"]
 `command` paths and arguments are your executable's responsibility. With a
 config file, its parent is the default agent working directory; override
 `agent.cwd` as needed. TOML arrays avoid shell-specific quoting on Windows.
+Windows `.bat`/`.cmd` shims run through the system `cmd.exe` with AutoRun and
+delayed expansion disabled. Prompts remain UTF-8 stdin and never enter the
+command line. Paths with ordinary spaces are supported. Configured batch
+paths and arguments containing quotes, `%`, `!`, `&`, `|`, `<`, `>`, `^`,
+parentheses or control characters are rejected. Use a native executable or a
+small stdin wrapper when your agent needs those argument values. The batch
+file itself controls how configuration arguments reach its underlying
+program; the native executable's literal argument guarantee does not extend
+to arbitrary batch code.
+
 For structured responses, set `output_format = "json"` in `[agent]` or use
 `--output-format json`:
 

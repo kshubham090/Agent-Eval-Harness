@@ -1,7 +1,8 @@
 """Bring an existing function, executable, coding agent, or HTTP endpoint.
 
 Every adapter implements ``run(input: str) -> AgentOutput``. Commands are
-executed directly, without a shell. Each invocation is independent, so the
+executed directly except Windows batch shims, which use a restricted cmd.exe
+invocation and require stdin prompts. Each invocation is independent, so the
 adapters themselves may be shared by the evaluator's worker threads.
 """
 
@@ -11,9 +12,11 @@ import asyncio
 import inspect
 import json
 import math
+import ntpath
 import os
 import signal
 import subprocess
+import sys
 import threading
 import time
 from collections.abc import Callable, Mapping, Sequence
@@ -27,6 +30,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 from harness.runner import AgentOutput
 
 DEFAULT_MAX_OUTPUT_BYTES = 1_048_576
+_IS_WINDOWS = os.name == "nt"
 
 
 class AdapterError(RuntimeError):
@@ -119,6 +123,85 @@ def _argv(command: Sequence[str]) -> tuple[str, ...]:
     return tuple(command)
 
 
+def _environment(overrides: Mapping[str, str] | None) -> dict[str, str] | None:
+    if not _IS_WINDOWS:
+        return {**os.environ, **overrides} if overrides is not None else None
+    # Windows environment names are case-insensitive. Avoid passing both
+    # inherited PATH and an override named Path to CreateProcess.
+    environment = {key.upper(): value for key, value in os.environ.items()}
+    if overrides is not None:
+        environment.update({key.upper(): value for key, value in overrides.items()})
+    return environment
+
+
+def _resolve_windows_executable(command: str, cwd: str | Path | None, environment: Mapping[str, str]) -> str:
+    """Resolve Windows argv[0] before CreateProcess, including npm .cmd shims.
+
+    Relative paths and PATH entries are relative to the invocation's cwd.
+    Extensionless npm POSIX scripts are not preferred over PATHEXT matches.
+    """
+    base = ntpath.abspath(os.fspath(cwd) if cwd is not None else os.getcwd())
+    directory, name = ntpath.split(command)
+    if directory:
+        directories = [ntpath.abspath(ntpath.join(base, directory))]
+    else:
+        directories = [] if "NODEFAULTCURRENTDIRECTORYINEXEPATH" in environment else [base]
+        directories.extend(
+            ntpath.abspath(ntpath.join(base, part.strip('"')))
+            for part in environment.get("PATH", "").split(";") if part
+        )
+    extensions = [ext for ext in environment.get("PATHEXT", ".COM;.EXE;.BAT;.CMD").split(";") if ext]
+    names = [name] if ntpath.splitext(name.rstrip(" ."))[1] else [name + ext for ext in extensions]
+    seen = set()
+    for directory in directories:
+        for filename in names:
+            candidate = ntpath.normpath(ntpath.join(directory, filename))
+            folded = ntpath.normcase(candidate)
+            if folded not in seen and os.path.isfile(candidate):
+                return candidate
+            seen.add(folded)
+    raise AdapterError("could not start agent command; check executable, working directory, and PATH/PATHEXT")
+
+
+def _windows_cmd_executable() -> str:
+    # Do not use PATH or a user-overridden COMSPEC to locate the interpreter.
+    # The system directory comes from Windows itself.
+    import ctypes
+
+    buffer = ctypes.create_unicode_buffer(32768)
+    length = ctypes.windll.kernel32.GetSystemDirectoryW(buffer, len(buffer))
+    if not length or length >= len(buffer):
+        raise AdapterError("could not locate the Windows command interpreter")
+    return ntpath.join(buffer.value, "cmd.exe")
+
+
+def _windows_command(
+    command: Sequence[str], *, cwd: str | Path | None,
+    environment: Mapping[str, str], has_input_placeholder: bool = False,
+) -> tuple[list[str] | str, str]:
+    """Prepare native argv or a restricted command line for a batch shim."""
+    executable = _resolve_windows_executable(command[0], cwd, environment)
+    resolved = [executable, *command[1:]]
+    # Win32 may ignore trailing dots/spaces in filenames. Do not allow that
+    # spelling to bypass the batch-file safeguards.
+    if ntpath.splitext(executable.rstrip(" ."))[1].lower() not in {".bat", ".cmd"}:
+        return resolved, executable
+    if has_input_placeholder:
+        raise AdapterError("Windows batch agents do not support {input} arguments; send the prompt on stdin or use a native executable")
+    forbidden = '"%&|<>^!()'
+    if any(any(char in forbidden or ord(char) < 32 or ord(char) == 127 for char in arg) for arg in resolved):
+        raise AdapterError("Windows batch agent paths and arguments cannot contain shell metacharacters or control characters; use stdin or a native executable")
+    interpreter = _windows_cmd_executable()
+    # cmd /s removes the outer quote pair after /c. Quote the batch path even
+    # when it has no spaces, and use CRT-compatible quoting for the remaining
+    # safe arguments so common npm shims can forward them through %*.
+    inner = f'"{executable}"'
+    if len(resolved) > 1:
+        inner += " " + subprocess.list2cmdline(resolved[1:])
+    command_line = f'"{interpreter}" /d /v:off /s /c "{inner}"'
+    return command_line, interpreter
+
+
 def _kill(process: subprocess.Popen) -> None:
     if os.name == "posix":
         try:
@@ -139,6 +222,7 @@ def _execute(
     timeout: float,
     max_output_bytes: int,
     env: Mapping[str, str] | None = None,
+    has_input_placeholder: bool = False,
 ) -> str:
     """Capture pipes with bounded memory and a deadline, including pipe drain.
 
@@ -152,14 +236,22 @@ def _execute(
         input_bytes = input.encode("utf-8")
     except UnicodeEncodeError:
         raise AdapterError("agent input must be valid UTF-8 text") from None
+    environment = _environment(env)
+    executable = None
+    if _IS_WINDOWS:
+        command, executable = _windows_command(
+            command, cwd=cwd, environment=environment,
+            has_input_placeholder=has_input_placeholder,
+        )
     try:
         process = subprocess.Popen(
             command,
+            executable=executable,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=cwd,
-            env={**os.environ, **env} if env is not None else None,
+            env=environment,
             start_new_session=os.name == "posix",
             bufsize=0,
         )
@@ -216,6 +308,12 @@ def _execute(
             if remaining <= 0:
                 raise AdapterError(f"agent command timed out after {timeout:g}s")
             exceeded.wait(min(remaining, 0.01))
+        # A reader can set either flag and finish between the checks above
+        # and the completion check. Never accept a truncated successful run.
+        if exceeded.is_set():
+            raise AdapterError(f"agent command exceeded the {max_output_bytes}-byte output limit")
+        if reader_failed.is_set():
+            raise AdapterError("could not read agent command output")
         if process.returncode:
             raise AdapterError(f"agent command exited with status {process.returncode}; command output omitted")
         try:
@@ -225,10 +323,27 @@ def _execute(
     finally:
         # Also reap descendants after success: a command must not leave agents
         # running between eval cases after closing its output pipes.
-        _kill(process)
-        process.wait()
+        original_error = sys.exception()
+        cleanup_failed = False
+        try:
+            _kill(process)
+        except OSError:
+            cleanup_failed = True
+        # If termination failed, waiting unboundedly would defeat the run's
+        # timeout. Surface cleanup failure without hiding the primary error.
+        try:
+            process.wait(timeout=0.2 if cleanup_failed else None)
+        except subprocess.TimeoutExpired:
+            cleanup_failed = True
         for thread in [*readers, writer]:
             thread.join(timeout=0.2)
+        if cleanup_failed:
+            detail = "agent process cleanup failed; a process may remain running"
+            if isinstance(original_error, Exception):
+                raise AdapterError(f"{original_error}; {detail}") from original_error
+            if original_error is None:
+                raise AdapterError(detail)
+            original_error.add_note(detail)
 
 
 class FunctionRunner:
@@ -276,8 +391,9 @@ class FunctionRunner:
 class CommandRunner:
     """Run argv directly. Send input on stdin unless argv contains ``{input}``.
 
-    A placeholder is replaced literally within an argument and never evaluated
-    by a shell. Text output retains whitespace; JSON output uses the common
+    A placeholder is replaced literally within a native executable's argument.
+    Windows .bat/.cmd shims require stdin input and restricted configuration
+    arguments. Text output retains whitespace; JSON output uses the common
     response envelope. stdout and stderr are each limited to max_output_bytes.
     Environment overrides augment the current environment and are never logged.
     """
@@ -318,6 +434,7 @@ class CommandRunner:
             command, "" if has_placeholder else input,
             cwd=self.cwd, timeout=self.timeout,
             max_output_bytes=self.max_output_bytes, env=self.env,
+            has_input_placeholder=has_placeholder,
         )
         if self.output_format == "json":
             return agent_output_from_payload(_json(stdout, "agent command"), output_key=self.output_key)
@@ -353,6 +470,7 @@ class CodexRunner:
         usage: dict = {}
         trajectory: list[str] = []
         metadata = {"adapter": "codex"}
+        provider_errors = 0
         for line in stdout.splitlines():
             if not line.strip():
                 continue
@@ -360,8 +478,19 @@ class CodexRunner:
             if not isinstance(event, dict) or not isinstance(event.get("type"), str):
                 raise AdapterError("Codex JSONL events must be objects with a type")
             kind = event["type"]
-            if kind in {"error", "turn.failed"}:
+            if kind == "turn.failed":
                 raise AdapterError("Codex reported a failed turn; provider details omitted")
+            if kind == "error":
+                # Codex also emits this event for retryable stream errors.
+                # Completion after the error establishes recovery. A final
+                # message from this unfinished turn remains valid, but an
+                # already-completed turn's answer cannot be reused.
+                provider_errors += 1
+                if completed:
+                    final = None
+                completed, usage = False, {}
+            if kind == "turn.started":
+                final, completed, usage = None, False, {}
             if kind == "thread.started" and isinstance(event.get("thread_id"), str):
                 metadata["thread_id"] = event["thread_id"]
             if kind == "item.completed":
@@ -382,7 +511,11 @@ class CodexRunner:
                 completed = True
                 usage = event.get("usage", {})
         if final is None or not completed:
+            if provider_errors:
+                raise AdapterError("Codex reported a failed turn without a subsequent completed response; provider details omitted")
             raise AdapterError("Codex response is incomplete: final agent message and completed turn required")
+        if provider_errors:
+            metadata["provider_error_events"] = provider_errors
         return agent_output_from_payload({
             "output": final, "trajectory": trajectory, "usage": usage, "metadata": metadata,
         })

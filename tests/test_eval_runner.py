@@ -227,6 +227,36 @@ def test_bad_agent_telemetry_is_isolated_without_losing_output():
     assert result.case_results[0].usage == {}
 
 
+def test_real_usage_counters_save_as_json_without_losing_builtin_integer_precision(tmp_path):
+    import json
+    from fractions import Fraction
+
+    from harness.dataset import EvalCase
+
+    exact_integer = 2 ** 53 + 1
+
+    class MeteredAgent:
+        def run(self, input):
+            return AgentOutput("Paris", usage={
+                "input_tokens": Fraction(3),
+                "output_tokens": Fraction(2),
+                "custom_count": exact_integer,
+            })
+
+    result = run_eval([EvalCase("a", "prompt", "Paris")], MeteredAgent(), [ExactMatchScorer()])
+    path = tmp_path / "result.json"
+    result.save(path)
+    saved = json.loads(path.read_text(encoding="utf-8"))
+
+    assert saved["error_count"] == 0
+    assert saved["cases"][0]["usage"] == {
+        "input_tokens": 3.0, "output_tokens": 2.0, "custom_count": exact_integer,
+    }
+    assert saved["summary"]["tokens"] == {
+        "reported_total": 5.0, "reported_count": 1, "missing_count": 0,
+    }
+
+
 @pytest.mark.parametrize("concurrency", [1.5, True])
 def test_noninteger_concurrency_rejected(concurrency):
     from harness.dataset import EvalCase

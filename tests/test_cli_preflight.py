@@ -98,3 +98,26 @@ def test_missing_optional_dependency_fails_before_agent_calls(tmp_path, monkeypa
     path.write_text('{"id":"a","input":"x","expected_output":"x"}\n')
     result = CliRunner().invoke(cli, ["eval", "--dataset", str(path), "--agent", "codex", "--scorers", "llm_judge"])
     assert result.exit_code == 1 and "optional dependencies" in result.output
+
+
+@pytest.mark.parametrize("floor, exit_code", [("0.90", 0), ("0.900000001", 1)])
+def test_repeated_run_floor_allows_only_rounding_error(tmp_path, monkeypatch, floor, exit_code):
+    import harness.cli as module
+    from harness.runner import AgentOutput
+
+    class Agent:
+        count = 0
+
+        def run(self, prompt):
+            run_index, case_index = divmod(self.count, 20)
+            self.count += 1
+            return AgentOutput("yes" if case_index < (17, 19)[run_index] else "no")
+
+    monkeypatch.setattr(module, "_make_runner", lambda _: Agent())
+    dataset = tmp_path / "cases.jsonl"
+    dataset.write_text("".join(json.dumps({"id": str(i), "input": "answer", "expected_output": "yes"}) + "\n"
+                               for i in range(20)))
+    result = CliRunner().invoke(cli, ["eval", "--dataset", str(dataset), "--agent", "codex",
+                                      "--runs", "2", "--min-pass-rate", floor])
+    assert result.exit_code == exit_code, result.output
+    assert "0.900" in result.output
